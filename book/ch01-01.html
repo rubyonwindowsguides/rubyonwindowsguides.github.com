@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Windows Command Line</title>
+   <meta name="author" content="Boško Ivanišević" />
+
+   <link rel="stylesheet" href="/css/960.css" type="text/css" />
+   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
+   <link rel="stylesheet" href="/css/text.css" type="text/css" />
+
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+
+</head>
+<body>
+
+<div class="container_12">
+  <!--<div class="grid_2">
+    <br/>
+    <h1>Something</h1>
+    <p>
+      Lorem ipsum, etc, etc, so on and so forth
+    </p>
+  </div>-->
+
+  <div id="main" class="grid_10">
+    <div id="header" class="grid_10">
+      <br/>
+      <table>
+        <tr>
+          <td><img src="/images/rwg_logo_blue.png"/></td>
+          <td>
+            <h1>Ruby on Windows Guides</h1>
+            <!-- <h3>Comprehensive guides for Ruby on Windows</h3> -->
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="menu" class="grid_10">
+      <a href="/">Book</a>
+      <!-- <a href="/about.html">About</a>
+      <a href="/something.html">Something</a> -->
+    </div>
+
+    <div id="content" class="grid_10">
+      
+      <a href="/book/ch01-00.html" title="Previous: Setup">&laquo; Setup</a>
+      
+
+      
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <a href="/book/ch01-02.html" title="Next: Improving Command Prompt">Improving Command Prompt &raquo; </a>
+       
+      <br/><br/>
+
+      <h2>Windows Command Line</h2>
+<p>Ruby is a scripting language and most of the time you will use it from the command line. For years Windows has been known for its poor command line interpreter. Although Microsoft has improved it in Windows XP and later versions, it still lacks some features which come in very handy when developing Ruby applications. In this chapter you&#8217;ll learn how to use and adjust it for Ruby development.</p>
+<p>Click on the start button in the lower left corner, then on <code>All Programs</code> and <code>Accessories</code>. In the list of applications you&#8217;ll see Command Prompt.</p>
+<p><img src="/images/fig0101.png" title="Starting Command Prompt" alt="Starting Command Prompt" /></p>
+<p>Click on it and new command prompt window will open. It is time to make first adjustment. Normally Windows command prompt uses raster fonts and cannot display Unicode characters. Click on the icon in the top left corner of command prompt window and then on Properties menu item (Figure 1-2).</p>
+<p><img src="/images/fig0102.png" title="Opening Command Prompt Properties" alt="Opening Command Prompt Properties" /></p>
+<p>In the properties dialog box activate Font tab and select either Lucida Console or Consolas. These two fonts are TrueType monospaced fonts and can display characters from Unicode character set. Font size doesn&#8217;t matter so you can choose the one that suits you the best.</p>
+<p>Running application from the Command Prompt can be done either by giving full path to the executable file</p>
+<div class="highlight"><pre><code class="bat">Microsoft Windows [Version <span class="m">6</span>.<span class="m">1</span>.<span class="m">7600</span>]
+Copyright (c) <span class="m">2009</span> Microsoft Corporation.  All rights reserved.
+C:\<span class="p">&gt;</span><span class="n">c</span>:\Windows\notepad.exe
+</code></pre>
+</div><p>or, if the executable file is in the path just invoking application by executable file name:</p>
+<div class="highlight"><pre><code class="bat">Microsoft Windows [Version <span class="m">6</span>.<span class="m">1</span>.<span class="m">7600</span>]
+Copyright (c) <span class="m">2009</span> Microsoft Corporation.  All rights reserved.
+C:\<span class="p">&gt;</span><span class="n">notepad</span>
+</code></pre>
+</div><p>Let&#8217;s stop here for a second and see what path actually is. The path to a file or a folder is its address on the computer. On Windows operating systems path consists of a drive letter and all directories and sub-directories which determine location of a file or a folder in the system. Operating system uses path to find a file. In our case it means that system will search for <code>notepad.exe</code> file on drive <code>C:</code> in the <code>Windows</code> folder.</p>
+<p>Invoking application by giving full path to the executable every time is quite inconvenient. Besides, if application loads dynamic libraries, system is searching for them in the application directory first and then in the path. Therefore if you want to use application from the Command Prompt it is recommended to put it in the system path variable. Whenever you issue command in the Command Prompt, system will search for the executable first in the current directory and if it doesn&#8217;t find it, search will continue through all directories listed in the path. Folders are searched in the exactly same order as they are listed in the path. Now it is time to check what is a value of the path system variable. Open new Command Prompt and type:</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">echo</span> <span class="nv">%PATH%</span>
+C:\Windows\system<span class="m">32</span>;C:\Windows;C:\Windows\System<span class="m">32</span>\Wbem
+</code></pre>
+</div><p>As you can see we currently have only few system directories in the path. These directories will be searched whenever you issue command in the Command Prompt if executable is not found in the current directory. System  will first look for the executable in the <code>C:\Window\System32</code>, then in the <code>C:\Windows</code> and finally in the <code>C:\Windows\System\Wbem</code>. Note that directories in the path are separated by semicolon. This separator must be used whenever you want to add new directory to the path as we&#8217;ll see later.</p>
+<p>Altering path for the current Command Prompt is done simply by invoking <code>set</code> command:</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">set</span> PATH<span class="o">=</span>c:\Ruby<span class="m">192</span>
+C:\<span class="p">&gt;</span><span class="n">echo</span> <span class="nv">%PATH%</span>
+c:\Ruby<span class="m">192</span>
+</code></pre>
+</div><p>Be careful not to type any spaces before or after the “equals” sign. Setting path variable obviously removed all other directories and left only the one we added to the path. This means you will not be able to run system applications just by invoking them. Let&#8217;s try it:</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">notepad</span>
+<span class="s1">&#39;notepad&#39;</span> is not recognized as an internal or external command<span class="p">,</span>
+operable program or batch file.
+</code></pre>
+</div><p>As you can see system is not able to find notepad executable because it doesn&#8217;t exist in the current folder and only directory which is in the path is <code>C:\Ruby192</code> which actually does not exist, unless you created it manually. Before we go on with Windows path exploring we should fix it in the current Command Prompt:</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">set</span> PATH<span class="o">=</span>C:\Windows\system<span class="m">32</span>;C:\Windows;C:\Windows\System<span class="m">32</span>\Wbem
+</code></pre>
+</div><p>Removing all directories from the path when new directory is added surely is not a good way to alter system path. What we actually want is to be able to add new directory without removing existing ones. As we already saw system will set variable to the value we pass after equal sign. This means we can just put our new directory and all already existing directories in the statement for setting system path. This requires lot of typing. Luckily there is a shortcut. Using system variable <code>%PATH%</code> allows us to keep existing directories while we are adding new one:</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">set</span> PATH<span class="o">=</span>C:\Ruby<span class="m">192</span>;<span class="nv">%PATH%</span>
+C:\<span class="p">&gt;</span><span class="n">echo</span> <span class="nv">%PATH%</span>
+C:\Ruby<span class="m">192</span>;C:\Windows\system<span class="m">32</span>;C:\Windows;C:\Windows\System<span class="m">32</span>\Wbem
+</code></pre>
+</div><p>As you can see set statement keeps the order of directories and you must be careful when you set the path. If you want newly added folder to be searched first you must put it before <code>%PATH%</code> variable. Contrary if you want system first to search other folders and at the end to lookup in new added one you must put <code>%PATH%</code> variable at the beginning.</p>
+<p>Changing path this way is temporary and as soon as Command Prompt window is closed all changes will be reverted. You can easily check this by opening two Command Prompt windows. Changes made in one of the windows will not be reflected on the other.</p>
+<p>There are two ways we can permanently change system path. The first and easier one is to us System Properties dialog box. Open <code>Control Panel -&gt; System -&gt; Advanced System Settings</code>. Alternatively you can click on the Start button and right-click on the computer and choose Properties &#8594; Advanced System Settings. When System Properties dialog box opens, activate Advanced tab and click on the <code>Environment Variables...</code> button (Figure 1-3).</p>
+<p><img src="/images/fig0103.png" title="System Properties Dialog Box" alt="System Properties Dialog Box" /></p>
+<p>New dialog box will open with two lists of system variables. In the upper list all user variables and in the lower one system wide variables are displayed (Figure 1-4).</p>
+<p><img src="/images/fig0104.png" title="Environment Variables Dialog Box" alt="Environment Variables Dialog Box" /></p>
+<p>Changes made to system variables will be visible for all users on the system. Contrary changes made to user specific variables will be visible only to the user who&#8217;s account is changed. If you change path I recommend to keep your specific changes in the user section. That way you will clearly keep changes you made separate from the other users. There is one more important thing you should know. If you define path variable in the user section, directories from that variable are added at the end of the system-wide defined path.</p>
+<p>Windows operating system keeps all system related configuration options and settings in the registry. Thus you can change system variables and among them the path, directly in the registry. System-wide variables and their values are stored in the <code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment</code> section. User defined variables can be found in <code>HKEY_CURRENT_USER\Environment section</code>.</p>
+<p>Be aware of one big difference between changing path and other environment variables through System Properties Dialog Box and directly in the registry. Changes made within System Properties Dialog Box are followed by the broadcast message about change of system variables. This message is sent to all opened applications and it is up to application to handle this change. Unfortunately Command Prompt does not handle this message at all and in order to have Command Prompt which is aware of the change, you will have to close all open Command Prompt windows and open them again. Altering system variables through registry is low-level change and no application will be aware of it. In that case you will have to log off and log on to your account again if you want applications to be aware of the changes.</p>
+
+      <br/>
+      
+      <a href="/book/ch01-00.html" title="Previous: Setup">&laquo; Setup</a>
+      
+
+      
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <a href="/book/ch01-02.html" title="Next: Improving Command Prompt">Improving Command Prompt &raquo; </a>
+       
+    </div>
+
+    <hr>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Word About Editors</title>
+   <meta name="author" content="Boško Ivanišević" />
+
+   <link rel="stylesheet" href="/css/960.css" type="text/css" />
+   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
+   <link rel="stylesheet" href="/css/text.css" type="text/css" />
+
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+
+</head>
+<body>
+
+<div class="container_12">
+  <!--<div class="grid_2">
+    <br/>
+    <h1>Something</h1>
+    <p>
+      Lorem ipsum, etc, etc, so on and so forth
+    </p>
+  </div>-->
+
+  <div id="main" class="grid_10">
+    <div id="header" class="grid_10">
+      <br/>
+      <table>
+        <tr>
+          <td><img src="/images/rwg_logo_blue.png"/></td>
+          <td>
+            <h1>Ruby on Windows Guides</h1>
+            <!-- <h3>Comprehensive guides for Ruby on Windows</h3> -->
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="menu" class="grid_10">
+      <a href="/">Book</a>
+      <!-- <a href="/about.html">About</a>
+      <a href="/something.html">Something</a> -->
+    </div>
+
+    <div id="content" class="grid_10">
+      
+      <a href="/book/ch01-02.html" title="Previous: Improving Command Prompt">&laquo; Improving Command Prompt</a>
+      
+
+      
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <a href="/book/ch02-00.html" title="Next: Installing Ruby">Installing Ruby &raquo; </a>
+       
+      <br/><br/>
+
+      <h2>A Word About Git, IDEs and Editors</h2>
+<p>Git is new kid on the block in the field of Source Code Management (<span class="caps">SCM</span>) tools. It is distributed version control system. “Distributed” in this case means that whenever you clone some repository you get complete history on your disk. Despite it youth it quickly became very popular among Ruby, and not only Ruby, developers. Its popularity resulted in the changes in Ruby extensions packaging system, Rubygems, to implement extension installation directly from Git repositories. Due to these facts it is recommended to install Git on Windows.</p>
+<p>There are two ports of Git to Windows – Cygwin and <span class="caps">MSYS</span> Git. If you plan to use Ruby on windows be careful not to use Cygwin version. Even more it is recommended not to keep Cygwin in the path at all and to remove all Cygwin configuration files from user home directory before you go on. If you don&#8217;t do this you might face various kind of errors due to incompatibility of Cygwin and <span class="caps">MSYS</span>-MinGW tools. I will not write much about Git here. There are lot of on-line resources and books that cover it already, but there is one point that need your attention. It is recommended to select option “Run Git from the Windows Command Prompt” during installation. This way your Ruby scripts and Rubygems will have Git always available since it will be added to the path. As already stated it is good to keep <span class="caps">MSYS</span> and MinGW tools in the paths without spaces so I will install it in the <code>C:\Git</code>.</p>
+<p>Now when Git is installed we will added to the Console2. Open Console Settings dialog clicking on Edit &#8594; Settings in Console2. In the Tabs section click on the Add button and change Title from Console to Git. In the icon text box put:</p>
+<div class="highlight"><pre><code class="bat">C:\Git\etc\git.ico
+</code></pre>
+</div><p>and in the Shell text box:</p>
+<div class="highlight"><pre><code class="bat">C:\Windows\System<span class="m">32</span>\cmd.exe <span class="n">/c</span> <span class="s2">&quot;&quot;</span>C:\Git\bin\sh.exe<span class="s2">&quot; --login -i&quot;</span>
+</code></pre>
+</div><p>Be careful to change path to Git to point to the path where you installed it and to put all quotes as given in the sample. If you followed all the instructions for Console2 and Git you can now open new Git bash shell with <code>Ctrl-F2</code> key combination or through <code>File-&gt;New Tab-&gt;Git</code> menu item.</p>
+<p>Even though chapter&#8217;s title mentions Integrated Development Environments (IDEs) and editors I will not recommend any of them for several reasons among which the most important is that developers usually have their favorite <span class="caps">IDE</span> or editor and they are not willing to change it. Besides, question “What is the best <span class="caps">IDE</span> or editor for Ruby development” is asked from time to time on various mailing lists and it has almost as many different answers as replies.</p>
+<p>The fact is there are just a few IDEs for Ruby development and Eclipse is one of the free ones. Problem is that it does not support 1.9 Ruby version. So if you want to work with Ruby 1.8 and really want to work in <span class="caps">IDE</span> you can give it a try.</p>
+<p>On the other hand, status with editors are quite different. Most of the Windows editors support Ruby syntax highlighting. Some of them even have a capability to execute Ruby script that is currently edited. So which one to choose? If you ask Mac users most of them will recommend TextMate. Still there are lot of them which use Vim or Emacs. On the Linux Vim and Emacs are probably most used but GEdit also has good Ruby support.</p>
+<p>Windows developers are not familiar with Vim and Emacs but that is not a reason not to try them. Personally I use Emacs for everyday Ruby development among other things. Main reason why I have chosen Emacs is I develop on Linux beside Windows so I wanted editor which is free, rich of features and can be used on most popular operating systems today. If you decide to use Emacs you can check my customization files adjusted mostly for Ruby development at http://github.com/bosko/emacs-customizations. But if you are not willing to put some effort to learn Vim or Emacs you can check SciTe or Notepad++. Bottom line is you should use the tool that you are most comfortable with but effort needed to get used to new tools shouldn&#8217;t stop you while you are searching for your editor of choice.</p>
+
+      <br/>
+      
+      <a href="/book/ch01-02.html" title="Previous: Improving Command Prompt">&laquo; Improving Command Prompt</a>
+      
+
+      
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <a href="/book/ch02-00.html" title="Next: Installing Ruby">Installing Ruby &raquo; </a>
+       
+    </div>
+
+    <hr>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Mysql Database</title>
+   <meta name="author" content="Boško Ivanišević" />
+
+   <link rel="stylesheet" href="/css/960.css" type="text/css" />
+   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
+   <link rel="stylesheet" href="/css/text.css" type="text/css" />
+
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+
+</head>
+<body>
+
+<div class="container_12">
+  <!--<div class="grid_2">
+    <br/>
+    <h1>Something</h1>
+    <p>
+      Lorem ipsum, etc, etc, so on and so forth
+    </p>
+  </div>-->
+
+  <div id="main" class="grid_10">
+    <div id="header" class="grid_10">
+      <br/>
+      <table>
+        <tr>
+          <td><img src="/images/rwg_logo_blue.png"/></td>
+          <td>
+            <h1>Ruby on Windows Guides</h1>
+            <!-- <h3>Comprehensive guides for Ruby on Windows</h3> -->
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="menu" class="grid_10">
+      <a href="/">Book</a>
+      <!-- <a href="/about.html">About</a>
+      <a href="/something.html">Something</a> -->
+    </div>
+
+    <div id="content" class="grid_10">
+      
+      <a href="/book/ch03-01.html" title="Previous: Sqlite3 Database">&laquo; Sqlite3 Database</a>
+      
+
+      
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <a href="/book/ch03-03.html" title="Next: Postgresql Database">Postgresql Database &raquo; </a>
+       
+      <br/><br/>
+
+      <h2>MySQL database</h2>
+<p>Contrary to SQlite3 Rails cannot create database directly. Before we start migration, tests or server we have to create database manually and grant rights for a user that will be used to connect to a database. Since we will use MySQL from the zip archive we will not have to deal with user rights. In order to create database we first have to start MySQL database. Go to the bin subdirectory of the folder where you have unpacked archive, <code>C:\mysql-5.5.8-win32\lib</code> in my case and start <code>mysqld.exe</code> application. Open new Command Prompt in the same folder, start MySQL client as root user and create database rwin_book:</p>
+<div class="highlight"><pre><code class="bat">Z:\mysql<span class="m">-5</span>.<span class="m">5</span>.<span class="m">8</span>-win<span class="m">32</span>\bin<span class="p">&gt;</span><span class="n">mysql</span> -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is <span class="m">12</span>
+Server version: <span class="m">5</span>.<span class="m">5</span>.<span class="m">8</span> MySQL Community Server (GPL)
+
+Copyright (c) <span class="m">2000</span><span class="p">,</span> <span class="m">2010</span><span class="p">,</span> Oracle and<span class="n">/or</span> its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and<span class="n">/or</span> its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type <span class="s1">&#39;help;&#39;</span> or <span class="s1">&#39;\h&#39;</span> <span class="k">for</span> help. Type <span class="s1">&#39;\c&#39;</span> to clear the current input statement.
+mysql<span class="p">&gt;</span> <span class="n">create</span> database rwin_book_devel;
+<span class="k">If</span> you want to check whether database is create you can use show databases MySQL command:
+mysql<span class="p">&gt;</span> <span class="n">show</span> databases;
++--------------------+
+<span class="p">|</span> <span class="n">Database</span>           |
++--------------------+
+<span class="p">|</span> <span class="n">information_schema</span> |
+<span class="p">|</span> <span class="n">database</span>           |
+<span class="p">|</span> <span class="n">mysql</span>              |
+<span class="p">|</span> <span class="n">performance_schema</span> |
+<span class="p">|</span> <span class="n">rwin_book_devel</span>    |
++--------------------+
+<span class="m">6</span> rows in <span class="k">set</span> (<span class="m">0</span>.<span class="m">02</span> sec)
+</code></pre>
+</div><p>With server up and running we have to configure Rails application to use MySQL database. Development section of database.yml file inside config directory should look like this:</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
+  <span class="n">adapter</span><span class="p">:</span> <span class="n">mysql2</span>
+  <span class="n">encoding</span><span class="p">:</span> <span class="n">utf8</span>
+  <span class="n">database</span><span class="p">:</span> <span class="n">rwin_book_devel</span>
+  <span class="n">username</span><span class="p">:</span> <span class="n">root</span>
+  <span class="n">password</span><span class="p">:</span>
+</code></pre>
+</div><p>In addition we have to alter Gemfile so bundler knows which gems are required by our application. Without removing sqlite3 gem add new line to Gemfile and run bundle install to finish application configuration.</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;mysql2&#39;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s1">&#39;mysql2&#39;</span>
+</code></pre>
+</div><p>Before starting database migration we have to do one more thing. Our mysql2 is linked against <code>libmysql.dll</code> shared library and, just as we did with SQlite3, we must put this library in the path so operating system can find it when needed. Now you can migrate database with rake <code>db:migration</code> task and start rwin_book application.</p>
+
+      <br/>
+      
+      <a href="/book/ch03-01.html" title="Previous: Sqlite3 Database">&laquo; Sqlite3 Database</a>
+      
+
+      
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <a href="/book/ch03-03.html" title="Next: Postgresql Database">Postgresql Database &raquo; </a>
+       
+    </div>
+
+    <hr>
+  </div>
+</div>
+
+</body>
+</html>
