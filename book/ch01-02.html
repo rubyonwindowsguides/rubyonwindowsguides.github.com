@@ -15,6 +15,22 @@
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
 
+   <!-- Update your html tag to include the itemscope and itemtype attributes -->
+   <html itemscope itemtype="http://schema.org/Book">
+
+   <!-- Add the following three tags inside head -->
+   <meta itemprop="name" content="Ruby On Windows Guides">
+   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
+
+   <!-- Place this render call where appropriate -->
+   <script type="text/javascript">
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+   </script>
+
    <script type="text/javascript">
 
      var _gaq = _gaq || [];
@@ -48,7 +64,8 @@
           <td><img src="/images/rwg_logo_blue.png"/></td>
           <td>
             <h1>Ruby on Windows Guides</h1>
-            <!-- <h3>Comprehensive guides for Ruby on Windows</h3> -->
+            <h4>Comprehensive guides for Ruby on Windows</h4>
+            <h6>by Bosko Ivanisevic</h6>
           </td>
         </tr>
       </table>
@@ -61,6 +78,9 @@
     </div>
 
     <div id="content" class="grid_10">
+      <!-- Place this tag where you want the +1 button to render -->
+      <g:plusone annotation="inline"></g:plusone>
+      <br/>
       
       <a href="/book/ch01-01.html" title="Previous: Windows Command Line">&laquo; Windows Command Line</a>
       
@@ -78,10 +98,13 @@
 <p>Console2 has a lot of options which help you to customize it to your needs. Besides background and foreground colors, fonts and other visual customizations you can define hot keys for opening new tabs, switch between them, activating specific tab and many more which we will not discuss here. But one option deserves more attention. Tabs section in Settings dialog is used to define which shell will be opened in new tabs. By default Console2 opens tab with cmd.exe shell, but you can use others like Cygwin or <span class="caps">MSYS</span> bash shells. This will come in handy later when we install Git and DevKit.</p>
 <p>Command Prompt on Windows is capable of displaying colored text. Unfortunately Microsoft implementation differs from standard so <span class="caps">ANSI</span> color codes, which are used in all Ruby extensions, are not interpreted correctly. For a long time win32console extension was used on Windows platforms for converting <span class="caps">ANSI</span> color codes in the form Command Prompt understands. Although it did great job at the time and most of extensions were able to use win32console, it had one drawback – slowness.</p>
 <p>At the moment of writing this book recommendation is to use <a href="http://adoxa.110mb.com/ansicon/index.html"><span class="caps">ANSICON</span></a> or <a href="http://github.com/adoxa/ansicon"><span class="caps">ANSICON</span> GitHub Project</a>, application that hooks into <code>cmd.exe</code> process on Windows, parses <span class="caps">ANSI</span> color codes and converts them so Command Prompt can displayed colored output. Like Console2 <span class="caps">ANSICON</span> comes as Zip archive. In order to install it you have to unpack it to some folder on your path. There are few ways <span class="caps">ANSICON</span> can be used. If ansicon.exe is just started new command processor (typically <code>cmd.exe</code>) is started. With option <code>-p</code> <span class="caps">ANSICON</span> hooks in the current Command Prompt and recognition of <span class="caps">ANSI</span> escape sequences is enabled. If you want <span class="caps">ANSICON</span> to be enabled whenever you start new Command Prompt you should invoke it with:</p>
-<div class="highlight"><pre><code class="bat">ansicon -i or
-ansicon -I
-</code></pre>
-</div><p>The first one adds <span class="caps">ANSICON</span> to the <code>AutoRun</code> registry value for current user and the second for local machine.</p>
+<div>
+<pre>
+<code class='bat'>ansicon -i or
+<p>ansicon -I</code><br />
+  </pre></p>
+</div>
+<p>The first one adds <span class="caps">ANSICON</span> to the <code>AutoRun</code> registry value for current user and the second for local machine.</p>
 
       <br/>
       

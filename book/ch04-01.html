@@ -15,6 +15,22 @@
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
 
+   <!-- Update your html tag to include the itemscope and itemtype attributes -->
+   <html itemscope itemtype="http://schema.org/Book">
+
+   <!-- Add the following three tags inside head -->
+   <meta itemprop="name" content="Ruby On Windows Guides">
+   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
+
+   <!-- Place this render call where appropriate -->
+   <script type="text/javascript">
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+   </script>
+
    <script type="text/javascript">
 
      var _gaq = _gaq || [];
@@ -48,7 +64,8 @@
           <td><img src="/images/rwg_logo_blue.png"/></td>
           <td>
             <h1>Ruby on Windows Guides</h1>
-            <!-- <h3>Comprehensive guides for Ruby on Windows</h3> -->
+            <h4>Comprehensive guides for Ruby on Windows</h4>
+            <h6>by Bosko Ivanisevic</h6>
           </td>
         </tr>
       </table>
@@ -61,6 +78,9 @@
     </div>
 
     <div id="content" class="grid_10">
+      <!-- Place this tag where you want the +1 button to render -->
+      <g:plusone annotation="inline"></g:plusone>
+      <br/>
       
       <a href="/book/ch04-00.html" title="Previous: Programming On Windows">&laquo; Programming On Windows</a>
       
@@ -76,81 +96,95 @@
 <p>Later, technology evolved to <span class="caps">OLE</span> 2 based on Component Object Model (<span class="caps">COM</span>), binary-interface standard for inter-process communication and dynamic object creation. <span class="caps">COM</span> was intended for use by various scripting languages. Nowadays it can be used from almost all languages that run on Windows: C, C++, Visual Basic, Delphi and, of course, Ruby.</p>
 <p>Using <span class="caps">OLE</span> in Ruby scripts is managed through win32ole extension. We&#8217;ll start exploring Ruby and <span class="caps">OLE</span> objects through couple one-liners which will give us good starting insight in <span class="caps">OLE</span> objects that exist in operating system. Later on we will see what additional data about existing <span class="caps">OLE</span> objects we can collect from Ruby. Finally we will learn how to automate few Windows applications through Ruby scripts.</p>
 <p>Let&#8217;s start with one simple one-liner which will print out all <span class="caps">OLE</span> objects registered in the system:</p>
-<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">ruby</span> -rwin<span class="m">32</span>ole -e <span class="s2">&quot;puts WIN32OLE_TYPE.typelibs.sort&quot;</span>
-AP Client <span class="m">1</span>.<span class="m">0</span> HelpPane Type Library
-AP Client <span class="m">1</span>.<span class="m">0</span> Type Library
-ATL <span class="m">2</span>.<span class="m">0</span> Type Library
-AccessibilityCplAdmin <span class="m">1</span>.<span class="m">0</span> Type Library
-Active DS Type Library
-ActiveMovie control type library
-AppIdPolicyEngineApi <span class="m">1</span>.<span class="m">0</span> Type Library
-Assistance Platform Client <span class="m">1</span>.<span class="m">0</span> Data Services Type Library
-Available Networks Type Library
-BdeUISrv <span class="m">1</span>.<span class="m">0</span> Type Library
-Bined package <span class="m">8</span>.<span class="m">0</span> Type Library
-BmlDataCarousel <span class="m">1</span>.<span class="m">0</span> Type Library
-:    :     :
-</code></pre>
-</div><p>What we did with this one-liner? We told ruby to load win32ole extension (<code>-r win32ole</code>) and to print array of names of all type libraries registered in the system (<code>-e “puts WIN32OLE_TYPE.typelibs.sort”</code>). Type libraries contain metadata about <span class="caps">COM</span> types. Ruby reads this data with the help of another <code>win32ole</code> class – <code>WIN32OLE_TYPELIB</code>. This class&#8217; internal method reads entries in registry key <code>HKCR\TypeLib</code> and collects all properties of registered type libraries like name, version and path on the disk. <code>WIN32OLE_TYPE</code> extracts these type libraries names and stores them in the array. Knowing this we can use <code>WIN32OLE_TYPELIB</code> class to display more information about existing <span class="caps">COM</span> objects:</p>
-<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">ruby</span> -rwin<span class="m">32</span>ole -e <span class="s1">&#39;puts &quot;#{WIN32OLE_TYPELIB.typelibs[0].name}:  #{WIN32OLE_TYPELIB.typelibs[0].path}&quot;&#39;</span>
-
-Microsoft ActiveX Data Objects <span class="m">2</span>.<span class="m">0</span> Library:  C:\Program Files\Common Files\System\ado\msado<span class="m">20</span>.tlb
-</code></pre>
-</div><p>This time we displayed not only the name but also the path of the type library on the file system. Information obtained through <code>WIN32OLE_TYPELIB</code> is not of much use, but it can be good as a starting point for exploring <span class="caps">OLE</span> objects that exist in the system.</p>
+<div>
+<pre>
+<code class='bat'>c:\&amp;gt;ruby -rwin32ole -e &amp;quot;puts WIN32OLE_TYPE.typelibs.sort&amp;quot;
+<p>AP Client 1.0 HelpPane Type Library<br />
+AP Client 1.0 Type Library<br />
+<span class="caps">ATL</span> 2.0 Type Library<br />
+AccessibilityCplAdmin 1.0 Type Library<br />
+Active DS Type Library<br />
+ActiveMovie control type library<br />
+AppIdPolicyEngineApi 1.0 Type Library<br />
+Assistance Platform Client 1.0 Data Services Type Library<br />
+Available Networks Type Library<br />
+BdeUISrv 1.0 Type Library<br />
+Bined package 8.0 Type Library<br />
+BmlDataCarousel 1.0 Type Library<br />
+:    :     :</code><br />
+  </pre></p>
+</div>
+<p>What we did with this one-liner? We told ruby to load win32ole extension (<code>-r win32ole</code>) and to print array of names of all type libraries registered in the system (<code>-e “puts WIN32OLE_TYPE.typelibs.sort”</code>). Type libraries contain metadata about <span class="caps">COM</span> types. Ruby reads this data with the help of another <code>win32ole</code> class – <code>WIN32OLE_TYPELIB</code>. This class&#8217; internal method reads entries in registry key <code>HKCR\TypeLib</code> and collects all properties of registered type libraries like name, version and path on the disk. <code>WIN32OLE_TYPE</code> extracts these type libraries names and stores them in the array. Knowing this we can use <code>WIN32OLE_TYPELIB</code> class to display more information about existing <span class="caps">COM</span> objects:</p>
+<div>
+<pre>
+<code class='bat'>c:\&amp;gt;ruby -rwin32ole -e 'puts &amp;quot;#{WIN32OLE_TYPELIB.typelibs[0].name}:  #{WIN32OLE_TYPELIB.typelibs[0].path}&amp;quot;'
+<p>Microsoft ActiveX Data Objects 2.0 Library:  C:\Program Files\Common Files\System\ado\msado20.tlb</code><br />
+  </pre></p>
+</div>
+<p>This time we displayed not only the name but also the path of the type library on the file system. Information obtained through <code>WIN32OLE_TYPELIB</code> is not of much use, but it can be good as a starting point for exploring <span class="caps">OLE</span> objects that exist in the system.</p>
 <p>Each type library usually contains more classes. List of classes are returned by ole_classes, @WIN32OLE_TYPE@&#8217;s class method which accepts one argument, name of type library:</p>
-<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">ruby</span> -rwin<span class="m">32</span>ole -e <span class="s2">&quot;puts WIN32OLE_TYPE.ole_classes(&#39;Microsoft Scripting Runtime&#39;)&quot;</span>
-CompareMethod
-IOMode
-Tristate
-FileAttribute
-:    :    :
-FileSystemObject
-Drive
-Drives
-Folder
-Folders
-File
-Files
-TextStream
-IScriptEncoder
-Encoder
-</code></pre>
-</div><p>Method ole_classes returns array of <code>WIN32OLE_TYPE</code> objects but Ruby&#8217;s puts method, when called with array as an argument, iterates over all objects in the array and calls to_s method for each member of array. <code>WIN32OLE_TYPE</code> objects return name of the <span class="caps">OLE</span> type as a result of to_s method. But there is much more information that <code>WIN32OLE_TYPE</code> object contains then just a name as you can see from the irb session displayed below.</p>
-<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">irb</span> -r win<span class="m">32</span>ole
-irb(main)<span class="nl">:001:0</span><span class="p">&gt;</span> <span class="n">WIN32OLE_TYPE</span>.ole_classes(<span class="s2">&quot;Microsoft Scripting Runtime&quot;</span>)[<span class="m">22</span>].name
-<span class="o">=</span>&gt; <span class="s2">&quot;FileSystemObject&quot;</span>
-irb(main)<span class="nl">:002:0</span><span class="p">&gt;</span> <span class="n">WIN32OLE_TYPE</span>.ole_classes(<span class="s2">&quot;Microsoft Scripting Runtime&quot;</span>)[<span class="m">22</span>].guid
-<span class="o">=</span>&gt; <span class="s2">&quot;{0D43FE01-F093-11CF-8940-00A0C9054228}&quot;</span>
-irb(main)<span class="nl">:003:0</span><span class="p">&gt;</span> <span class="n">WIN32OLE_TYPE</span>.ole_classes(<span class="s2">&quot;Microsoft Scripting Runtime&quot;</span>)[<span class="m">22</span>].progid
-<span class="o">=</span>&gt; <span class="s2">&quot;Scripting.FileSystemObject&quot;</span>
-</code></pre>
-</div><p>As you can see name of the <span class="caps">OLE</span> type is exactly the one displayed in the command prompt when we printed array of classes in Microsoft Scripting Runtime type library. Further we see this class&#8217; <span class="caps">GUID</span> and ProgID. Globally unique identifier (<span class="caps">GUID</span>) is 32 character hexadecimal string which uniquely identifies <span class="caps">OLE</span> type. ProgID is string that corresponds to <span class="caps">GUID</span> and also identifies <span class="caps">OLE</span> type. Both of these values can be used when we instantiate object of particular <span class="caps">OLE</span> type.</p>
+<div>
+<pre>
+<code class='bat'>c:\&amp;gt;ruby -rwin32ole -e &amp;quot;puts WIN32OLE_TYPE.ole_classes('Microsoft Scripting Runtime')&amp;quot;
+<p>CompareMethod<br />
+IOMode<br />
+Tristate<br />
+FileAttribute<br />
+:    :    :<br />
+FileSystemObject<br />
+Drive<br />
+Drives<br />
+Folder<br />
+Folders<br />
+File<br />
+Files<br />
+TextStream<br />
+IScriptEncoder<br />
+Encoder</code><br />
+  </pre></p>
+</div>
+<p>Method ole_classes returns array of <code>WIN32OLE_TYPE</code> objects but Ruby&#8217;s puts method, when called with array as an argument, iterates over all objects in the array and calls to_s method for each member of array. <code>WIN32OLE_TYPE</code> objects return name of the <span class="caps">OLE</span> type as a result of to_s method. But there is much more information that <code>WIN32OLE_TYPE</code> object contains then just a name as you can see from the irb session displayed below.</p>
+<div>
+<pre>
+<code class='bat'>C:\&amp;gt;irb -r win32ole
+<p>irb(main):001:0&gt; WIN32OLE_TYPE.ole_classes(&quot;Microsoft Scripting Runtime&quot;)<sup class="footnote" id="fnr22"><a href="#fn22">22</a></sup>.name<br />
+=&gt; &quot;FileSystemObject&quot;<br />
+irb(main):002:0&gt; WIN32OLE_TYPE.ole_classes(&quot;Microsoft Scripting Runtime&quot;)<sup class="footnote" id="fnr22"><a href="#fn22">22</a></sup>.guid<br />
+=&gt; &quot;{0D43FE01-F093-11CF-8940-00A0C9054228}&quot;<br />
+irb(main):003:0&gt; WIN32OLE_TYPE.ole_classes(&quot;Microsoft Scripting Runtime&quot;)<sup class="footnote" id="fnr22"><a href="#fn22">22</a></sup>.progid<br />
+=&gt; &quot;Scripting.FileSystemObject&quot;</code><br />
+  </pre></p>
+</div>
+<p>As you can see name of the <span class="caps">OLE</span> type is exactly the one displayed in the command prompt when we printed array of classes in Microsoft Scripting Runtime type library. Further we see this class&#8217; <span class="caps">GUID</span> and ProgID. Globally unique identifier (<span class="caps">GUID</span>) is 32 character hexadecimal string which uniquely identifies <span class="caps">OLE</span> type. ProgID is string that corresponds to <span class="caps">GUID</span> and also identifies <span class="caps">OLE</span> type. Both of these values can be used when we instantiate object of particular <span class="caps">OLE</span> type.</p>
 <p>Let&#8217;s do that know and check what informations about <span class="caps">OLE</span> type we can get from such object:</p>
-<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">irb</span> -rwin<span class="m">32</span>ole
-irb(main)<span class="nl">:001:0</span><span class="p">&gt;</span> <span class="n">fso</span> <span class="o">=</span> WIN<span class="m">32</span>OLE_TYPE.new(<span class="s2">&quot;Microsoft Scripting Runtime&quot;</span><span class="p">,</span> <span class="s2">&quot;FileSystemObject&quot;</span>)
-<span class="o">=</span>&gt; #<span class="p">&lt;</span><span class="n">WIN32OLE_TYPE</span><span class="nl">:FileSystemObject</span><span class="p">&gt;</span>
-<span class="n">irb</span>(main)<span class="nl">:002:0</span><span class="p">&gt;</span> <span class="n">fso</span>.ole_methods.length
-<span class="o">=</span><span class="p">&gt;</span> <span class="n">34</span>
-irb(main)<span class="nl">:003:0</span><span class="p">&gt;</span> <span class="n">fso</span>.ole_methods[<span class="m">17</span>].invoke_kind
-<span class="o">=</span>&gt; <span class="s2">&quot;FUNC&quot;</span>
-irb(main)<span class="nl">:004:0</span><span class="p">&gt;</span> <span class="n">fso</span>.ole_methods[<span class="m">17</span>].return_type
-<span class="o">=</span>&gt; <span class="s2">&quot;BOOL&quot;</span>
-irb(main)<span class="nl">:005:0</span><span class="p">&gt;</span> <span class="n">fso</span>.ole_methods[<span class="m">17</span>].name
-<span class="o">=</span>&gt; <span class="s2">&quot;FileExists&quot;</span>
-irb(main)<span class="nl">:006:0</span><span class="p">&gt;</span> <span class="n">fso</span>.ole_methods[<span class="m">17</span>].helpstring
-<span class="o">=</span>&gt; <span class="s2">&quot;Check if a file exists&quot;</span>
-irb(main)<span class="nl">:007:0</span><span class="p">&gt;</span> <span class="n">params</span> <span class="o">=</span> fso.ole_methods[<span class="m">17</span>].params
-<span class="o">=</span>&gt; [#<span class="p">&lt;</span><span class="n">WIN32OLE_PARAM</span><span class="nl">:FileSpec</span>&gt;]
-irb(main)<span class="nl">:008:0</span><span class="p">&gt;</span> <span class="n">params</span>[<span class="m">0</span>].input?
-<span class="o">=</span><span class="p">&gt;</span> <span class="n">true</span>
-irb(main)<span class="nl">:009:0</span><span class="p">&gt;</span> <span class="n">params</span>[<span class="m">0</span>].ole_type
-<span class="o">=</span>&gt; <span class="s2">&quot;BSTR&quot;</span>
-irb(main)<span class="nl">:010:0</span><span class="p">&gt;</span> <span class="n">params</span>[<span class="m">0</span>].name
-<span class="o">=</span>&gt; <span class="s2">&quot;FileSpec&quot;</span>
-irb(main)<span class="nl">:011:0</span><span class="p">&gt;</span> <span class="n">params</span>[<span class="m">0</span>].default
-<span class="o">=</span><span class="p">&gt;</span> <span class="n">nil</span>
-</code></pre>
-</div><p>In the first statement we are creating <code>WIN32OLE_TYPE</code> object, <code>FileSystemObject</code>, from Microsoft Scripting Runtime type library. In the next step we are reading number of <span class="caps">OLE</span> methods that are defined in the <span class="caps">OLE</span> object. Statements that follow display various properties of one particular <span class="caps">OLE</span> method.</p>
+<div>
+<pre>
+<code class='bat'>c:\&amp;gt;irb -rwin32ole
+<p>irb(main):001:0&gt; fso = WIN32OLE_TYPE.new(&quot;Microsoft Scripting Runtime&quot;, &quot;FileSystemObject&quot;)<br />
+=&gt; #&lt;WIN32OLE_TYPE:FileSystemObject&gt;<br />
+irb(main):002:0&gt; fso.ole_methods.length<br />
+=&gt; 34<br />
+irb(main):003:0&gt; fso.ole_methods<sup class="footnote" id="fnr17"><a href="#fn17">17</a></sup>.invoke_kind<br />
+=&gt; &quot;<span class="caps">FUNC</span>&quot;<br />
+irb(main):004:0&gt; fso.ole_methods<sup class="footnote" id="fnr17"><a href="#fn17">17</a></sup>.return_type<br />
+=&gt; &quot;<span class="caps">BOOL</span>&quot;<br />
+irb(main):005:0&gt; fso.ole_methods<sup class="footnote" id="fnr17"><a href="#fn17">17</a></sup>.name<br />
+=&gt; &quot;FileExists&quot;<br />
+irb(main):006:0&gt; fso.ole_methods<sup class="footnote" id="fnr17"><a href="#fn17">17</a></sup>.helpstring<br />
+=&gt; &quot;Check if a file exists&quot;<br />
+irb(main):007:0&gt; params = fso.ole_methods<sup class="footnote" id="fnr17"><a href="#fn17">17</a></sup>.params<br />
+=&gt; [#&lt;WIN32OLE_PARAM:FileSpec&gt;]<br />
+irb(main):008:0&gt; params<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>.input?<br />
+=&gt; true<br />
+irb(main):009:0&gt; params<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>.ole_type<br />
+=&gt; &quot;<span class="caps">BSTR</span>&quot;<br />
+irb(main):010:0&gt; params<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>.name<br />
+=&gt; &quot;FileSpec&quot;<br />
+irb(main):011:0&gt; params<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>.default<br />
+=&gt; nil</code><br />
+  </pre></p>
+</div>
+<p>In the first statement we are creating <code>WIN32OLE_TYPE</code> object, <code>FileSystemObject</code>, from Microsoft Scripting Runtime type library. In the next step we are reading number of <span class="caps">OLE</span> methods that are defined in the <span class="caps">OLE</span> object. Statements that follow display various properties of one particular <span class="caps">OLE</span> method.</p>
 <p>The first one shows that this <span class="caps">OLE</span> method is actually a function. Possible values that can be returned from <code>invoke_kind</code> are:</p>
 <ul>
 	<li><span class="caps">UNKNOWN</span> – for undefined <span class="caps">OLE</span> methods</li>
@@ -162,230 +196,258 @@ irb(main)<span class="nl">:011:0</span><span class="p">&gt;</span> <span class="
 </ul>
 <p>After this we see method&#8217;s name, return type and help string. Finally, information about method&#8217;s parameters are displayed.</p>
 <p>We can now extend our Ruby on Rails application to display information about registered <span class="caps">OLE</span> objects. Since we are gathering data directly from the system we will not need new database model. Go to the <code>rwin_book</code> application directory and invoke one of Rails generators that will create new controller with index method only:</p>
-<div class="highlight"><pre><code class="bat">c:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> generate controller OleExplorer index
-      create  app<span class="n">/controllers/ole_explorer_controller.rb</span>
-       route  get <span class="s2">&quot;ole_explorer/index&quot;</span>
-      invoke  erb
-      create    app<span class="n">/views/ole_explorer</span>
-      create    app<span class="n">/views/ole_explorer/index.html.erb</span>
-      invoke  test_unit
-      create    test<span class="n">/functional/ole_explorer_controller_test.rb</span>
-      invoke  helper
-      create    app<span class="n">/helpers/ole_explorer_helper.rb</span>
-      invoke    test_unit
-      create      test<span class="n">/unit/helpers/ole_explorer_helper_test.rb</span>
-</code></pre>
-</div><p>The generator logs everything it did created new controller, view, test and helper files and added a new route. From this point we can proceed in several ways. Code that extracts <span class="caps">OLE</span> information can all be part of the new controller. We can also put it in the <code>ole_explorer_helper.rb</code> file or, as we will do, create new library and put complete <span class="caps">OLE</span> related code there.</p>
+<div>
+<pre>
+<code class='bat'>c:\projects\rwin_book&amp;gt;rails generate controller OleExplorer index
+create  app/controllers/ole_explorer_controller.rb
+route  get &quot;ole_explorer/index&quot;
+invoke  erb
+create    app/views/ole_explorer
+create    app/views/ole_explorer/index.html.erb
+invoke  test_unit
+create    test/functional/ole_explorer_controller_test.rb
+invoke  helper
+create    app/helpers/ole_explorer_helper.rb
+invoke    test_unit
+create      test/unit/helpers/ole_explorer_helper_test.rb</code>
+</pre>
+</div>
+<p>The generator logs everything it did created new controller, view, test and helper files and added a new route. From this point we can proceed in several ways. Code that extracts <span class="caps">OLE</span> information can all be part of the new controller. We can also put it in the <code>ole_explorer_helper.rb</code> file or, as we will do, create new library and put complete <span class="caps">OLE</span> related code there.</p>
 <p>Create new file in the lib directory within your application&#8217;s directory and put following code in it:</p>
-<div class="highlight"><pre><code class="bat">require <span class="s1">&#39;win32ole&#39;</span>
-
-module WinOle
-  class OleExplorer
-    def typelibs
-<span class="p">      @</span>typelibs ||<span class="o">=</span> WIN<span class="m">32</span>OLE_TYPELIB.typelibs.select {<span class="p">|</span><span class="n">tl</span><span class="p">|</span> <span class="n">tl</span>.name unless tl.name.length <span class="o">==</span> <span class="m">0</span>}
-    end
-
-    def ole_classes(typelib)
-      begin
-        WIN<span class="m">32</span>OLE_TYPE.ole_classes(typelib).collect {<span class="p">|</span><span class="n">oc</span><span class="p">|</span> <span class="n">oc</span>.name}.sort
-      rescue
-        []
-      end
-    end
-
-    def ole_members(typelib<span class="p">,</span> klass)
-      begin
-        ot <span class="o">=</span> WIN<span class="m">32</span>OLE_TYPE.new(typelib<span class="p">,</span> klass)
-        members <span class="o">=</span> (ot.ole_methods + ot.variables).collect{<span class="p">|</span><span class="n">om</span><span class="p">|</span> <span class="n">om</span>.name}.sort
-        {<span class="nl">:class</span><span class="o">=</span><span class="p">&gt;</span><span class="n">ot</span><span class="p">,</span> <span class="nl">:members</span><span class="o">=</span><span class="p">&gt;</span><span class="n">members</span>}
-      rescue
-        {<span class="nl">:members</span><span class="o">=</span>&gt;[]}
-      end
-    end
-
-    def ole_member(typelib<span class="p">,</span> klass<span class="p">,</span> member)
-      begin
-        ot <span class="o">=</span> WIN<span class="m">32</span>OLE_TYPE.new(typelib<span class="p">,</span> klass)
-        (ot.ole_methods + ot.variables).find {<span class="p">|</span><span class="n">mem</span><span class="p">|</span> <span class="n">mem</span>.name <span class="o">==</span> member}
-      rescue
-      end
-    end
-  end
+<div>
+<pre>
+<code class='bat'>require 'win32ole'
+<p>module WinOle<br />
+  class OleExplorer<br />
+    def typelibs<br />
+      @typelibs ||= WIN32OLE_TYPELIB.typelibs.select {|tl| tl.name unless tl.name.length == 0}<br />
+    end</p>
+def ole_classes(typelib)
+begin
+WIN32OLE_TYPE.ole_classes(typelib).collect {|oc| oc.name}.sort
+rescue
+[]
 end
-</code></pre>
-</div><p>We created new WinOle module with class <code>OleExplorer</code> in it. The first method typelibs returns an array of names of all type libraries found in the system. The second one returns an array with names of all classes defined in a type library whose name is passed as an argument. Next one returns hash which has two keys if requested class is found in the type library. First key, <code>:class</code>, has <code>WIN32OLE_TYPE</code> object as a value, and the second, <code>:members</code>, contains an array with names of all members of the class. When requested class is not found method returns only empty array in the <code>:members</code> key. Finally the last method returns member of the class or <code>nil</code>. This member can be <code>WIN32OLE_METHOD</code> or <code>WIN32OLE_VARIABLE</code> object.</p>
+end
+def ole_members(typelib, klass)
+begin
+ot = WIN32OLE_TYPE.new(typelib, klass)
+members = (ot.ole_methods + ot.variables).collect{|om| om.name}.sort
+{:class=&gt;ot, :members=&gt;members}
+rescue
+{:members=&gt;[]}
+end
+end
+def ole_member(typelib, klass, member)
+begin
+ot = WIN32OLE_TYPE.new(typelib, klass)
+(ot.ole_methods + ot.variables).find {|mem| mem.name == member}
+rescue
+end
+end
+end
+<p>end</code><br />
+  </pre></p>
+</div>
+<p>We created new WinOle module with class <code>OleExplorer</code> in it. The first method typelibs returns an array of names of all type libraries found in the system. The second one returns an array with names of all classes defined in a type library whose name is passed as an argument. Next one returns hash which has two keys if requested class is found in the type library. First key, <code>:class</code>, has <code>WIN32OLE_TYPE</code> object as a value, and the second, <code>:members</code>, contains an array with names of all members of the class. When requested class is not found method returns only empty array in the <code>:members</code> key. Finally the last method returns member of the class or <code>nil</code>. This member can be <code>WIN32OLE_METHOD</code> or <code>WIN32OLE_VARIABLE</code> object.</p>
 <p>With this library in place our <code>OleExplorerController</code> can use <code>WinOle::OleExplorer</code> class to collect <span class="caps">OLE</span> data and display them to the user in the view. This trivial example will use three drop-down select boxes for choosing type library, class and member of the class. In the controller we will use <code>OleExplorer</code> class to fetch all type libraries registered in the system.</p>
-<div class="highlight"><pre><code class="bat">require <span class="s2">&quot;ole_explorer&quot;</span>
-
-class OleExplorerController <span class="p">&lt;</span> <span class="n">ApplicationController</span>
-  def index
-<span class="p">    @</span>typelibs <span class="o">=</span> ole_explorer.typelibs.collect{<span class="p">|</span><span class="n">tl</span><span class="p">|</span> <span class="n">tl</span>.name}.sort
-  end
-
-  def ole_explorer
-<span class="p">    @</span>ole_explorer ||<span class="o">=</span> WinOle<span class="c">::OleExplorer.new</span>
-  end
+<div>
+<pre>
+<code class='bat'>require &amp;quot;ole_explorer&amp;quot;
+<p>class OleExplorerController &lt; ApplicationController<br />
+  def index<br />
+    @typelibs = ole_explorer.typelibs.collect{|tl| tl.name}.sort<br />
+  end</p>
+def ole_explorer
+@ole_explorer ||= WinOle::OleExplorer.new
 end
-</code></pre>
-</div><p>In the template file <code>index.html.erb</code> we will use instance variable <code>@typelibs</code> to display all type libraries in the select box.</p>
-<div class="highlight"><pre><code class="bat"><span class="p">&lt;</span><span class="n">h1</span><span class="p">&gt;</span><span class="n">OleExplorer</span>&lt;<span class="n">/h1&gt;</span>
-&lt;%<span class="o">=</span> select <span class="s2">&quot;typelib&quot;</span><span class="p">,</span> <span class="s2">&quot;typelib&quot;</span><span class="p">,</span> @typelibs<span class="p">,</span> {<span class="nl">:prompt</span><span class="o">=</span>&gt;<span class="s2">&quot;Select Type Library&quot;</span>}  %&gt;
-</code></pre>
-</div><p>If you now start rails server and load <code>http://localhost:3000/ole_explorer/index</code> page you will see select box filled with all type libraries registered in the system (Figure 12).</p>
+<p>end</code><br />
+  </pre></p>
+</div>
+<p>In the template file <code>index.html.erb</code> we will use instance variable <code>@typelibs</code> to display all type libraries in the select box.</p>
+<div>
+<pre>
+<code class='bat'>&amp;lt;h1&amp;gt;OleExplorer&amp;lt;/h1&amp;gt;
+<p>&lt;%= select &quot;typelib&quot;, &quot;typelib&quot;, @typelibs, {:prompt=&gt;&quot;Select Type Library&quot;}  %&gt;</code><br />
+  </pre></p>
+</div>
+<p>If you now start rails server and load <code>http://localhost:3000/ole_explorer/index</code> page you will see select box filled with all type libraries registered in the system (Figure 12).</p>
 <p><img src="/images/fig0401.png" title="Select box with all registered type libraries." alt="Select box with all registered type libraries." /></p>
 <p>Next we want to read all classes in a type library whenever user changes selected type library. We will do that through Ajax request. Let&#8217;s add onchange method to our select box.</p>
-<div class="highlight"><pre><code class="html"><span class="nt">&lt;h1&gt;</span>OleExplorer<span class="nt">&lt;/h1&gt;</span>
-<span class="err">&lt;</span>%= select &quot;typelib&quot;, &quot;typelib&quot;, @typelibs,
-    {:prompt=&gt;&quot;Select Type Library&quot;},
-    {:onchange =&gt; remote_function(:url =&gt; {:action =&gt;
-&quot;update_classes&quot;}, :method=&gt;:get,  :with =&gt; &quot;&#39;typelib=&#39;+value&quot;)}  %&gt;
-</code></pre>
-</div><p>New JavaScript method will send <span class="caps">GET</span> request to the <code>OleExplorer</code> controller, call <code>update_classes</code> method and pass the name of the selected type library. We are still missing <code>update_classes</code> method in the controller so let&#8217;s add it now:</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">update_classes</span>
-  <span class="vi">@ole_classes</span> <span class="o">=</span> <span class="n">ole_explorer</span><span class="o">.</span><span class="n">ole_classes</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:typelib</span><span class="o">]</span><span class="p">)</span>
-
-  <span class="n">render</span> <span class="ss">:update</span> <span class="k">do</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span>
-    <span class="n">page</span><span class="o">.</span><span class="n">replace_html</span> <span class="s1">&#39;ole_classes&#39;</span><span class="p">,</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s1">&#39;ole_classes&#39;</span><span class="p">,</span>
-                                     <span class="ss">:object</span> <span class="o">=&gt;</span> <span class="vi">@ole_classes</span> <span class="o">||</span> <span class="o">[]</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>New method will collect names of all classes in the type library and replace <span class="caps">HTML</span> code in the <code>div</code> tag with ID <code>ole_classes</code> by rendering <code>ole_classes</code> partial template, passing it the array with names of classes. Before we can check our new code we have to create partial template <code>_ole_classes.html.erb</code> in the <code>app/views/ole_explorer</code> directory and add new route to <code>routes.rb</code> file. Go ahead and create new partial and add following code to it.</p>
-<div class="highlight"><pre><code class="ruby"><span class="o">&lt;</span><span class="sx">%= select &quot;ole_class&quot;, &quot;ole_class&quot;, @ole_classes,</span>
-<span class="sx">    {:prompt=</span><span class="o">&gt;</span><span class="s2">&quot;Select OLE class&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="ss">:onchange</span> <span class="o">=&gt;</span> <span class="n">remote_function</span><span class="p">(</span><span class="ss">:url</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:action</span> <span class="o">=&gt;</span> <span class="s2">&quot;update_members&quot;</span><span class="p">},</span>
-       <span class="ss">:method</span><span class="o">=&gt;</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s2">&quot;&#39;ole_class=&#39;+value+&#39;&amp;typelib=&#39;+$(&#39;typelib_typelib&#39;).getValue()&quot;</span><span class="p">)}</span> <span class="o">%&gt;</span>
-</code></pre>
-</div><p>Finally change <code>routes.rb</code>:</p>
-<div class="highlight"><pre><code class="ruby"><span class="no">RwinBook</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span>
-  <span class="n">get</span> <span class="s2">&quot;ole_explorer/index&quot;</span>
-  <span class="n">get</span> <span class="s2">&quot;ole_explorer/update_classes&quot;</span>
-<span class="k">end</span>
-<span class="no">OleExplorerController</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">index</span> <span class="nb">method</span><span class="p">:</span>
-<span class="k">def</span> <span class="nf">index</span>
-  <span class="vi">@typelibs</span> <span class="o">=</span> <span class="n">ole_explorer</span><span class="o">.</span><span class="n">typelibs</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">tl</span><span class="o">|</span> <span class="n">tl</span><span class="o">.</span><span class="n">name</span><span class="p">}</span><span class="o">.</span><span class="n">sort</span>
-  <span class="vi">@ole_classes</span> <span class="o">=</span> <span class="o">[]</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>and add the following line to the end of the <code>index.html.erb</code> file:</p>
-<div class="highlight"><pre><code class="html"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;ole_classes&quot;</span><span class="nt">&gt;</span><span class="err">&lt;</span>%= render :partial =&gt; &#39;ole_classes&#39;,
-                                 :object =&gt; @ole_classes %&gt;<span class="nt">&lt;/div&gt;</span>
-</code></pre>
-</div><p>Now reload the page in the browser and new select box will be displayed, filled with new names of classes whenever you change selected type library.</p>
+<div>
+<pre>
+<code class='html'>&amp;lt;h1&amp;gt;OleExplorer&amp;lt;/h1&amp;gt;
+<p>&lt;%= select &quot;typelib&quot;, &quot;typelib&quot;, @typelibs,<br />
+    {:prompt=&gt;&quot;Select Type Library&quot;},<br />
+    {:onchange =&gt; remote_function(:url =&gt; {:action =&gt;<br />
+&quot;update_classes&quot;}, :method=&gt;:get,  :with =&gt; &quot;&#8216;typelib=&#8217;+value&quot;)}  %&gt;</code><br />
+  </pre></p>
+</div>
+<p>New JavaScript method will send <span class="caps">GET</span> request to the <code>OleExplorer</code> controller, call <code>update_classes</code> method and pass the name of the selected type library. We are still missing <code>update_classes</code> method in the controller so let&#8217;s add it now:</p>
+<div>
+<pre>
+<code class='ruby'>def update_classes
+@ole_classes = ole_explorer.ole_classes(params[:typelib])
+render :update do |page|
+page.replace_html &#8216;ole_classes&#8217;, :partial =&gt; &#8216;ole_classes&#8217;,
+:object =&gt; @ole_classes || []
+end
+<p>end</code><br />
+  </pre></p>
+</div>
+<p>New method will collect names of all classes in the type library and replace <span class="caps">HTML</span> code in the <code>div</code> tag with ID <code>ole_classes</code> by rendering <code>ole_classes</code> partial template, passing it the array with names of classes. Before we can check our new code we have to create partial template <code>_ole_classes.html.erb</code> in the <code>app/views/ole_explorer</code> directory and add new route to <code>routes.rb</code> file. Go ahead and create new partial and add following code to it.</p>
+<div>
+<pre>
+<code class='ruby'>&amp;lt;%= select &amp;quot;ole_class&amp;quot;, &amp;quot;ole_class&amp;quot;, @ole_classes,
+{:prompt=&gt;&quot;Select <span class="caps">OLE</span> class&quot;},
+{:onchange =&gt; remote_function(:url =&gt; {:action =&gt; &quot;update_members&quot;},
+:method=&gt;:get, :with =&gt; &quot;&#8216;ole_class=&#8217;+value+&#8217;&amp;typelib=&#8216;+$(&#8217;typelib_typelib&#8217;).getValue()&quot;)} %&gt;</code>
+</pre>
+</div>
+<p>Finally change <code>routes.rb</code>:</p>
+<div>
+<pre>
+<code class='ruby'>RwinBook::Application.routes.draw do
+get &quot;ole_explorer/index&quot;
+get &quot;ole_explorer/update_classes&quot;
+<p>end<br />
+OleExplorerController&#8217;s index method:<br />
+def index<br />
+  @typelibs = ole_explorer.typelibs.collect{|tl| tl.name}.sort<br />
+  @ole_classes = []<br />
+end</code><br />
+  </pre></p>
+</div>
+<p>and add the following line to the end of the <code>index.html.erb</code> file:</p>
+<div>
+<pre>
+<code class='html'>&amp;lt;div id=&amp;quot;ole_classes&amp;quot;&amp;gt;&amp;lt;%= render :partial =&amp;gt; 'ole_classes',
+:object =&gt; @ole_classes %&gt;&lt;/div&gt;</code>
+</pre>
+</div>
+<p>Now reload the page in the browser and new select box will be displayed, filled with new names of classes whenever you change selected type library.</p>
 <p>In the next iteration of improving this quite trivial Rails example we want to display general information about selected class, its members and information about selected member within the class. Let&#8217;s first add two new partial templates. The first one, <code>_ole_members.html.erb</code>, will display general class information and select box with names of all members of selected class.</p>
-<div class="highlight"><pre><code class="html"><span class="err">&lt;</span>% if @ole_members[:class] %&gt;
-  <span class="nt">&lt;h3&gt;</span>Class Info<span class="nt">&lt;/h3&gt;</span>
-
-  <span class="nt">&lt;p&gt;</span>Name: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @ole_members[:class].name %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-  <span class="nt">&lt;p&gt;</span>GUID: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @ole_members[:class].guid %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-  <span class="nt">&lt;p&gt;</span>ProgID: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @ole_members[:class].progid %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-  <span class="nt">&lt;p&gt;</span>Desc: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @ole_members[:class].helpstring %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-<span class="err">&lt;</span>% end %&gt;
-<span class="err">&lt;</span>%= select(&quot;ole_member&quot;, &quot;ole_member&quot;, @ole_members[:members],
-           {:prompt=&gt;&quot;Select OLE member&quot;},
- {:onchange =&gt; remote_function(:url =&gt; {:action =&gt; &quot;member_info&quot;},
-                               :method=&gt;:get,
- :with =&gt; &quot;&#39;member=&#39;+value+&#39;<span class="err">&amp;</span>typelib=&#39;+$(&#39;typelib_typelib&#39;).getValue()+&#39;<span class="err">&amp;</span>ole_class=&#39;+$(&#39;ole_class_ole_class&#39;).getValue()&quot;)}) %&gt;
-</code></pre>
-</div><p>Below the heading we are displaying class&#8217; name, <span class="caps">GUID</span>, ProgID and help string. After that we fill select box with all members of selected class. Similarly to previous two select boxes we are using <code>onchange</code> event to send Ajax request to the server whenever selected member is changed. This time we are sending three values in the request: names of member, class and type library.</p>
+<div>
+<pre>
+<code class='html'>&amp;lt;% if @ole_members[:class] %&amp;gt;
+&lt;h3&gt;Class Info&lt;/h3&gt;
+&lt;p&gt;Name: &lt;b&gt;&lt;%= @ole_members[:class].name %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;<span class="caps">GUID</span>: &lt;b&gt;&lt;%= @ole_members[:class].guid %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;ProgID: &lt;b&gt;&lt;%= @ole_members[:class].progid %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Desc: &lt;b&gt;&lt;%= @ole_members[:class].helpstring %&gt;&lt;/b&gt;&lt;/p&gt;
+<p>&lt;% end <span>&gt;<br />
+&lt;</span>= select(&quot;ole_member&quot;, &quot;ole_member&quot;, @ole_members[:members],<br />
+           {:prompt=&gt;&quot;Select <span class="caps">OLE</span> member&quot;},<br />
+ {:onchange =&gt; remote_function(:url =&gt; {:action =&gt; &quot;member_info&quot;},<br />
+                               :method=&gt;:get,<br />
+ :with =&gt; &quot;&#8216;member=&#8217;+value+&#8217;&amp;typelib=&#8216;+$(&#8217;typelib_typelib&#8217;).getValue()<ins>&#8216;&amp;ole_class=&#8217;</ins>$(&#8216;ole_class_ole_class&#8217;).getValue()&quot;)}) %&gt;</code><br />
+  </pre></p>
+</div>
+<p>Below the heading we are displaying class&#8217; name, <span class="caps">GUID</span>, ProgID and help string. After that we fill select box with all members of selected class. Similarly to previous two select boxes we are using <code>onchange</code> event to send Ajax request to the server whenever selected member is changed. This time we are sending three values in the request: names of member, class and type library.</p>
 <p>Second partial, <code>_member_info.html.erb</code>, displays information about requested member:</p>
-<div class="highlight"><pre><code class="html"><span class="err">&lt;</span>% unless @member.nil? %&gt;
-  <span class="nt">&lt;h3&gt;</span>Member info<span class="nt">&lt;/h3&gt;</span>
-  <span class="err">&lt;</span>% if @member.is_a? WIN32OLE_METHOD %&gt;
-    <span class="err">&lt;</span>% if @member.event? %&gt;
-      <span class="nt">&lt;p&gt;&lt;i&gt;</span>Event<span class="nt">&lt;/i&gt;&lt;/p&gt;</span>
-      <span class="nt">&lt;p&gt;</span>Event interface: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.event_interface %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-    <span class="err">&lt;</span>% end %&gt;
-    <span class="nt">&lt;p&gt;</span>Name: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.name %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span>Invoke: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.invoke_kind %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span>Returns: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.return_type %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span>Dispatch ID: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.dispid %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span>Help string: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.helpstring %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;&lt;i&gt;</span>Arguments<span class="nt">&lt;/i&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;table</span> <span class="na">border=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;tr&gt;&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;&lt;th&gt;</span>Type<span class="nt">&lt;/th&gt;&lt;th&gt;</span>Usage<span class="nt">&lt;/th&gt;&lt;/tr&gt;</span>
-      <span class="err">&lt;</span>% @member.params.each do |param| %&gt;
-        <span class="nt">&lt;tr&gt;</span>
-          <span class="nt">&lt;td&gt;</span><span class="err">&lt;</span>%= param.name %&gt;<span class="nt">&lt;/td&gt;</span>
-          <span class="nt">&lt;td&gt;</span><span class="err">&lt;</span>%= param.ole_type %&gt;<span class="nt">&lt;/td&gt;</span>
-          <span class="err">&lt;</span>% parinf = [] %&gt;
-          <span class="err">&lt;</span>% parinf <span class="err">&lt;&lt;</span> &quot;In&quot; if param.input? %&gt;
-          <span class="err">&lt;</span>% parinf <span class="err">&lt;&lt;</span> &quot;Out&quot; if param.output? %&gt;
-          <span class="err">&lt;</span>% parinf <span class="err">&lt;&lt;</span> &quot;Optional&quot; if param.optional? %&gt;
-          <span class="nt">&lt;td&gt;</span><span class="err">&lt;</span>%= parinf.join(&#39;,&#39;) %&gt;<span class="nt">&lt;/td&gt;</span>
-        <span class="nt">&lt;/tr&gt;</span>
-      <span class="err">&lt;</span>% end -%&gt;
-    <span class="nt">&lt;/table&gt;</span>
-  <span class="err">&lt;</span>% else %&gt;
-    <span class="nt">&lt;p&gt;&lt;i&gt;</span>Variable<span class="nt">&lt;/i&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span>Name: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.name %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span>Kind: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.variable_kind %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span>Type: <span class="nt">&lt;b&gt;</span><span class="err">&lt;</span>%= @member.ole_type %&gt;<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
-  <span class="err">&lt;</span>% end %&gt;
-<span class="err">&lt;</span>% end %&gt;
-</code></pre>
-</div><p>On the server-side, values of parameters from Ajax request are extracted and used to read information about class&#8217; member. Full listing of code in the controller is given below.</p>
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;ole_explorer&quot;</span>
-
-<span class="k">class</span> <span class="nc">OleExplorerController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">index</span>
-    <span class="vi">@typelibs</span> <span class="o">=</span> <span class="n">ole_explorer</span><span class="o">.</span><span class="n">typelibs</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">tl</span><span class="o">|</span> <span class="n">tl</span><span class="o">.</span><span class="n">name</span><span class="p">}</span><span class="o">.</span><span class="n">sort</span>
-    <span class="vi">@ole_classes</span> <span class="o">=</span> <span class="o">[]</span>
-    <span class="vi">@ole_members</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:members</span><span class="o">=&gt;[]</span><span class="p">}</span>
-    <span class="vi">@member</span> <span class="o">=</span> <span class="kp">nil</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">update_classes</span>
-    <span class="vi">@ole_classes</span> <span class="o">=</span> <span class="n">ole_explorer</span><span class="o">.</span><span class="n">ole_classes</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:typelib</span><span class="o">]</span><span class="p">)</span>
-    <span class="n">render</span> <span class="ss">:update</span> <span class="k">do</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span>
-      <span class="n">page</span><span class="o">.</span><span class="n">replace_html</span> <span class="s1">&#39;ole_classes&#39;</span><span class="p">,</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s1">&#39;ole_classes&#39;</span><span class="p">,</span>
-                        <span class="ss">:object</span> <span class="o">=&gt;</span> <span class="vi">@ole_classes</span> <span class="o">||</span> <span class="o">[]</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">update_members</span>
-    <span class="vi">@ole_members</span> <span class="o">=</span> <span class="n">ole_explorer</span><span class="o">.</span><span class="n">ole_members</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:typelib</span><span class="o">]</span><span class="p">,</span><span class="n">params</span><span class="o">[</span><span class="ss">:ole_class</span><span class="o">]</span><span class="p">)</span>
-    <span class="n">render</span> <span class="ss">:update</span> <span class="k">do</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span>
-      <span class="n">page</span><span class="o">.</span><span class="n">replace_html</span> <span class="s1">&#39;ole_members&#39;</span><span class="p">,</span><span class="ss">:partial</span><span class="o">=&gt;</span><span class="s1">&#39;ole_members&#39;</span><span class="p">,</span>
-                        <span class="ss">:object</span> <span class="o">=&gt;</span> <span class="vi">@ole_members</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">member_info</span>
-    <span class="vi">@member</span> <span class="o">=</span> <span class="n">ole_explorer</span><span class="o">.</span><span class="n">ole_member</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:typelib</span><span class="o">]</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:ole_class</span><span class="o">]</span><span class="p">,</span>
-                                      <span class="n">params</span><span class="o">[</span><span class="ss">:member</span><span class="o">]</span><span class="p">)</span>
-    <span class="n">render</span> <span class="ss">:update</span> <span class="k">do</span> <span class="o">|</span><span class="n">page</span><span class="o">|</span>
-      <span class="n">page</span><span class="o">.</span><span class="n">replace_html</span> <span class="s1">&#39;member_info&#39;</span><span class="p">,</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s1">&#39;member_info&#39;</span><span class="p">,</span>
-                        <span class="ss">:object</span> <span class="o">=&gt;</span> <span class="vi">@member</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">ole_explorer</span>
-    <span class="vi">@ole_explorer</span> <span class="o">||=</span> <span class="no">WinOle</span><span class="o">::</span><span class="no">OleExplorer</span><span class="o">.</span><span class="n">new</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Finally we have to add new partial templates to our index page:</p>
-<div class="highlight"><pre><code class="html"><span class="nt">&lt;h1&gt;</span>OleExplorer<span class="nt">&lt;/h1&gt;</span>
-<span class="err">&lt;</span>%= javascript_include_tag :defaults %&gt;
-<span class="err">&lt;</span>%= select &quot;typelib&quot;, &quot;typelib&quot;, @typelibs,
-    {:prompt=&gt;&quot;Select Type Library&quot;},
-    {:onchange =&gt; remote_function(:url =&gt; {:action =&gt;
-&quot;update_classes&quot;}, :method=&gt;:get,  :with =&gt; &quot;&#39;typelib=&#39;+value&quot;)}  %&gt;
-<span class="nt">&lt;br/&gt;</span>
-
-<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;ole_classes&quot;</span><span class="nt">&gt;</span><span class="err">&lt;</span>%= render :partial =&gt; &#39;ole_classes&#39;,
-                                 :object =&gt; @ole_classes %&gt;<span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;ole_members&quot;</span><span class="nt">&gt;</span><span class="err">&lt;</span>%= render :partial =&gt; &#39;ole_members&#39;,
-                                 :object =&gt; @ole_members %&gt;<span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;member_info&quot;</span><span class="nt">&gt;</span><span class="err">&lt;</span>%= render :partial =&gt; &#39;member_info&#39;,
-                                 :object =&gt; @member %&gt;<span class="nt">&lt;/div&gt;</span>
-</code></pre>
-</div><p>and to add two new routes:</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">get</span> <span class="s2">&quot;ole_explorer/update_members&quot;</span>
-<span class="n">get</span> <span class="s2">&quot;ole_explorer/member_info&quot;</span>
-</code></pre>
-</div><p>Now we have full-featured page for exploring all registered <span class="caps">OLE</span> types in the system. Start Rails application and load the page. Output should look similar to the one shown in Figure 13.</p>
+<div>
+<pre>
+<code class='html'>&amp;lt;% unless @member.nil? %&amp;gt;
+&lt;h3&gt;Member info&lt;/h3&gt;
+&lt;% if @member.is_a? WIN32OLE_METHOD %&gt;
+&lt;% if @member.event? %&gt;
+&lt;p&gt;&lt;i&gt;Event&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;Event interface: &lt;b&gt;&lt;%= @member.event_interface %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;% end %&gt;
+&lt;p&gt;Name: &lt;b&gt;&lt;%= @member.name %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Invoke: &lt;b&gt;&lt;%= @member.invoke_kind %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Returns: &lt;b&gt;&lt;%= @member.return_type %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Dispatch ID: &lt;b&gt;&lt;%= @member.dispid %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Help string: &lt;b&gt;&lt;%= @member.helpstring %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;&lt;i&gt;Arguments&lt;/i&gt;&lt;/p&gt;
+&lt;table border=&quot;1&quot;&gt;
+&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Type&lt;/th&gt;&lt;th&gt;Usage&lt;/th&gt;&lt;/tr&gt;
+&lt;% @member.params.each do |param| %&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;%= param.name %&gt;&lt;/td&gt;
+&lt;td&gt;&lt;%= param.ole_type %&gt;&lt;/td&gt;
+&lt;% parinf = [] %&gt;
+&lt;% parinf &lt;&lt; &quot;In&quot; if param.input? %&gt;
+&lt;% parinf &lt;&lt; &quot;Out&quot; if param.output? %&gt;
+&lt;% parinf &lt;&lt; &quot;Optional&quot; if param.optional? %&gt;
+&lt;td&gt;&lt;%= parinf.join(&#8216;,&#8217;) %&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;% end -%&gt;
+&lt;/table&gt;
+&lt;% else %&gt;
+&lt;p&gt;&lt;i&gt;Variable&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;Name: &lt;b&gt;&lt;%= @member.name %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Kind: &lt;b&gt;&lt;%= @member.variable_kind %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Type: &lt;b&gt;&lt;%= @member.ole_type %&gt;&lt;/b&gt;&lt;/p&gt;
+&lt;% end %&gt;
+<p>&lt;% end %&gt;</code><br />
+  </pre></p>
+</div>
+<p>On the server-side, values of parameters from Ajax request are extracted and used to read information about class&#8217; member. Full listing of code in the controller is given below.</p>
+<div>
+<pre>
+<code class='ruby'>require &amp;quot;ole_explorer&amp;quot;
+<p>class OleExplorerController &lt; ApplicationController<br />
+  def index<br />
+    @typelibs = ole_explorer.typelibs.collect{|tl| tl.name}.sort<br />
+    @ole_classes = []<br />
+    @ole_members = {:members=&gt;[]}<br />
+    @member = nil<br />
+  end</p>
+def update_classes
+@ole_classes = ole_explorer.ole_classes(params[:typelib])
+render :update do |page|
+page.replace_html &#8216;ole_classes&#8217;, :partial =&gt; &#8216;ole_classes&#8217;,
+:object =&gt; @ole_classes || []
+end
+end
+def update_members
+@ole_members = ole_explorer.ole_members(params[:typelib],params[:ole_class])
+render :update do |page|
+page.replace_html &#8216;ole_members&#8217;,:partial=&gt;&#8216;ole_members&#8217;,
+:object =&gt; @ole_members
+end
+end
+def member_info
+@member = ole_explorer.ole_member(params[:typelib], params[:ole_class],
+params[:member])
+render :update do |page|
+page.replace_html &#8216;member_info&#8217;, :partial =&gt; &#8216;member_info&#8217;,
+:object =&gt; @member
+end
+end
+def ole_explorer
+@ole_explorer ||= WinOle::OleExplorer.new
+end
+<p>end</code><br />
+  </pre></p>
+</div>
+<p>Finally we have to add new partial templates to our index page:</p>
+<div>
+<pre>
+<code class='html'>&amp;lt;h1&amp;gt;OleExplorer&amp;lt;/h1&amp;gt;
+<p>&lt;%= javascript_include_tag :defaults <span>&gt;<br />
+&lt;</span>= select &quot;typelib&quot;, &quot;typelib&quot;, @typelibs,<br />
+    {:prompt=&gt;&quot;Select Type Library&quot;},<br />
+    {:onchange =&gt; remote_function(:url =&gt; {:action =&gt;<br />
+&quot;update_classes&quot;}, :method=&gt;:get,  :with =&gt; &quot;&#8216;typelib=&#8217;+value&quot;)}  %&gt;<br />
+&lt;br/&gt;</p>
+<p>&lt;div id=&quot;ole_classes&quot;&gt;&lt;%= render :partial =&gt; &#8216;ole_classes&#8217;,<br />
+                                 :object =&gt; @ole_classes <span>&gt;&lt;/div&gt;<br />
+&lt;div id=&quot;ole_members&quot;&gt;&lt;</span>= render :partial =&gt; &#8216;ole_members&#8217;,<br />
+                                 :object =&gt; @ole_members <span>&gt;&lt;/div&gt;<br />
+&lt;div id=&quot;member_info&quot;&gt;&lt;</span>= render :partial =&gt; &#8216;member_info&#8217;,<br />
+                                 :object =&gt; @member %&gt;&lt;/div&gt;</code><br />
+  </pre></p>
+</div>
+<p>and to add two new routes:</p>
+<div>
+<pre>
+<code class='ruby'>get &amp;quot;ole_explorer/update_members&amp;quot;
+<p>get &quot;ole_explorer/member_info&quot;</code><br />
+  </pre></p>
+</div>
+<p>Now we have full-featured page for exploring all registered <span class="caps">OLE</span> types in the system. Start Rails application and load the page. Output should look similar to the one shown in Figure 13.</p>
 <p><img src="/images/fig0402.png" title="Full-featured OLE explorer view." alt="Full-featured OLE explorer view." /></p>
 
       <br/>

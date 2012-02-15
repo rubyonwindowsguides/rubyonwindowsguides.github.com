@@ -15,6 +15,22 @@
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
 
+   <!-- Update your html tag to include the itemscope and itemtype attributes -->
+   <html itemscope itemtype="http://schema.org/Book">
+
+   <!-- Add the following three tags inside head -->
+   <meta itemprop="name" content="Ruby On Windows Guides">
+   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
+
+   <!-- Place this render call where appropriate -->
+   <script type="text/javascript">
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+   </script>
+
    <script type="text/javascript">
 
      var _gaq = _gaq || [];
@@ -48,7 +64,8 @@
           <td><img src="/images/rwg_logo_blue.png"/></td>
           <td>
             <h1>Ruby on Windows Guides</h1>
-            <!-- <h3>Comprehensive guides for Ruby on Windows</h3> -->
+            <h4>Comprehensive guides for Ruby on Windows</h4>
+            <h6>by Bosko Ivanisevic</h6>
           </td>
         </tr>
       </table>
@@ -61,6 +78,9 @@
     </div>
 
     <div id="content" class="grid_10">
+      <!-- Place this tag where you want the +1 button to render -->
+      <g:plusone annotation="inline"></g:plusone>
+      <br/>
       
 
       
