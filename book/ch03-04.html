@@ -103,15 +103,12 @@
 <p><img src="/images/fig0305.png" title="Choosing default database for ODBC connection." alt="Choosing default database for ODBC connection." /></p>
 <p>On the next wizard&#8217;s page (Figure 11) you must select default database that will be used by <span class="caps">ODBC</span> connection. We already have rwin_book_devel database and you should select it. On the last page you can change few more setting that are not relevant for us so you can just click on the Finish button. Finally new dialog box will open which you can use to test whether your <span class="caps">ODBC</span> connection is working.</p>
 <p>With all prerequisites met we can now configure our Ruby on Rails application to use <span class="caps">SQL</span> Server. Connection options are displayed below:</p>
-<div>
-<pre>
-<code class='ruby'>development:
-adapter: sqlserver
-mode: <span class="caps">ODBC</span>
-dsn: rwin_book_devel</code>
-</pre>
-</div>
-<p>Finally, two lines for activerecord-sqlserver-adapter and ruby-odbc gems must be added to the Gemfile. Note that if you used <span class="caps">SQL</span> Server authentication mode you have to also set username and password values in the <code>database.yml</code> file.</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">development</span><span class="p">:</span>
+  <span class="n">adapter</span><span class="p">:</span> <span class="n">sqlserver</span>
+  <span class="n">mode</span><span class="p">:</span> <span class="no">ODBC</span>
+  <span class="n">dsn</span><span class="p">:</span> <span class="n">rwin_book_devel</span>
+</code></pre>
+</div><p>Finally, two lines for activerecord-sqlserver-adapter and ruby-odbc gems must be added to the Gemfile. Note that if you used <span class="caps">SQL</span> Server authentication mode you have to also set username and password values in the <code>database.yml</code> file.</p>
 
       <br/>
       

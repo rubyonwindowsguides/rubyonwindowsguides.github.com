@@ -98,13 +98,10 @@
 <p>Console2 has a lot of options which help you to customize it to your needs. Besides background and foreground colors, fonts and other visual customizations you can define hot keys for opening new tabs, switch between them, activating specific tab and many more which we will not discuss here. But one option deserves more attention. Tabs section in Settings dialog is used to define which shell will be opened in new tabs. By default Console2 opens tab with cmd.exe shell, but you can use others like Cygwin or <span class="caps">MSYS</span> bash shells. This will come in handy later when we install Git and DevKit.</p>
 <p>Command Prompt on Windows is capable of displaying colored text. Unfortunately Microsoft implementation differs from standard so <span class="caps">ANSI</span> color codes, which are used in all Ruby extensions, are not interpreted correctly. For a long time win32console extension was used on Windows platforms for converting <span class="caps">ANSI</span> color codes in the form Command Prompt understands. Although it did great job at the time and most of extensions were able to use win32console, it had one drawback – slowness.</p>
 <p>At the moment of writing this book recommendation is to use <a href="http://adoxa.110mb.com/ansicon/index.html"><span class="caps">ANSICON</span></a> or <a href="http://github.com/adoxa/ansicon"><span class="caps">ANSICON</span> GitHub Project</a>, application that hooks into <code>cmd.exe</code> process on Windows, parses <span class="caps">ANSI</span> color codes and converts them so Command Prompt can displayed colored output. Like Console2 <span class="caps">ANSICON</span> comes as Zip archive. In order to install it you have to unpack it to some folder on your path. There are few ways <span class="caps">ANSICON</span> can be used. If ansicon.exe is just started new command processor (typically <code>cmd.exe</code>) is started. With option <code>-p</code> <span class="caps">ANSICON</span> hooks in the current Command Prompt and recognition of <span class="caps">ANSI</span> escape sequences is enabled. If you want <span class="caps">ANSICON</span> to be enabled whenever you start new Command Prompt you should invoke it with:</p>
-<div>
-<pre>
-<code class='bat'>ansicon -i or
-<p>ansicon -I</code><br />
-  </pre></p>
-</div>
-<p>The first one adds <span class="caps">ANSICON</span> to the <code>AutoRun</code> registry value for current user and the second for local machine.</p>
+<div class="highlight"><pre><code class="bat">ansicon -i or
+ansicon -I
+</code></pre>
+</div><p>The first one adds <span class="caps">ANSICON</span> to the <code>AutoRun</code> registry value for current user and the second for local machine.</p>
 
       <br/>
       

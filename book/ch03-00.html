@@ -94,35 +94,32 @@
       <h1>Ruby on Rails 3.x on Windows</h1>
 <p>Ruby on Rails is excellent Web application development framework whose popularity has tremendously increased in last few years. Most of the popularity it owes to the fact that it makes some common development tasks easier. Being based on <span class="caps">MVC</span> (Model-View-Controller) architecture, it gives developer possibility to easily scaffold model, view and controller for basic Web site functionality. In a few simple steps developer is able to create working application skeleton. The latest version 3.x targets either Ruby version 1.8.7 or 1.9.2 and drops support for 1.9.1, 1.8.6 and earlier versions.</p>
 <p>All packages that constitute Ruby on Rails, as well as their dependencies, are written in the pure Ruby and are provided as gems. Due to that, installing them on Windows is straightforward:</p>
-<div>
-<pre>
-<code class='ruby'>C:\&amp;gt;gem install rails –no-rdoc --no-ri
-<p>Successfully installed activesupport-3.0.3<br />
-Successfully installed builder-2.1.2<br />
-Successfully installed i18n-0.5.0<br />
-Successfully installed activemodel-3.0.3<br />
-Successfully installed rack-1.2.1<br />
-Successfully installed rack-test-0.5.7<br />
-Successfully installed rack-mount-0.6.13<br />
-Successfully installed tzinfo-0.3.24<br />
-Successfully installed abstract-1.0.0<br />
-Successfully installed erubis-2.6.6<br />
-Successfully installed actionpack-3.0.3<br />
-Successfully installed arel-2.0.7<br />
-Successfully installed activerecord-3.0.3<br />
-Successfully installed activeresource-3.0.3<br />
-Successfully installed mime-types-1.16<br />
-Successfully installed polyglot-0.3.1<br />
-Successfully installed treetop-1.4.9<br />
-Successfully installed mail-2.2.15<br />
-Successfully installed actionmailer-3.0.3<br />
-Successfully installed thor-0.14.6<br />
-Successfully installed railties-3.0.3<br />
-Successfully installed bundler-1.0.9<br />
-Successfully installed rails-3.0.3</code><br />
-  </pre></p>
-</div>
-<p>As the most of Web application frameworks, Ruby on Rails heavily relies on a database as a back-end data storage. Through its built-in database adapters it directly supports SQlite3, MySQL and PostgreSQL databases. This is not the end of the list because you can easily install adapters for other databases like Oracle or MS <span class="caps">SQL</span>. The only difference is these adapters are not shipped with Ruby on Rails. Common to all adapters is the fact that they actually use additional extension libraries to connect to target database engine. At the first sight it sounds complicated but in the reality it is quite simple to switch the database Rails uses.</p>
+<div class="highlight"><pre><code class="ruby"><span class="n">C</span><span class="p">:\</span><span class="o">&gt;</span><span class="n">gem</span> <span class="n">install</span> <span class="n">rails</span> <span class="err">–</span><span class="n">no</span><span class="o">-</span><span class="n">rdoc</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">ri</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">activesupport</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">builder</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">2</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">i18n</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="mi">0</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">activemodel</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">rack</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">rack</span><span class="o">-</span><span class="nb">test</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="mi">7</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">rack</span><span class="o">-</span><span class="n">mount</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span><span class="o">.</span><span class="mi">13</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">tzinfo</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">24</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">abstract</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">erubis</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">6</span><span class="o">.</span><span class="mi">6</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">actionpack</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">arel</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">7</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">activerecord</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">activeresource</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">mime</span><span class="o">-</span><span class="n">types</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">16</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">polyglot</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">1</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">treetop</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">4</span><span class="o">.</span><span class="mi">9</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">mail</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">15</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">actionmailer</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">thor</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">14</span><span class="o">.</span><span class="mi">6</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">railties</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">bundler</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">9</span>
+<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">rails</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+</code></pre>
+</div><p>As the most of Web application frameworks, Ruby on Rails heavily relies on a database as a back-end data storage. Through its built-in database adapters it directly supports SQlite3, MySQL and PostgreSQL databases. This is not the end of the list because you can easily install adapters for other databases like Oracle or MS <span class="caps">SQL</span>. The only difference is these adapters are not shipped with Ruby on Rails. Common to all adapters is the fact that they actually use additional extension libraries to connect to target database engine. At the first sight it sounds complicated but in the reality it is quite simple to switch the database Rails uses.</p>
 <p>Extension libraries for accessing databases were one source of problems on Windows in the past. Natural approach in all Open Source projects is to primarily support and rely on other Open Source projects. Ruby on Rails in no exception. In early RoR days programmers were mostly turned to Linux, leaving Windows behind. At the same time small number of Windows developers, ready to dedicate their spare time to Open Source projects, could not create big enough momentum which would lead to larger number of extension libraries for various databases that work well on Windows. Additional obstacle was the fact that Ruby was build with Visual Studio, commercial project not available to everyone willing to help in this field. Despite this, Windows support was improving over time. Quantum jump has happened with a move to MinGW development environment, just as it did with Ruby.</p>
 <p>Not only more developers were able to contribute, but with some additional tools like rake-compiler it became much easier to create binary gems for specific platform, Windows at the first place. This naturally lead to better support and easier upgrade of extensions, since release cycle was shortened. Even more each develop is now able to build lot of extension libraries by itself, just as we already did with slite3 and mysql2 gems.</p>
 

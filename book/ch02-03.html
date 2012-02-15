@@ -93,289 +93,233 @@
 
       <p>le unless we add the path to the development version to the system path. So we have to choose either to use Ruby in Console2&#8217;s tabs or to constantly alter system path in order to change Ruby version we work with. This certainly is not the most comfortable way and, fortunately, there is a much better solution – Pik.</p>
 <p>Pik gem is Ruby extension for managing multiple Ruby versions on Windows system. It is installed as any other Ruby gem. Open new Command Prompt window (not Console2) and execute following command:</p>
-<div>
-<pre>
-<code class='bat'>C:\&amp;gt;gem install pik
-<hr />
-<ul style="vertical-align:middle;">
-	<li>If you&#8217;re upgrading from a version &lt;= 0.1.1, you&#8217;ll want to delete the pik.bat<br />
-   file from all of your ruby versions. Gem uninstall should do the trick.</li>
-	<li>Install pik to a location that&#8217;s in your path, but someplace other than your<br />
-   ruby\bin dir If you&#8217;re upgrading from a more recent version, pik_install will<br />
-   overwrite the older files as needed.<br />
-    &gt;path<br />
-      <span class="caps">PATH</span>=C:\tools\;C:\ruby\186-p368-mingw32\bin;C:\<span class="caps">WINDOWS</span>\system32;C:\<span class="caps">WINDOWS</span><br />
-    &gt;pik_install C:\tools</li>
-	<li>If this is a first-time install, add all the versions of ruby that you want to<br />
-   use with pik<br />
-    &gt;pik add<br />
-    Adding:  186: ruby 1.8.6 (2009-03-31 patchlevel 368) [i386-mingw32]<br />
-     Located at:  c:/ruby/186-p368-mingw32/bin<br />
-    &gt;pik add C:\ruby\IronRuby-091\bin<br />
-    Adding:  091: IronRuby 0.9.1.0 on .<span class="caps">NET</span> 2.0.0.0<br />
-     Located at:  C:/ruby/IronRuby-091/bin<br />
-    &gt;pik add C:\ruby\jruby-1.4.0RC1\bin<br />
-    Adding:  140: jruby 1.4.0RC1 (ruby 1.8.7 patchlevel 174) (2009-09-30 80c263b)<br />
- (Java HotSpot&#8482; Client VM 1.6.0_14) [x86-java]<br />
-     Located at:  C:/ruby/jruby-1.4.0RC1/bin<br />
-<del>-</del>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-<br />
-Successfully installed pik-0.2.8<br />
-1 gem installed<br />
-Installing ri documentation for pik-0.2.8&#8230;<br />
-Installing RDoc documentation for pik-0.2.8&#8230;</code><br />
-  </pre><br />
-</div></li>
-</ul>
-<p>Command is executed in the new Command Prompt where the only Ruby available, at the moment, is 1.9.2, therefore gem will be installed in it. Let&#8217;s check that:</p>
-<div>
-<pre>
-<code class='bat'>C:\&amp;gt;gem list
-
-		<ul>
-			<li><span class="caps">LOCAL</span> <span class="caps">GEMS</span> <strong>*</strong><br />
-minitest (1.6.0)<br />
-pik (0.2.8)<br />
-rake (0.8.7)<br />
-rdoc (2.5.8)</code><br />
-  </pre><br />
-</div></li>
-		</ul><p>As you can see Pik is available in the list of gems currently available to the default Ruby. But where other gems come from when we didn&#8217;t install it? They are bundled with Ruby and are available with Ruby installation.</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">gem</span> install pik
+----------------------------------------------------------------------------
+*  <span class="k">If</span> you<span class="s1">&#39;re upgrading from a version &lt;= 0.1.1, you&#39;</span>ll want to delete the pik.bat
+   file from all of your ruby versions. Gem uninstall should <span class="k">do</span> the trick.
+*  Install pik to a location that&#39;s in your path<span class="p">,</span> but someplace other than your
+   ruby\bin dir <span class="k">If</span> you&#39;re upgrading from a more recent version<span class="p">,</span> pik_install will
+   overwrite the older files as needed.
+    <span class="p">&gt;</span><span class="n">path</span>
+      PATH<span class="o">=</span>C:\tools\;C:\ruby\<span class="m">186</span>-p<span class="m">368</span>-mingw<span class="m">32</span>\bin;C:\WINDOWS\system<span class="m">32</span>;C:\WINDOWS
+    <span class="p">&gt;</span><span class="n">pik_install</span> C:\tools
+*  <span class="k">If</span> this is a first-time install<span class="p">,</span> add all the versions of ruby that you want to
+   use with pik
+    <span class="p">&gt;</span><span class="n">pik</span> add
+    Adding:  <span class="m">186</span>: ruby <span class="m">1</span>.<span class="m">8</span>.<span class="m">6</span> (<span class="m">2009-03-31</span> patchlevel <span class="m">368</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+     Located at:  c:<span class="n">/ruby/186-p368-mingw32/bin</span>
+    <span class="p">&gt;</span><span class="n">pik</span> add C:\ruby\IronRuby<span class="m">-091</span>\bin
+    Adding:  <span class="m">091</span>: IronRuby <span class="m">0</span>.<span class="m">9</span>.<span class="m">1</span>.<span class="m">0</span> <span class="k">on</span> .NET <span class="m">2</span>.<span class="m">0</span>.<span class="m">0</span>.<span class="m">0</span>
+     Located at:  C:<span class="n">/ruby/IronRuby-091/bin</span>
+    <span class="p">&gt;</span><span class="n">pik</span> add C:\ruby\jruby<span class="m">-1</span>.<span class="m">4</span>.<span class="m">0</span>RC<span class="m">1</span>\bin
+    Adding:  <span class="m">140</span>: jruby <span class="m">1</span>.<span class="m">4</span>.<span class="m">0</span>RC<span class="m">1</span> (ruby <span class="m">1</span>.<span class="m">8</span>.<span class="m">7</span> patchlevel <span class="m">174</span>) (<span class="m">2009-09-30</span> <span class="m">80</span>c<span class="m">263</span>b)
+ (Java HotSpot(TM) Client VM <span class="m">1</span>.<span class="m">6</span>.<span class="m">0</span>_<span class="m">14</span>) [x<span class="m">86</span>-java]
+     Located at:  C:<span class="n">/ruby/jruby-1.4.0RC1/bin</span>
+----------------------------------------------------------------------------
+Successfully installed pik<span class="m">-0</span>.<span class="m">2</span>.<span class="m">8</span>
+<span class="m">1</span> gem installed
+Installing ri documentation <span class="k">for</span> pik<span class="m">-0</span>.<span class="m">2</span>.<span class="m">8</span>...
+Installing RDoc documentation <span class="k">for</span> pik<span class="m">-0</span>.<span class="m">2</span>.<span class="m">8</span>...
+</code></pre>
+</div><p>Command is executed in the new Command Prompt where the only Ruby available, at the moment, is 1.9.2, therefore gem will be installed in it. Let&#8217;s check that:</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">gem</span> list
+*** LOCAL GEMS ***
+minitest (<span class="m">1</span>.<span class="m">6</span>.<span class="m">0</span>)
+pik (<span class="m">0</span>.<span class="m">2</span>.<span class="m">8</span>)
+rake (<span class="m">0</span>.<span class="m">8</span>.<span class="m">7</span>)
+rdoc (<span class="m">2</span>.<span class="m">5</span>.<span class="m">8</span>)
+</code></pre>
+</div><p>As you can see Pik is available in the list of gems currently available to the default Ruby. But where other gems come from when we didn&#8217;t install it? They are bundled with Ruby and are available with Ruby installation.</p>
 <p>It is time to finalize Pik installation. Comments displayed after gem is installed are self-explanatory but let&#8217;s analyze them. We are not upgrading Pik so we can skip the first one. The second one states that we must use pik_install command in order to install Pik, and we should pass it, as argument, some directory that is in the path. It is recommended to avoid our <code>ruby\bin</code> directory.</p>
 <p>Currently our path contains directories added during Windows installation,  directory where Git is installed and, finally, bin directory of our Ruby 1.9.2 version. Since I like to keep things clear we will create new directory which we will use when we launch <code>pik_install</code> command. We&#8217;ll follow Pik&#8217;s suggestion and create <code>C:\tools</code> directory. Before calling pik_install we must add new directory to the path.</p>
 <p>Click on the Start button, right-click on the Computer and click on the Properties menu item in the context-menu. New window with basic information about your computer opens. On the left side of window click on the <code>Advanced system settings</code> link and in dialog box that pops up click on <code>Environment variables...</code> button. In the list of user&#8217;s variables you should see Path variable set to the bin directory of our installed Ruby. Double click on it and at the end of value add:</p>
-<div>
-<pre>
-<code class='bat'>;C:\tools</code>
-</pre>
-</div>
-<p>Do not forget to type semicolon (;) before tools directory path. Click on OK buttons three times and close System window. You must close all Command Prompt windows and open new one, since changes made to Path variable will not be available in Command Prompt windows that were opened while we were changing it. We have prepared everything needed for Pik and we are ready to go on.</p>
-<div>
-<pre>
-<code class='bat'>C:\&amp;gt;pik_install C:\tools
-<p>Thank you for using pik.</p>
-<p>mkdir -p C:\tools<br />
-mkdir -p C:\Users\bosko/.pik<br />
-Installing to C:\tools</p>
-<p>cp c:/Ruby/192/lib/ruby/gems/1.9.1/gems/pik-0.2.8/tools/pik_runner.exe C:\tools<br />
-cp c:/Ruby/192/lib/ruby/gems/1.9.1/gems/pik-0.2.8/tools/pik.bat C:\tools<br />
-cp c:/Ruby/192/lib/ruby/gems/1.9.1/gems/pik-0.2.8/tools/pik.ps1 C:\tools</p>
-<p>creating C:\Users\bosko/.pik/.pikrc</p>
-<p>pik is installed</p>
-<p>if you want to use pik with git bash, add the following line to your ~/.bashrc:<br />
-  [[ -s $<span class="caps">USERPROFILE</span>/.pik/.pikrc ]] &amp;&amp; source $<span class="caps">USERPROFILE</span>/.pik/.pikrc</code><br />
-  </pre></p>
-</div>
-<p>As a good behaved tool, Pik displays everything it did during installation. First it created directory where it installed it&#8217;s files, <code>C:\tools</code> in our case. If directory already exists Pik will do nothing. Next, it creates <code>.pik</code> directory in <code>C:\Users\bosko</code>. But why does Pik chose this directory?</p>
+<div class="highlight"><pre><code class="bat">;C:\tools
+</code></pre>
+</div><p>Do not forget to type semicolon (;) before tools directory path. Click on OK buttons three times and close System window. You must close all Command Prompt windows and open new one, since changes made to Path variable will not be available in Command Prompt windows that were opened while we were changing it. We have prepared everything needed for Pik and we are ready to go on.</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">pik_install</span> C:\tools
+Thank you <span class="k">for</span> using pik.
+
+mkdir -p C:\tools
+mkdir -p C:\Users\bosko<span class="n">/.pik</span>
+Installing to C:\tools
+
+cp c:<span class="n">/Ruby/192/lib/ruby/gems/1.9.1/gems/pik-0.2.8/tools/pik_runner.exe</span> C:\tools
+cp c:<span class="n">/Ruby/192/lib/ruby/gems/1.9.1/gems/pik-0.2.8/tools/pik.bat</span> C:\tools
+cp c:<span class="n">/Ruby/192/lib/ruby/gems/1.9.1/gems/pik-0.2.8/tools/pik.ps1</span> C:\tools
+
+creating C:\Users\bosko<span class="n">/.pik/.pikrc</span>
+
+pik is installed
+
+<span class="k">if</span> you want to use pik with git bash<span class="p">,</span> add the following line to your ~<span class="n">/.bashrc:</span>
+  [[ -s $USERPROFILE<span class="n">/.pik/.pikrc</span> ]] &amp;&amp; source $USERPROFILE<span class="n">/.pik/.pikrc</span>
+</code></pre>
+</div><p>As a good behaved tool, Pik displays everything it did during installation. First it created directory where it installed it&#8217;s files, <code>C:\tools</code> in our case. If directory already exists Pik will do nothing. Next, it creates <code>.pik</code> directory in <code>C:\Users\bosko</code>. But why does Pik chose this directory?</p>
 <p>On the Unix-like systems all user specific files and directories are kept in user&#8217;s home directory which is usually located at the <code>/home/&lt;user_name&gt;</code> path and this value is stored in <code>HOME</code> system variable. On Windows, value that is used is stored in the <code>USERPROFILE</code> variable and on my system its value is <code>C:\Users\bosko</code>. Pik stores its data within <code>.pik</code> directory in the user&#8217;s home folder. That it a reason why it created <code>.pik</code> folder in it.</p>
 <p>Further, it installed necessary scripts in the <code>C:\tools</code> folder by copying them from gem folder. At the end, Pik created <code>.pikrc</code> file in the <code>.pik</code> folder. Don&#8217;t be surprised by the name of the folder and the path. Naming convention on Unix-like systems is to hide them by prefixing names with a dot. Actually files and directories which have names that start with a dot are not actually hidden but are not displayed in any tool unless specifically requested. Pik follows this convention so it uses <code>.pik</code> and <code>.pikrc</code> for names of its folder and file within it.</p>
 <p>Notice last comment printed out by <code>pik_install</code> script. It tells us that if we want to use Pik from Git bash shell we should add line:</p>
-<div>
-<pre>
-<code class='bash'>[[ -s $USERPROFILE/.pik/.pikrc ]] &amp;amp;&amp;amp; source $USERPROFILE/.pik/.pikrc</code>
-</pre>
-</div>
-<p>to <code>~/.bashrc file</code>. Again tilda character is used on Unix-like systems to denote user&#8217;s home folder. As you might already guess it is <code>C:\Users\bosko</code> on my system. Let&#8217;s retain for a while on the <code>.pikrc</code> file. In the version 0.2.8 it contains following code:</p>
-<div>
-<pre>
-<code class='bash'>#!/bin/sh
-<p>pik_path=/c/tools</p>
-<p>function pik  {<br />
-  $pik_path/pik_runner.exe pik.sh $@<br />
-  [[ -s $<span class="caps">USERPROFILE</span>/.pik/pik.sh ]] &amp;&amp; source $<span class="caps">USERPROFILE</span>/.pik/pik.sh<br />
-}</code><br />
-  </pre></p>
-</div>
-<p>The first line is the shebang line we mentioned earlier. Value <code>/bin/sh</code> means that the rest of the script should be executed in the shell. After that there is a definition for <code>pik_path</code> variable and then a code that looks like, and is, function definition. As comment printed out at the end of execution of pik_install script indicates, that this script is used for Git bash shell. Since Git uses Linux-like shell called Bash, it inherits almost all functionalities from Linux system. In Windows Command Prompt invoking pik command means executing <code>pik.bat</code>, batch file, stored in the <code>C:\tools</code> directory. On the other hand Git bash shell doesn&#8217;t know how to start pik command. Open new Console2 window and type in the Git bash tab (<code>Ctrl-F2</code>):</p>
-<div>
-<pre>
-<code class='bash'>$ pik
-<p>sh.exe&quot;: pik: command not found</code><br />
-  </pre></p>
-</div>
-<p>Therefore in order to use Pik in this shell we must execute it in such a way that pik function becomes available in it. You can do it by executing following statement:</p>
-<div>
-<pre>
-<code class='bash'>source $HOME/.pik/.pikrc</code>
-</pre>
-</div>
-<p>which tells Bash shell to apply changes from <code>.pikrc</code> configuration file. After that you can try Pik in the Git&#8217;s Bash shell too:</p>
-<div>
-<pre>
-<code class='bash'>$ pik -V
-<p>pik 0.2.8</code><br />
-  </pre></p>
-</div>
-<p>If you do not want to “source” this configuration file every time you open Git Bash you should create <code>.bashrc</code> file in your home folder and put</p>
-<div>
-<pre>
-<code class='bash'>[[ -s $USERPROFILE/.pik/.pikrc ]] &amp;amp;&amp;amp; source $USERPROFILE/.pik/.pikrc</code>
-</pre>
-</div>
-<p>in it. Go ahead and try it. Close current Git tab in Console2, create <code>.bashrc</code> file and then open Git tab again. You will see that pik command is available.</p>
+<div class="highlight"><pre><code class="bash"><span class="o">[[</span> -s <span class="nv">$USERPROFILE</span>/.pik/.pikrc <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="nv">$USERPROFILE</span>/.pik/.pikrc
+</code></pre>
+</div><p>to <code>~/.bashrc file</code>. Again tilda character is used on Unix-like systems to denote user&#8217;s home folder. As you might already guess it is <code>C:\Users\bosko</code> on my system. Let&#8217;s retain for a while on the <code>.pikrc</code> file. In the version 0.2.8 it contains following code:</p>
+<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<span class="nv">pik_path</span><span class="o">=</span>/c/tools
+
+<span class="k">function </span>pik  <span class="o">{</span>
+  <span class="nv">$pik_path</span>/pik_runner.exe pik.sh <span class="nv">$@</span>
+  <span class="o">[[</span> -s <span class="nv">$USERPROFILE</span>/.pik/pik.sh <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="nv">$USERPROFILE</span>/.pik/pik.sh
+<span class="o">}</span>
+</code></pre>
+</div><p>The first line is the shebang line we mentioned earlier. Value <code>/bin/sh</code> means that the rest of the script should be executed in the shell. After that there is a definition for <code>pik_path</code> variable and then a code that looks like, and is, function definition. As comment printed out at the end of execution of pik_install script indicates, that this script is used for Git bash shell. Since Git uses Linux-like shell called Bash, it inherits almost all functionalities from Linux system. In Windows Command Prompt invoking pik command means executing <code>pik.bat</code>, batch file, stored in the <code>C:\tools</code> directory. On the other hand Git bash shell doesn&#8217;t know how to start pik command. Open new Console2 window and type in the Git bash tab (<code>Ctrl-F2</code>):</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>pik
+sh.exe<span class="err">&quot;</span>: pik: <span class="nb">command </span>not found
+</code></pre>
+</div><p>Therefore in order to use Pik in this shell we must execute it in such a way that pik function becomes available in it. You can do it by executing following statement:</p>
+<div class="highlight"><pre><code class="bash"><span class="nb">source</span> <span class="nv">$HOME</span>/.pik/.pikrc
+</code></pre>
+</div><p>which tells Bash shell to apply changes from <code>.pikrc</code> configuration file. After that you can try Pik in the Git&#8217;s Bash shell too:</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>pik -V
+pik 0.2.8
+</code></pre>
+</div><p>If you do not want to “source” this configuration file every time you open Git Bash you should create <code>.bashrc</code> file in your home folder and put</p>
+<div class="highlight"><pre><code class="bash"><span class="o">[[</span> -s <span class="nv">$USERPROFILE</span>/.pik/.pikrc <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">source</span> <span class="nv">$USERPROFILE</span>/.pik/.pikrc
+</code></pre>
+</div><p>in it. Go ahead and try it. Close current Git tab in Console2, create <code>.bashrc</code> file and then open Git tab again. You will see that pik command is available.</p>
 <p>Up to now we haven&#8217;t actually tried Pik at all. We have only checked its availability in the Git Bash shell and its version. It is time to execute Pik for the first time:</p>
-<div>
-<pre>
-<code class='bat'>c:\&amp;gt;pik
+<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">pik</span>
+** Adding:  <span class="m">192</span>: ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>p<span class="m">136</span> (<span class="m">2010-12-25</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+ Located at:  C:\Ruby\<span class="m">192</span>\bin
+Usage: pik command [options]
 
-	<ul>
-		<li>Adding:  192: ruby 1.9.2p136 (2010-12-25) [i386-mingw32]<br />
- Located at:  C:\Ruby\192\bin<br />
-Usage: pik command [options]</li>
-	</ul><p>To get help with a command</p>
-pik help (command)
-<p>To list all commands and descriptions:</p>
-pik help commands
--V, &#8212;version                    Pik version
--d, &#8212;debug                      Outputs debug information</code>
-</pre>
-</div>
-<p>Amazing! Pik somehow found our installed Ruby and added it to its list of available Rubies. The question is how did Pik know what Ruby we have. The answer is, again, Windows registry. If you open Registry Editor and navigate to <code>HKEY_CURRENT_USER\Software\RubyInstaller</code> key you will see that it has <span class="caps">MRI</span> sub-key, and that&#8217;s the place where it finds all necessary data about installed Ruby versions. If you are curious what data is stored there click on the 1.9.2 sub-key within <span class="caps">MRI</span> and you will see that it holds information about platform Ruby is built on, installation date, full path to the directory where Ruby is installed as well as a patch level. And that&#8217;s all Pik has to know to add Ruby version to itself.</p>
+To get help with a command
+
+  pik help (command)
+
+To list all commands and descriptions:
+
+  pik help commands
+
+    -V<span class="p">,</span> --version                    Pik version
+    -d<span class="p">,</span> --debug                      Outputs debug information
+</code></pre>
+</div><p>Amazing! Pik somehow found our installed Ruby and added it to its list of available Rubies. The question is how did Pik know what Ruby we have. The answer is, again, Windows registry. If you open Registry Editor and navigate to <code>HKEY_CURRENT_USER\Software\RubyInstaller</code> key you will see that it has <span class="caps">MRI</span> sub-key, and that&#8217;s the place where it finds all necessary data about installed Ruby versions. If you are curious what data is stored there click on the 1.9.2 sub-key within <span class="caps">MRI</span> and you will see that it holds information about platform Ruby is built on, installation date, full path to the directory where Ruby is installed as well as a patch level. And that&#8217;s all Pik has to know to add Ruby version to itself.</p>
 <p>Now go back to <code>.pik</code> folder in your home directory. You will see additional file created there, named <code>config.yml</code>. Extension <code>.yml</code> denotes it is <span class="caps">YAML</span> file. <span class="caps">YAML</span> (<span class="caps">YAML</span> Ain&#8217;t Markup Language) is common format for serializing data in Ruby world. We will not dwell on it. If you are not already familiar with <span class="caps">YAML</span> you can check the official <a href="http://www.yaml.org"><span class="caps">YAML</span> Web Site</a>. Let&#8217;s go further and open <code>config.yml</code> in your favorite editor.</p>
-<div>
-<pre>
-<code class='ruby'>---
-<p>&quot;192: ruby 1.9.2p136 (2010-12-25) [i386-mingw32]&quot;:<br />
-  :path: !ruby/object:Pathname<br />
-    path: C:/Ruby/192/bin<br />
-<del>-</del> {}</code><br />
-  </pre></p>
-</div>
-<p>As you can see Pik has stored all data it needs about our Ruby in that configuration file. We should start exploring Pik features at this point. Fire up Console2 and in the default tab check the list of all Ruby versions Pik is aware of by issuing <code>pik list</code> or <code>pik ls</code> command:</p>
-<div>
-<pre>
-<code class='bat'>C:\&amp;gt;pik ls
-<ul>
-	<li>192: ruby 1.9.2p136 (2010-12-25) [i386-mingw32]</code><br />
-  </pre><br />
-</div></li>
-</ul>
-<p>As expected, at the moment, Pik is aware only of our installed Ruby 1.9.2 version and it is marked as a default one, in the list that is printed out, by the asterisk (*) sign at the beginning of the line.</p>
+<div class="highlight"><pre><code class="ruby"><span class="o">---</span>
+<span class="s2">&quot;192: ruby 1.9.2p136 (2010-12-25) [i386-mingw32]&quot;</span><span class="p">:</span>
+  <span class="ss">:path</span><span class="p">:</span> <span class="o">!</span><span class="n">ruby</span><span class="o">/</span><span class="n">object</span><span class="ss">:Pathname</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">C</span><span class="ss">:/</span><span class="no">Ruby</span><span class="o">/</span><span class="mi">192</span><span class="o">/</span><span class="n">bin</span>
+<span class="o">---</span> <span class="p">{}</span>
+</code></pre>
+</div><p>As you can see Pik has stored all data it needs about our Ruby in that configuration file. We should start exploring Pik features at this point. Fire up Console2 and in the default tab check the list of all Ruby versions Pik is aware of by issuing <code>pik list</code> or <code>pik ls</code> command:</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">pik</span> ls
+* <span class="m">192</span>: ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>p<span class="m">136</span> (<span class="m">2010-12-25</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+</code></pre>
+</div><p>As expected, at the moment, Pik is aware only of our installed Ruby 1.9.2 version and it is marked as a default one, in the list that is printed out, by the asterisk (*) sign at the beginning of the line.</p>
 <p>More then just listing installed Ruby versions, Pik is capable of showing all Ruby versions that can be installed through it.</p>
-<div>
-<pre>
-<code class='bat'>c:\&amp;gt;pik ls -r
-<hr />
-<p>DevKit:<br />
-  3.4.5r3: http://rubyforge.org/frs/download.php/66888/devkit-3.4.5r3-20091110.7z<br />
-IronRuby:<br />
-  0.3.0: http://rubyforge.org/frs/download.php/53552/ironruby-0.3.0.zip<br />
-  0.5.0: http://rubyforge.org/frs/download.php/57126/ironruby-0.5.0.zip<br />
-  0.6.0: http://rubyforge.org/frs/download.php/59717/ironruby-0.6.0.zip<br />
-  0.9.0: http://rubyforge.org/frs/download.php/61382/ironruby-0.9.0.zip<br />
-  0.9.1: http://rubyforge.org/frs/download.php/64504/ironruby-0.9.1.zip<br />
-  0.9.2: http://rubyforge.org/frs/download.php/66606/ironruby-0.9.2.zip<br />
-  &quot;1.0&quot;: http://rubyforge.org/frs/download.php/70179/ironruby-1.0.zip<br />
-  1.0-rc1: http://rubyforge.org/frs/download.php/67955/ironruby-1.0-rc1.zip<br />
-  1.0-rc2: http://rubyforge.org/frs/download.php/69180/ironruby-1.0-rc2.zip<br />
-  1.0.0rc: http://rubyforge.org/frs/download.php/69853/ironruby-1.0.0rc.zip<br />
-  1.0rc3: http://rubyforge.org/frs/download.php/69665/ironruby-1.0rc3.zip<br />
-  1.0v4: http://rubyforge.org/frs/download.php/70181/ironruby-1.0v4.zip<br />
-JRuby:<br />
-  1.5.6: http://jruby.org.s3.amazonaws.com/downloads/1.5.6/jruby-bin-1.5.6.zip<br />
-  1.6.0.RC1: http://jruby.org.s3.amazonaws.com/downloads/1.6.0.RC1/jruby-bin-1.6.0.RC1.zip<br />
-Ruby:<br />
-  1.8.7-p302: http://rubyforge.org/frs/download.php/72087/ruby-1.8.7-p302-i386-mingw32.7z<br />
-  1.8.7-p330: http://rubyforge.org/frs/download.php/73720/ruby-1.8.7-p330-i386-mingw32.7z<br />
-  1.9.1-p429: http://rubyforge.org/frs/download.php/71496/ruby-1.9.1-p429-i386-mingw32.7z<br />
-  1.9.1-p430: http://rubyforge.org/frs/download.php/72076/ruby-1.9.1-p430-i386-mingw32.7z<br />
-  1.9.2-p0: http://rubyforge.org/frs/download.php/72160/ruby-1.9.2-p0-i386-mingw32.7z<br />
-  1.9.2-p136: http://rubyforge.org/frs/download.php/73723/ruby-1.9.2-p136-i386-mingw32.7z<br />
-  1.9.2-rc1: http://rubyforge.org/frs/download.php/71498/ruby-1.9.2-rc1-i386-mingw32.7z<br />
-  1.9.2dev-preview3-1: http://rubyforge.org/frs/download.php/71175/ruby-1.9.2dev-preview3-i386-mingw32-1.7z</code><br />
-  </pre></p>
-</div>
-<p>Omitting DevKit for the moment we can see that Pik can install various versions of IronRuby, JRuby and <span class="caps">MRI</span>. We&#8217;ll use this Pik&#8217;s feature and install IronRuby. This version is not so important for usage throughout the book, but is installed just to show one of many Pik&#8217;s features. Before we start IronRuby installation we&#8217;ll configure Pik to install new Ruby versions where we want to – in <code>C:\Ruby</code>.</p>
-<div>
-<pre>
-<code class='bat'>pik config installs=C:\Ruby</code>
-</pre>
-</div>
-<p>Now we are ready to start IronRuby installation</p>
-<div>
-<pre>
-<code class='bat'>c:\&amp;gt;pik install ironruby
+<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">pik</span> ls -r
+---
+DevKit:
+  <span class="m">3</span>.<span class="m">4</span>.<span class="m">5</span>r<span class="m">3</span>: http:<span class="n">//rubyforge.org/frs/download.php/66888/devkit-3.4.5r3-20091110.7z</span>
+IronRuby:
+  <span class="m">0</span>.<span class="m">3</span>.<span class="m">0</span>: http:<span class="n">//rubyforge.org/frs/download.php/53552/ironruby-0.3.0.zip</span>
+  <span class="m">0</span>.<span class="m">5</span>.<span class="m">0</span>: http:<span class="n">//rubyforge.org/frs/download.php/57126/ironruby-0.5.0.zip</span>
+  <span class="m">0</span>.<span class="m">6</span>.<span class="m">0</span>: http:<span class="n">//rubyforge.org/frs/download.php/59717/ironruby-0.6.0.zip</span>
+  <span class="m">0</span>.<span class="m">9</span>.<span class="m">0</span>: http:<span class="n">//rubyforge.org/frs/download.php/61382/ironruby-0.9.0.zip</span>
+  <span class="m">0</span>.<span class="m">9</span>.<span class="m">1</span>: http:<span class="n">//rubyforge.org/frs/download.php/64504/ironruby-0.9.1.zip</span>
+  <span class="m">0</span>.<span class="m">9</span>.<span class="m">2</span>: http:<span class="n">//rubyforge.org/frs/download.php/66606/ironruby-0.9.2.zip</span>
+  <span class="s2">&quot;1.0&quot;</span>: http:<span class="n">//rubyforge.org/frs/download.php/70179/ironruby-1.0.zip</span>
+  <span class="m">1</span>.<span class="m">0</span>-rc<span class="m">1</span>: http:<span class="n">//rubyforge.org/frs/download.php/67955/ironruby-1.0-rc1.zip</span>
+  <span class="m">1</span>.<span class="m">0</span>-rc<span class="m">2</span>: http:<span class="n">//rubyforge.org/frs/download.php/69180/ironruby-1.0-rc2.zip</span>
+  <span class="m">1</span>.<span class="m">0</span>.<span class="m">0</span>rc: http:<span class="n">//rubyforge.org/frs/download.php/69853/ironruby-1.0.0rc.zip</span>
+  <span class="m">1</span>.<span class="m">0</span>rc<span class="m">3</span>: http:<span class="n">//rubyforge.org/frs/download.php/69665/ironruby-1.0rc3.zip</span>
+  <span class="m">1</span>.<span class="m">0</span>v<span class="m">4</span>: http:<span class="n">//rubyforge.org/frs/download.php/70181/ironruby-1.0v4.zip</span>
+JRuby:
+  <span class="m">1</span>.<span class="m">5</span>.<span class="m">6</span>: http:<span class="n">//jruby.org.s3.amazonaws.com/downloads/1.5.6/jruby-bin-1.5.6.zip</span>
+  <span class="m">1</span>.<span class="m">6</span>.<span class="m">0</span>.RC<span class="m">1</span>: http:<span class="n">//jruby.org.s3.amazonaws.com/downloads/1.6.0.RC1/jruby-bin-1.6.0.RC1.zip</span>
+Ruby:
+  <span class="m">1</span>.<span class="m">8</span>.<span class="m">7</span>-p<span class="m">302</span>: http:<span class="n">//rubyforge.org/frs/download.php/72087/ruby-1.8.7-p302-i386-mingw32.7z</span>
+  <span class="m">1</span>.<span class="m">8</span>.<span class="m">7</span>-p<span class="m">330</span>: http:<span class="n">//rubyforge.org/frs/download.php/73720/ruby-1.8.7-p330-i386-mingw32.7z</span>
+  <span class="m">1</span>.<span class="m">9</span>.<span class="m">1</span>-p<span class="m">429</span>: http:<span class="n">//rubyforge.org/frs/download.php/71496/ruby-1.9.1-p429-i386-mingw32.7z</span>
+  <span class="m">1</span>.<span class="m">9</span>.<span class="m">1</span>-p<span class="m">430</span>: http:<span class="n">//rubyforge.org/frs/download.php/72076/ruby-1.9.1-p430-i386-mingw32.7z</span>
+  <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>-p<span class="m">0</span>: http:<span class="n">//rubyforge.org/frs/download.php/72160/ruby-1.9.2-p0-i386-mingw32.7z</span>
+  <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>-p<span class="m">136</span>: http:<span class="n">//rubyforge.org/frs/download.php/73723/ruby-1.9.2-p136-i386-mingw32.7z</span>
+  <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>-rc<span class="m">1</span>: http:<span class="n">//rubyforge.org/frs/download.php/71498/ruby-1.9.2-rc1-i386-mingw32.7z</span>
+  <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>dev-preview<span class="m">3-1</span>: http:<span class="n">//rubyforge.org/frs/download.php/71175/ruby-1.9.2dev-preview3-i386-mingw32-1.7z</span>
+</code></pre>
+</div><p>Omitting DevKit for the moment we can see that Pik can install various versions of IronRuby, JRuby and <span class="caps">MRI</span>. We&#8217;ll use this Pik&#8217;s feature and install IronRuby. This version is not so important for usage throughout the book, but is installed just to show one of many Pik&#8217;s features. Before we start IronRuby installation we&#8217;ll configure Pik to install new Ruby versions where we want to – in <code>C:\Ruby</code>.</p>
+<div class="highlight"><pre><code class="bat">pik config installs<span class="o">=</span>C:\Ruby
+</code></pre>
+</div><p>Now we are ready to start IronRuby installation</p>
+<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">pik</span> install ironruby
+** Downloading:  http:<span class="n">//rubyforge.org/frs/download.php/70181/ironruby-1.0v4.zip</span>
+   to:  C:\Users\bosko\.pik\downloads\ironruby<span class="m">-1</span>.<span class="m">0</span>v<span class="m">4</span>.zip
 
-	<ul>
-		<li>Downloading:  http://rubyforge.org/frs/download.php/70181/ironruby-1.0v4.zip<br />
-   to:  C:\Users\bosko\.pik\downloads\ironruby-1.0v4.zip</li>
-	</ul><p>ironruby-1.0v4.zip: 100% |ooooooooooooooooooooo|   2.9MB/  2.9MB Time: 00:00:03</p>
+ironruby<span class="m">-1</span>.<span class="m">0</span>v<span class="m">4</span>.zip: <span class="m">100</span>% <span class="p">|</span><span class="n">ooooooooooooooooooooo</span><span class="p">|</span>   <span class="n">2</span>.<span class="m">9</span>MB/  <span class="m">2</span>.<span class="m">9</span>MB Time: <span class="m">00</span><span class="nl">:00:03</span>
 
-	<ul>
-		<li>Extracting:  C:\Users\bosko\.pik\downloads\ironruby-1.0v4.zip<br />
-   to:  C:\ruby\IronRuby-10v4<br />
-done</li>
-	</ul>
-	<ul>
-		<li>Adding:  100: IronRuby 1.0.0.0 on .<span class="caps">NET</span> 4.0.30319.1<br />
- Located at:  C:\ruby\IronRuby-10v4\bin</code><br />
-  </pre><br />
-</div></li>
-	</ul><p>This is simple and elegant way to install additional Ruby versions on your Windows system. Checking available Rubies now gives:</p>
-<div>
-<pre>
-<code class='bat'>c:\&amp;gt;pik ls
-100: IronRuby 1.0.0.0 on .<span class="caps">NET</span> 4.0.30319.1
-<ul>
-	<li>192: ruby 1.9.2p136 (2010-12-25) [i386-mingw32]</code><br />
-  </pre><br />
-</div></li>
-</ul>
-<p>You must be aware of the fact that installing Rubies through Pik doesn&#8217;t run full installer, if it is available. Rather Pik downloads Zip or 7Zip archives, unpacks them and adds to its configuration file. This means that various configuration options that exist in installers like altering system path, files associations, menu shortcuts, etc. will not be set.</p>
+** Extracting:  C:\Users\bosko\.pik\downloads\ironruby<span class="m">-1</span>.<span class="m">0</span>v<span class="m">4</span>.zip
+   to:  C:\ruby\IronRuby<span class="m">-10</span>v<span class="m">4</span>
+done
+
+** Adding:  <span class="m">100</span>: IronRuby <span class="m">1</span>.<span class="m">0</span>.<span class="m">0</span>.<span class="m">0</span> <span class="k">on</span> .NET <span class="m">4</span>.<span class="m">0</span>.<span class="m">30319</span>.<span class="m">1</span>
+ Located at:  C:\ruby\IronRuby<span class="m">-10</span>v<span class="m">4</span>\bin
+</code></pre>
+</div><p>This is simple and elegant way to install additional Ruby versions on your Windows system. Checking available Rubies now gives:</p>
+<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">pik</span> ls
+  <span class="m">100</span>: IronRuby <span class="m">1</span>.<span class="m">0</span>.<span class="m">0</span>.<span class="m">0</span> <span class="k">on</span> .NET <span class="m">4</span>.<span class="m">0</span>.<span class="m">30319</span>.<span class="m">1</span>
+* <span class="m">192</span>: ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>p<span class="m">136</span> (<span class="m">2010-12-25</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+</code></pre>
+</div><p>You must be aware of the fact that installing Rubies through Pik doesn&#8217;t run full installer, if it is available. Rather Pik downloads Zip or 7Zip archives, unpacks them and adds to its configuration file. This means that various configuration options that exist in installers like altering system path, files associations, menu shortcuts, etc. will not be set.</p>
 <p>Additionally Pik has command for displaying more information about Ruby setup that is active in the current shell – pik info.</p>
-<div>
-<pre>
-<code class='bat'>c:\&amp;gt;pik info
-<p>pik 0.2.8</p>
-<p>ruby:<br />
-interpreter:  &quot;ruby&quot;<br />
-version:      &quot;1.9.2&quot;<br />
-date:         &quot;2010-12-25&quot;<br />
-platform:     &quot;i386-mingw32&quot;<br />
-patchlevel:   &quot;136&quot;<br />
-full_version: &quot;ruby 1.9.2p136 (2010-12-25) [i386-mingw32]&quot;</p>
-<p>homes:<br />
-gem:          &quot;C:\Ruby\192\lib\ruby\gems\1.9.1&quot;<br />
-ruby:         &quot;C:\Ruby\192&quot;</p>
-<p>binaries:<br />
-ruby:         &quot;C:\Ruby\192\bin&quot;<br />
-irb:          &quot;C:\Ruby\192\bin\irb.bat&quot;<br />
-gem:          &quot;C:\Ruby\192\bin\gem.bat&quot;<br />
-rake:         &quot;C:\Ruby\192\bin\rake.bat&quot;</p>
-<p>environment:<br />
-GEM_HOME:     &quot;&quot;<br />
-<span class="caps">HOME</span>:         &quot;C:/Users/bosko&quot;<br />
-<span class="caps">IRBRC</span>:        &quot;&quot;<br />
-<span class="caps">RUBYOPT</span>:      &quot;&quot;</p>
-<p>file associations:<br />
-.rb:           &quot;c:\Ruby\192\bin\ruby.exe&quot; &quot;%1&quot; %*<br />
-.rbw:          &quot;c:\Ruby\192\bin\rubyw.exe&quot; &quot;%1&quot; %*</code><br />
-  </pre></p>
-</div>
-<p>Output of Pik&#8217;s info command shows active interpreter version, full path where existing Ruby gems are and future ones will be installed, path to Ruby binaries, environment variables and file associations.</p>
-<p>Until now we have added two Ruby versions to Pik. First was added automatically when we first ran Pik and the second one was installed through Pik itself. In the chapter Building Ruby we have built latest development version, copied it to <code>C:\Ruby\193dev</code> directory, but Pik is not aware of it. We will use new Pik command to add this version. Logically command is called add and it accepts path to the directory where <code>ruby.exe</code> is located.</p>
-<div>
-<pre>
-<code class='bat'>C:\&amp;gt;pik add C:\Ruby\193dev\bin
+<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">pik</span> info
+pik <span class="m">0</span>.<span class="m">2</span>.<span class="m">8</span>
 
-	<ul>
-		<li>Adding:  193: ruby 1.9.3dev (2011-01-11 trunk 30511) [i386-mingw32]<br />
- Located at:  C:\Ruby\193dev\bin</code><br />
-  </pre><br />
-</div></li>
-	</ul><p>In a similar way we can add any Ruby version available on the system that is not installed through RubyInstaller installer. If we download any of Ruby 1.8 archives from RubyInstaller&#8217;s download page all we have to do is to unpack archive to some directory and use pik add command to add it to the list of versions that Pik can handle. Installing Ruby 1.8.7p330 is left for your exercise.</p>
+ruby:
+interpreter:  <span class="s2">&quot;ruby&quot;</span>
+version:      <span class="s2">&quot;1.9.2&quot;</span>
+date:         <span class="s2">&quot;2010-12-25&quot;</span>
+platform:     <span class="s2">&quot;i386-mingw32&quot;</span>
+patchlevel:   <span class="s2">&quot;136&quot;</span>
+full_version: <span class="s2">&quot;ruby 1.9.2p136 (2010-12-25) [i386-mingw32]&quot;</span>
+
+homes:
+gem:          <span class="s2">&quot;C:\Ruby\192\lib\ruby\gems\1.9.1&quot;</span>
+ruby:         <span class="s2">&quot;C:\Ruby\192&quot;</span>
+
+binaries:
+ruby:         <span class="s2">&quot;C:\Ruby\192\bin&quot;</span>
+irb:          <span class="s2">&quot;C:\Ruby\192\bin\irb.bat&quot;</span>
+gem:          <span class="s2">&quot;C:\Ruby\192\bin\gem.bat&quot;</span>
+rake:         <span class="s2">&quot;C:\Ruby\192\bin\rake.bat&quot;</span>
+
+environment:
+GEM_HOME:     <span class="s2">&quot;&quot;</span>
+HOME:         <span class="s2">&quot;C:/Users/bosko&quot;</span>
+IRBRC:        <span class="s2">&quot;&quot;</span>
+RUBYOPT:      <span class="s2">&quot;&quot;</span>
+
+file associations:
+.rb:           <span class="s2">&quot;c:\Ruby\192\bin\ruby.exe&quot;</span> <span class="s2">&quot;%1&quot;</span> %*
+.rbw:          <span class="s2">&quot;c:\Ruby\192\bin\rubyw.exe&quot;</span> <span class="s2">&quot;%1&quot;</span> %*
+</code></pre>
+</div><p>Output of Pik&#8217;s info command shows active interpreter version, full path where existing Ruby gems are and future ones will be installed, path to Ruby binaries, environment variables and file associations.</p>
+<p>Until now we have added two Ruby versions to Pik. First was added automatically when we first ran Pik and the second one was installed through Pik itself. In the chapter Building Ruby we have built latest development version, copied it to <code>C:\Ruby\193dev</code> directory, but Pik is not aware of it. We will use new Pik command to add this version. Logically command is called add and it accepts path to the directory where <code>ruby.exe</code> is located.</p>
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">pik</span> add C:\Ruby\<span class="m">193</span>dev\bin
+** Adding:  <span class="m">193</span>: ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">3</span>dev (<span class="m">2011-01-11</span> trunk <span class="m">30511</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+ Located at:  C:\Ruby\<span class="m">193</span>dev\bin
+</code></pre>
+</div><p>In a similar way we can add any Ruby version available on the system that is not installed through RubyInstaller installer. If we download any of Ruby 1.8 archives from RubyInstaller&#8217;s download page all we have to do is to unpack archive to some directory and use pik add command to add it to the list of versions that Pik can handle. Installing Ruby 1.8.7p330 is left for your exercise.</p>
 <p>At the beginning of this chapter we said Pik&#8217;s main purpose is to manage various Ruby versions. At any time you can change active Ruby version using Pik&#8217;s switch command</p>
-<div>
-<pre>
-<code class='bat'>c:\&amp;gt;pik sw 187
-<p>c:\&gt;ruby -v<br />
-ruby 1.8.7 (2010-12-23 patchlevel 330) [i386-mingw32]</p>
-<p>c:\&gt;pik sw 193<br />
-c:\&gt;ruby -v<br />
-ruby 1.9.3dev (2011-01-11 trunk 30511) [i386-mingw32]</p>
-<p>c:\&gt;pik switch 192<br />
-c:\&gt;ruby -v<br />
-ruby 1.9.2p136 (2010-12-25) [i386-mingw32]</code><br />
-  </pre></p>
+<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">pik</span> sw <span class="m">187</span>
+c:\<span class="p">&gt;</span><span class="n">ruby</span> -v
+ruby <span class="m">1</span>.<span class="m">8</span>.<span class="m">7</span> (<span class="m">2010-12-23</span> patchlevel <span class="m">330</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+
+c:\<span class="p">&gt;</span><span class="n">pik</span> sw <span class="m">193</span>
+c:\<span class="p">&gt;</span><span class="n">ruby</span> -v
+ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">3</span>dev (<span class="m">2011-01-11</span> trunk <span class="m">30511</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+
+c:\<span class="p">&gt;</span><span class="n">pik</span> switch <span class="m">192</span>
+c:\<span class="p">&gt;</span><span class="n">ruby</span> -v
+ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>p<span class="m">136</span> (<span class="m">2010-12-25</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+</code></pre>
 </div>
 
       <br/>
