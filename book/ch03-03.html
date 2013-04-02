@@ -93,88 +93,89 @@
 
       <h2>PostgreSQL database</h2>
 <p>This is the third in a row of databases with built-in support in Ruby on Rails. Similarly to MySQL we will skip installation and will use server from .zip archive. Unpack archive to the root of your <code>C:</code> drive (or any other one if you want). New directory <code>pgsql</code> will be created and all files will be extracted there. The very first thing we have to do is to initialize server instance. This will create all necessary files needed for PostgreSQL server. Go to the bin sub-directory within <code>pgsql</code> directory and execute <code>intidb</code> command and pass it directory where data files will be stored. Output should look similar to the one given below:</p>
-<div>
-<pre><code class='bat'>C:\pgsql\bin&amp;gt;initdb -D ..\data
-<p>The files belonging to this database system will be owned by user &quot;bosko&quot;.<br />
-This user must also own the server process.</p>
-<p>The database cluster will be initialized with locale English_United States.1252.</p>
-<p>The default text search configuration will be set to &quot;english&quot;.</p>
-<p>fixing permissions on existing directory ../data &#8230; ok<br />
-creating subdirectories &#8230; ok<br />
-selecting default max_connections &#8230; 100<br />
-selecting default shared_buffers &#8230; 32MB<br />
-creating configuration files &#8230; ok<br />
-creating template1 database in ../data/base/1 &#8230; ok<br />
-initializing pg_authid &#8230; ok<br />
-initializing dependencies &#8230; ok<br />
-creating system views &#8230; ok<br />
-loading system objects&#8217; descriptions &#8230; ok<br />
-creating conversions &#8230; ok<br />
-creating dictionaries &#8230; ok<br />
-setting privileges on built-in objects &#8230; ok<br />
-creating information schema &#8230; ok<br />
-loading PL/pgSQL server-side language &#8230; ok<br />
-vacuuming database template1 &#8230; ok<br />
-copying template1 to template0 &#8230; ok<br />
-copying template1 to postgres &#8230; ok</p>
-<p><span class="caps">WARNING</span>: enabling &quot;trust&quot; authentication for local connections<br />
-You can change this by editing pg_hba.conf or using the -A option the<br />
-next time you run initdb.</p>
-<p>Success. You can now start the database server using:</p>
-&quot;postgres&quot; -D &quot;../data&quot;
-<p>or<br />
-    &quot;pg_ctl&quot; -D &quot;../data&quot; -l logfile start</code></pre></p>
-</div>
-<p>As output of the initdb command suggests we can now start database server:</p>
-<div>
-<pre><code class='bat'>C:\pgsql\bin&amp;gt;postgres -D ..\data</code></pre>
-</div>
-<p>Let&#8217;s check whether our server is working. Don&#8217;t forget to change &#8216;bosko&#8217; with the user name under which you are working in Windows in the command below (this name is displayed in the first line of the log message if initdb command):</p>
-<div>
-<pre><code class='bat'>C:\pgsql\bin&amp;gt;psql -d template1 -U bosko
-<p>psql (9.0.2)<br />
-<span class="caps">WARNING</span>: Console code page (437) differs from Windows code page (1252)<br />
-         8-bit characters might not work correctly. See psql reference<br />
-         page &quot;Notes for Windows users&quot; for details.<br />
-Type &quot;help&quot; for help.</p>
-<p>postgres=# \l<br />
-                                             List of databases<br />
-   Name    | Owner | Encoding |         Collation          |           Ctype            | Access privileges<br />
-<del>-</del>&#8212;&#8212;&#8212;&#8212;<ins><del>-</del>&#8212;&#8212;</ins>&#8212;&#8212;&#8212;&#8212;&#8212;<ins><del>-</del>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-</ins>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-<br />
- postgres  | bosko | UTF8     | English_United States.1252 | English_United States.1252 |<br />
- template0 | bosko | UTF8     | English_United States.1252 | English_United States.1252 | =c/bosko         +<br />
-           |       |          |                            |                            | bosko=CTc/bosko<br />
- template1 | bosko | UTF8     | English_United States.1252 | English_United States.1252 | =c/bosko         +<br />
-           |       |          |                            |                            | bosko=CTc/bosko<br />
-(3 rows)<br />
-postgres=#</code></pre></p>
-</div>
-<p>If you see above lines your PostgreSQL server is running and ready. It is now time to create database for our rwin_book application. For this you can use <span class="caps">GUI</span> application pgAdmin3.exe or already started psql console client. I will stick with the console application. In the psql prompt execute following command:</p>
-<div>
-<pre><code class='bat'>postgres=# create database rwin_book_devel;</code></pre>
-</div>
-<p>In two chapters dedicated to native gems installation we installed sqlite3 and mysql2 gems so we were ready for these databases. For the PostgreSQL server we are still missing gem extension needed to connect to it. Before we configure our Rails application to use new database we have to install it:</p>
-<div>
-<pre><code class='bat'>c:\projects\rwin_book&amp;gt;gem install pg --version=0.9.0
-<p>Successfully installed pg-0.9.0-x86-mingw32<br />
-1 gem installed<br />
-Installing ri documentation for pg-0.9.0-x86-mingw32&#8230;<br />
-Installing RDoc documentation for pg-0.9.0-x86-mingw32&#8230;</code></pre></p>
-</div>
-<p>Version 0.9.0 has MinGW binaries that work on Windows. That&#8217;s the reason why we must install this and not the latest version. At the end we have to configure Rails application to use new database. For that use postgresql for adapter name in database.yml and add a line that requires pg in the application&#8217;s Gemfile. As we did we previous databases we must start database migration:</p>
-<div>
-<pre><code class='bat'>c:\projects\rwin_book&amp;gt;rake db:migrate
-<p>(in c:/projects/rwin_book)<br />
-==  CreateRubyWinSources: migrating ===========<br />
-&#8212; create_table(:ruby_win_sources)<br />
-<span class="caps">NOTICE</span>:  <span class="caps">CREATE</span> <span class="caps">TABLE</span> will create implicit sequence &quot;ruby_win_sources_id_seq&quot; <br />
-for serial column &quot;ruby_win_sources.id&quot;<br />
-<span class="caps">NOTICE</span>:  <span class="caps">CREATE</span> <span class="caps">TABLE</span> / <span class="caps">PRIMARY</span> <span class="caps">KEY</span> will create implicit index &quot;ruby_win_sources_pkey&quot; <br />
-for table &quot;ruby_win_sources&quot;<br />
-   -&gt; 0.3605s<br />
-==  CreateRubyWinSources: migrated (0.3605s) ==========</code></pre></p>
-</div>
-<p>This ends our journey through built-in support for database engines. All of them are functional and it is up to you which one you will use in Rails applications.</p>
+<div class="highlight"><pre><code class="bat">C:\pgsql\bin<span class="p">&gt;</span><span class="n">initdb</span> -D ..\data
+The files belonging to this database system will be owned by user <span class="s2">&quot;bosko&quot;</span>.
+This user must also own the server process.
+
+The database cluster will be initialized with locale English_United States.<span class="m">1252</span>.
+
+The default text search configuration will be <span class="k">set</span> <span class="nv">to</span> <span class="s2">&quot;english&quot;</span>.
+
+fixing permissions <span class="k">on</span> existing directory ..<span class="n">/data</span> ... ok
+creating subdirectories ... ok
+selecting default max_connections ... <span class="m">100</span>
+selecting default shared_buffers ... <span class="m">32</span>MB
+creating configuration files ... ok
+creating template<span class="m">1</span> database in ..<span class="n">/data/base/1</span> ... ok
+initializing pg_authid ... ok
+initializing dependencies ... ok
+creating system views ... ok
+loading system objects&#39; descriptions ... ok
+creating conversions ... ok
+creating dictionaries ... ok
+setting privileges <span class="k">on</span> built-in objects ... ok
+creating information schema ... ok
+loading PL<span class="n">/pgSQL</span> server-side language ... ok
+vacuuming database template<span class="m">1</span> ... ok
+copying template<span class="m">1</span> to template<span class="m">0</span> ... ok
+copying template<span class="m">1</span> to postgres ... ok
+
+WARNING: enabling <span class="s2">&quot;trust&quot;</span> authentication <span class="k">for</span> local connections
+You can change this by editing pg_hba.conf or using the -A option the
+next time you run initdb.
+
+Success. You can now start the database server using:
+
+    <span class="s2">&quot;postgres&quot;</span> -D <span class="s2">&quot;../data&quot;</span>
+or
+    <span class="s2">&quot;pg_ctl&quot;</span> -D <span class="s2">&quot;../data&quot;</span> -l logfile start
+</code></pre>
+</div><p>As output of the initdb command suggests we can now start database server:</p>
+<div class="highlight"><pre><code class="bat">C:\pgsql\bin<span class="p">&gt;</span><span class="n">postgres</span> -D ..\data
+</code></pre>
+</div><p>Let&#8217;s check whether our server is working. Don&#8217;t forget to change &#8216;bosko&#8217; with the user name under which you are working in Windows in the command below (this name is displayed in the first line of the log message if initdb command):</p>
+<div class="highlight"><pre><code class="bat">C:\pgsql\bin<span class="p">&gt;</span><span class="n">psql</span> -d template<span class="m">1</span> -U bosko
+psql (<span class="m">9</span>.<span class="m">0</span>.<span class="m">2</span>)
+WARNING: Console code page (<span class="m">437</span>) differs from Windows code page (<span class="m">1252</span>)
+         <span class="m">8</span>-bit characters might not work correctly. See psql reference
+         page <span class="s2">&quot;Notes for Windows users&quot;</span> <span class="k">for</span> details.
+Type <span class="s2">&quot;help&quot;</span> <span class="k">for</span> help.
+
+postgres<span class="o">=</span># \l
+                                             List of databases
+   Name    <span class="p">|</span> <span class="n">Owner</span> <span class="p">|</span> <span class="n">Encoding</span> <span class="p">|</span>         <span class="n">Collation</span>          <span class="p">|</span>           <span class="n">Ctype</span>            <span class="p">|</span> <span class="n">Access</span> privileges
+-----------+-------+----------+----------------------------+----------------------------+-------------------
+ postgres  <span class="p">|</span> <span class="n">bosko</span> <span class="p">|</span> <span class="n">UTF8</span>     <span class="p">|</span> <span class="n">English_United</span> States.<span class="m">1252</span> <span class="p">|</span> <span class="n">English_United</span> States.<span class="m">1252</span> <span class="p">|</span>
+ <span class="n">template0</span> <span class="p">|</span> <span class="n">bosko</span> <span class="p">|</span> <span class="n">UTF8</span>     <span class="p">|</span> <span class="n">English_United</span> States.<span class="m">1252</span> <span class="p">|</span> <span class="n">English_United</span> States.<span class="m">1252</span> | <span class="o">=</span>c<span class="n">/bosko</span>         +
+           |       |          |                            |                            <span class="p">|</span> <span class="n">bosko</span><span class="o">=</span>CTc<span class="n">/bosko</span>
+ template<span class="m">1</span> <span class="p">|</span> <span class="n">bosko</span> <span class="p">|</span> <span class="n">UTF8</span>     <span class="p">|</span> <span class="n">English_United</span> States.<span class="m">1252</span> <span class="p">|</span> <span class="n">English_United</span> States.<span class="m">1252</span> | <span class="o">=</span>c<span class="n">/bosko</span>         +
+           |       |          |                            |                            <span class="p">|</span> <span class="n">bosko</span><span class="o">=</span>CTc<span class="n">/bosko</span>
+(<span class="m">3</span> rows)
+postgres<span class="o">=</span>#
+</code></pre>
+</div><p>If you see above lines your PostgreSQL server is running and ready. It is now time to create database for our rwin_book application. For this you can use <span class="caps">GUI</span> application pgAdmin3.exe or already started psql console client. I will stick with the console application. In the psql prompt execute following command:</p>
+<div class="highlight"><pre><code class="bat">postgres<span class="o">=</span># create database rwin_book_devel;
+</code></pre>
+</div><p>In two chapters dedicated to native gems installation we installed sqlite3 and mysql2 gems so we were ready for these databases. For the PostgreSQL server we are still missing gem extension needed to connect to it. Before we configure our Rails application to use new database we have to install it:</p>
+<div class="highlight"><pre><code class="bat">c:\projects\rwin_book<span class="p">&gt;</span><span class="n">gem</span> install pg --version<span class="o">=</span><span class="m">0</span>.<span class="m">9</span>.<span class="m">0</span>
+Successfully installed pg<span class="m">-0</span>.<span class="m">9</span>.<span class="m">0</span>-x<span class="m">86</span>-mingw<span class="m">32</span>
+<span class="m">1</span> gem installed
+Installing ri documentation <span class="k">for</span> pg<span class="m">-0</span>.<span class="m">9</span>.<span class="m">0</span>-x<span class="m">86</span>-mingw<span class="m">32</span>...
+Installing RDoc documentation <span class="k">for</span> pg<span class="m">-0</span>.<span class="m">9</span>.<span class="m">0</span>-x<span class="m">86</span>-mingw<span class="m">32</span>...
+</code></pre>
+</div><p>Version 0.9.0 has MinGW binaries that work on Windows. That&#8217;s the reason why we must install this and not the latest version. At the end we have to configure Rails application to use new database. For that use postgresql for adapter name in database.yml and add a line that requires pg in the application&#8217;s Gemfile. As we did we previous databases we must start database migration:</p>
+<div class="highlight"><pre><code class="bat">c:\projects\rwin_book<span class="p">&gt;</span><span class="n">rake</span> db:migrate
+(in c:<span class="n">/projects/rwin_book)</span>
+<span class="o">==</span>  CreateRubyWinSources: migrating <span class="o">===========================================</span>
+-- create_table(<span class="nl">:ruby_win_sources</span>)
+NOTICE:  CREATE TABLE will create implicit sequence <span class="s2">&quot;ruby_win_sources_id_seq&quot;</span> 
+<span class="k">for</span> serial column <span class="s2">&quot;ruby_win_sources.id&quot;</span>
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index <span class="s2">&quot;ruby_win_sources_pkey&quot;</span> 
+<span class="k">for</span> table <span class="s2">&quot;ruby_win_sources&quot;</span>
+   -<span class="p">&gt;</span> <span class="n">0</span>.<span class="m">3605</span>s
+<span class="o">==</span>  CreateRubyWinSources: migrated (<span class="m">0</span>.<span class="m">3605</span>s) <span class="o">==================================</span>
+</code></pre>
+</div><p>This ends our journey through built-in support for database engines. All of them are functional and it is up to you which one you will use in Rails applications.</p>
 
       <br/>
       
