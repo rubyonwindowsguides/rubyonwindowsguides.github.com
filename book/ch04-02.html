@@ -94,313 +94,310 @@
       <h2>Internet Explorer Automation</h2>
 <p>In the previous chapter we learned how to find information about <span class="caps">OLE</span> classes and their members. Moreover we made Rails page that, although without fancy look, displays very useful information for selected <span class="caps">OLE</span> objects. Now we should go a step further and start to utilize this knowledge.</p>
 <p>We will start with simple wrapper class that starts Internet Explorer and exposes few methods for easier manipulation. Along the chapter we will improve it and add some advanced features. Starting source code is given below.</p>
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;win32ole&#39;</span>
-<span class="k">class</span> <span class="nc">IERunner</span>
-  <span class="kp">attr_reader</span> <span class="ss">:app</span>
-  <span class="k">def</span> <span class="nf">initialize</span>
-    <span class="vi">@type</span> <span class="o">=</span> <span class="no">WIN32OLE_TYPE</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Microsoft Internet Controls&quot;</span><span class="p">,</span> <span class="s2">&quot;InternetExplorer&quot;</span><span class="p">)</span>
-    <span class="vi">@app</span> <span class="o">=</span> <span class="no">WIN32OLE</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;InternetExplorer.Application&quot;</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">guid</span>
-    <span class="vi">@type</span><span class="o">.</span><span class="n">guid</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">progid</span>
-    <span class="vi">@type</span><span class="o">.</span><span class="n">progid</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">visible</span><span class="o">=</span><span class="p">(</span><span class="n">is_visible</span><span class="p">)</span>
-    <span class="vi">@app</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">is_visible</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">goto</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="vi">@app</span><span class="o">.</span><span class="n">Navigate</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">close</span>
-    <span class="vi">@app</span><span class="o">.</span><span class="n">Quit</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">html</span>
-    <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">nil?</span> <span class="p">?</span> <span class="s1">&#39;&#39;</span> <span class="p">:</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">outerHTML</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>In the <code>initialize</code> method we are creating IE&#8217;s <code>WIN32OLE_TYPE</code> object and start application. We are also defining reader attribute that returns our <code>InternetExplorer</code> application object, methods that return <span class="caps">GUID</span> and ProgrID, as well as method for navigating Web pages, exiting application and, finally, method that returns <span class="caps">HTML</span> source of a page that is currently displayed in the browser. If you now create <code>IERunner</code> object web browser will be started but nothing visible will happen. The reason is the fact that most of applications when started through <span class="caps">OLE</span> are not flagged as visible and to display their window you have to explicitly set visible flag to <code>true</code>. Let&#8217;s try this wrapper.</p>
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;ie_runner&#39;</span>
-<span class="n">ie</span> <span class="o">=</span> <span class="no">IERunner</span><span class="o">.</span><span class="n">new</span>
-<span class="n">ie</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kp">true</span>
-<span class="n">ie</span><span class="o">.</span><span class="n">goto</span> <span class="err">“</span><span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="n">www</span><span class="o">.</span><span class="n">rubyinstaller</span><span class="o">.</span><span class="n">org</span><span class="err">”</span>
-<span class="nb">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">ie</span><span class="o">.</span><span class="n">close</span>
-</code></pre>
-</div><p>Running above script will open new <code>InternetExplorer</code> window, The RubyInstaller homepage will be loaded and after 5 seconds application will be closed. We are making progress. We now know how to start a new application through <span class="caps">OLE</span> automation and send it messages, by calling <span class="caps">OLE</span> methods, through which we can manipulate it. Even though we can get back results of methods execution and check <span class="caps">OLE</span> object state through its properties, this is still one way communication because each action must be initiated from Ruby script. In some cases this should be enough. Our Ruby script will call numerous <span class="caps">OLE</span> methods, possibly branching due to the values of <span class="caps">OLE</span> properties and finally release <span class="caps">OLE</span> object and exit.</p>
+<div>
+<pre><code class='ruby'>require 'win32ole'
+<p>class IERunner<br />
+  attr_reader :app<br />
+  def initialize<br />
+    @type = WIN32OLE_TYPE.new(&quot;Microsoft Internet Controls&quot;, &quot;InternetExplorer&quot;)<br />
+    @app = WIN32OLE.new(&quot;InternetExplorer.Application&quot;)<br />
+  end</p>
+def guid
+@type.guid
+end
+def progid
+@type.progid
+end
+def visible=(is_visible)
+@app.visible = is_visible
+end
+def goto(url)
+@app.Navigate(url)
+end
+def close
+@app.Quit
+end
+def html
+@app.document.nil? ? &#8217;&#8217; : @app.document.body.outerHTML
+end
+<p>end</code></pre></p>
+</div>
+<p>In the <code>initialize</code> method we are creating IE&#8217;s <code>WIN32OLE_TYPE</code> object and start application. We are also defining reader attribute that returns our <code>InternetExplorer</code> application object, methods that return <span class="caps">GUID</span> and ProgrID, as well as method for navigating Web pages, exiting application and, finally, method that returns <span class="caps">HTML</span> source of a page that is currently displayed in the browser. If you now create <code>IERunner</code> object web browser will be started but nothing visible will happen. The reason is the fact that most of applications when started through <span class="caps">OLE</span> are not flagged as visible and to display their window you have to explicitly set visible flag to <code>true</code>. Let&#8217;s try this wrapper.</p>
+<div>
+<pre><code class='ruby'>require 'ie_runner'
+<p>ie = IERunner.new<br />
+ie.visible = true<br />
+ie.goto “http://www.rubyinstaller.org”<br />
+sleep(5)<br />
+ie.close</code></pre></p>
+</div>
+<p>Running above script will open new <code>InternetExplorer</code> window, The RubyInstaller homepage will be loaded and after 5 seconds application will be closed. We are making progress. We now know how to start a new application through <span class="caps">OLE</span> automation and send it messages, by calling <span class="caps">OLE</span> methods, through which we can manipulate it. Even though we can get back results of methods execution and check <span class="caps">OLE</span> object state through its properties, this is still one way communication because each action must be initiated from Ruby script. In some cases this should be enough. Our Ruby script will call numerous <span class="caps">OLE</span> methods, possibly branching due to the values of <span class="caps">OLE</span> properties and finally release <span class="caps">OLE</span> object and exit.</p>
 <p>More complex applications will, on the other hand, need to receive some notifications from <span class="caps">OLE</span> control and make decisions about next action based on it. Whether this is possible or not depends on <span class="caps">OLE</span> control. Namely some <span class="caps">OLE</span> controls use publish/subscribe, or better say, observer pattern to enable callbacks from <span class="caps">OLE</span> control to the client application.</p>
 <p>In general observer pattern is software pattern in which source object, called subject, keeps the list of its observers (subscribers) and notifies them whenever state changes. Usually this notification is done by calling observers&#8217; method, possibly passing it arguments. Observer can subscribe to more than one type of change and subject can have one or more observers per type of change. Subject maintains the list of all observers in such a way that it knows which observers should be called when particular change happens.</p>
 <p>In other words, subject exposes a list of events to which observers can subscribe. Whenever event occurs observers&#8217; method, event handler, is called. In our case subject is <span class="caps">OLE</span> control and observer is our Ruby script. For this purpose <code>win32ole</code> extension library defines special class, <code>WIN32OLE_EVENT</code>. Whenever you want to receive notifications from <span class="caps">OLE</span> control you must create object of this type passing <span class="caps">OLE</span> control to the <code>WIN32OLE_EVENT</code> constructor as an argument.</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">ie</span> <span class="o">=</span> <span class="no">WIN32OLE</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="err">“</span><span class="no">InternetExplorer</span><span class="o">.</span><span class="n">Application</span><span class="err">”</span><span class="p">)</span>
-<span class="n">ev</span> <span class="o">=</span> <span class="no">WIN32OLE_EVENT</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">ie</span><span class="p">)</span>
-</code></pre>
-</div><p>After object is created you can use it to subscribe to control&#8217;s events. Subscribing can be done in two ways. The first one is to call @WIN32OLE_EVENT@&#8217;s <code>on_event</code> method. This method accepts one optional argument. If this argument is given event handler will subscribe to the event of the same name. If on_event is called without argument handler will subscribe to all events. This method accepts block which is the code that will be executed when callback is called.</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">ev</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="err">“</span><span class="no">DocumentComplete</span><span class="err">”</span><span class="p">)</span> <span class="p">{</span><span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="nb">puts</span> <span class="err">“</span><span class="no">Loaded</span> <span class="n">document</span> <span class="n">at</span> <span class="c1">#{args[1]}”}</span>
-<span class="n">ev</span><span class="o">.</span><span class="n">on_event</span><span class="p">()</span> <span class="p">{</span><span class="o">|</span><span class="n">event</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="o">|</span> <span class="nb">puts</span> <span class="err">“</span><span class="no">Event</span> <span class="c1">#{event} triggered”}</span>
-</code></pre>
-</div><p>First line subscribes to the Internet Explorer&#8217;s <code>DocumentComplete</code> event which is fired when document being navigated to reaches <code>ReadyState_Complete</code>. This event passes two arguments to the callback function – object that specifies <code>WebBrowser</code> object corresponding to the event and <span class="caps">URL</span> of the loaded document. Callback procedure will print message with <span class="caps">URL</span> of loaded document. Second line subscribes to all events and whenever it is called it prints out name of triggered event. If you do not want to receive event notifications any more you can use off_event method.</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">ev</span><span class="o">.</span><span class="n">off_event</span><span class="p">(</span><span class="err">“</span><span class="no">DocumentComplete</span><span class="err">”</span><span class="p">)</span>
-</code></pre>
-</div><p>The second way of subscribing is to pass instance of the class that handles events notifications to the event handler&#8217;s object. In our example we will use this method, but before we go over all details of this method there is one important issue we must solve.</p>
+<div>
+<pre><code class='ruby'>ie = WIN32OLE.new(“InternetExplorer.Application”)
+<p>ev = WIN32OLE_EVENT.new(ie)</code></pre></p>
+</div>
+<p>After object is created you can use it to subscribe to control&#8217;s events. Subscribing can be done in two ways. The first one is to call @WIN32OLE_EVENT@&#8217;s <code>on_event</code> method. This method accepts one optional argument. If this argument is given event handler will subscribe to the event of the same name. If on_event is called without argument handler will subscribe to all events. This method accepts block which is the code that will be executed when callback is called.</p>
+<div>
+<pre><code class='ruby'>ev.on_event(“DocumentComplete”) {|*args| puts “Loaded document at #{args[1]}”}
+<p>ev.on_event() {|event, *args| puts “Event #{event} triggered”}</code></pre></p>
+</div>
+<p>First line subscribes to the Internet Explorer&#8217;s <code>DocumentComplete</code> event which is fired when document being navigated to reaches <code>ReadyState_Complete</code>. This event passes two arguments to the callback function – object that specifies <code>WebBrowser</code> object corresponding to the event and <span class="caps">URL</span> of the loaded document. Callback procedure will print message with <span class="caps">URL</span> of loaded document. Second line subscribes to all events and whenever it is called it prints out name of triggered event. If you do not want to receive event notifications any more you can use off_event method.</p>
+<div>
+<pre><code class='ruby'>ev.off_event(“DocumentComplete”)</code></pre>
+</div>
+<p>The second way of subscribing is to pass instance of the class that handles events notifications to the event handler&#8217;s object. In our example we will use this method, but before we go over all details of this method there is one important issue we must solve.</p>
 <p>Take a look at the following Ruby script:</p>
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;win32ole&#39;</span>
-<span class="n">ie</span> <span class="o">=</span> <span class="no">WIN32OLE</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="err">“</span><span class="no">InternetExplorer</span><span class="o">.</span><span class="n">Application</span><span class="err">”</span><span class="p">)</span>
-<span class="n">ev</span> <span class="o">=</span> <span class="no">WIN32OLE_EVENT</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">ie</span><span class="p">)</span>
-<span class="n">ev</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="err">“</span><span class="no">DocumentComplete</span><span class="err">”</span><span class="p">)</span> <span class="p">{</span><span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="nb">puts</span> <span class="err">“</span><span class="no">Loaded</span> <span class="n">document</span> <span class="n">at</span> <span class="c1">#{args[1]}”}</span>
-<span class="n">ie</span><span class="o">.</span><span class="n">Visible</span> <span class="o">=</span> <span class="kp">true</span>
-<span class="n">ie</span><span class="o">.</span><span class="n">Navigate</span> <span class="err">“</span><span class="n">http</span><span class="ss">:/</span><span class="o">/</span><span class="n">www</span><span class="o">.</span><span class="n">pragprog</span><span class="o">.</span><span class="n">com</span><span class="err">”</span>
-</code></pre>
-</div><p>At the first glance this is perfectly good script. We are creating Internet Explorer automation object and corresponding event handler, subscribing to <code>DocumentComplete</code> event and navigating to some <span class="caps">URL</span>. Do you see the problem we are facing here? If yes, excellent; otherwise keep reading.</p>
+<div>
+<pre><code class='ruby'>require 'win32ole'
+<p>ie = WIN32OLE.new(“InternetExplorer.Application”)<br />
+ev = WIN32OLE_EVENT.new(ie)<br />
+ev.on_event(“DocumentComplete”) {|*args| puts “Loaded document at #{args<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>}”}<br />
+ie.Visible = true<br />
+ie.Navigate “http://www.pragprog.com”</code></pre></p>
+</div>
+<p>At the first glance this is perfectly good script. We are creating Internet Explorer automation object and corresponding event handler, subscribing to <code>DocumentComplete</code> event and navigating to some <span class="caps">URL</span>. Do you see the problem we are facing here? If yes, excellent; otherwise keep reading.</p>
 <p>Let&#8217;s analyze script again. We are starting Internet Explorer, subscribing to the event and navigating to some <span class="caps">URL</span>. But, by the time document is loaded and it reaches <code>ReadyState_Complete</code> our Ruby script will exit, so we will never be able to receive any notification. It is clear that we must prevent script from exiting if we want our callback function, or in our case Ruby procedure, to be executed. So how can we do that? First idea might be to wait for user input</p>
-<div class="highlight"><pre><code class="ruby"><span class="nb">gets</span>
-</code></pre>
-</div><p>or to use infiniWord and Excel Automationte loop</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">wile</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>If you try any of these you will end up with Internet Explorer that doesn&#8217;t load page and has empty window client area. The reason for this behavior lies in a way how Windows applications work. All Windows applications are event driven. System passes input to the application&#8217;s window. Each window has special function, window procedure, that system calls whenever it has input for the window. When application processes current input control is returned to the system and application waits till new input is available.</p>
+<div>
+<pre><code class='ruby'>gets</code></pre>
+</div>
+<p>or to use infiniWord and Excel Automationte loop</p>
+<div>
+<pre><code class='ruby'>wile(true)
+<p>end</code></pre></p>
+</div>
+<p>If you try any of these you will end up with Internet Explorer that doesn&#8217;t load page and has empty window client area. The reason for this behavior lies in a way how Windows applications work. All Windows applications are event driven. System passes input to the application&#8217;s window. Each window has special function, window procedure, that system calls whenever it has input for the window. When application processes current input control is returned to the system and application waits till new input is available.</p>
 <p>Passing input to the window is message based. Each input is new message sent to the window. Actually messages can be sent or posted to the window. Messages that are sent are immediately processed and message queue is bypassed. On the other hand posted messages are put in the message queue. These messages are processed one at the time. Each message is removed from the queue, examined and finally processed in window procedure.</p>
 <p>An application must remove and process its messages. For single-threaded applications it is usually done in the message loop. Simple message loop has one function call to each of following functions: <code>GetMessage</code>, <code>TranslateMessage</code> and <code>DispatchMessage</code>. Without going into more details, these function calls retrieve message from the message queue, made necessary transformations and dispatch message to the target window.</p>
 <p>Most of messages sent by system to application&#8217;s windows are posted. If main application thread is blocked windows will never receive any of them. This will result in window that is not refreshed and doesn&#8217;t respond to mouse or keyboard input. This is exactly scenario we faced when we used infinite loop or while we were waiting for user input. If you still have script running you can check this by dragging any window over Internet Explorer&#8217;s window. Client area will not be redrawn. But if you move Internet Explorer window you will see that client area is cleared up again. System sends repaint message when window is moved and such messages are immediately processed by window procedure. Now you can end script by hitting <code>Ctrl-C</code>.</p>
 <p>Now we know how to prevent script from exiting without blocking Internet Explorer&#8217;s message queue. We must use message loop and call <code>GetMessage</code>, <code>TranslateMessage</code> and <code>DispatchMessage</code> functions. Fortunately we do not have to create our own message loop method. Such a function exists in <code>win32ole</code> library. It is class method of <code>WIN32OLE_TYPE</code> class.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">while</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
-  <span class="no">WIN32OLE_TYPE</span><span class="o">.</span><span class="n">message_loop</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>With these three lines at the end of our script we will prevent script exiting prematurely and we will be able to receive notification whenever browser loads complete page.</p>
+<div>
+<pre><code class='ruby'>while(true)
+WIN32OLE_TYPE.message_loop
+<p>end</code></pre></p>
+</div>
+<p>With these three lines at the end of our script we will prevent script exiting prematurely and we will be able to receive notification whenever browser loads complete page.</p>
 <p>When we talked how to handle events notifications fired from <span class="caps">OLE</span> control we mentioned two ways. The first one, using <code>on_event</code> method, was explained but the second, using instance of some class was just mentioned. It is now time to learn how to use objects to process events. But before we go over the code let&#8217;s see what we want to achieve. Of course, first functionality is to have easy way to register event handlers without using <code>on_event</code> method. Second, we want to centralize event handling in one class. Finally we want to be able to subscribe not only to events exposed by Internet Explorer but also to other <span class="caps">OLE</span> objects within it.</p>
 <p>Class that will do this is given in the code below (<code>event_handler.rb</code>):</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">class</span> <span class="nc">EventHandler</span>
-  <span class="k">def</span> <span class="nf">initialize</span>
-    <span class="vi">@handlers</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">add_handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">block_given?</span>
-      <span class="vi">@handlers</span><span class="o">[</span><span class="n">event</span><span class="o">]</span> <span class="o">=</span> <span class="n">block</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
-    <span class="k">if</span> <span class="vi">@handlers</span><span class="o">[</span><span class="n">event</span><span class="o">.</span><span class="n">to_s</span><span class="o">]</span>
-      <span class="vi">@handlers</span><span class="o">[</span><span class="n">event</span><span class="o">.</span><span class="n">to_s</span><span class="o">].</span><span class="n">call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>In the <code>initialize</code> method we are defining hash variable that will keep all registered event handler methods. Next method, <code>add_handler</code> receives event name in the first argument and block that should be executed when event is fired in the second argument. Using &amp; in front of the argument actually tells Ruby to convert block to the <code>Proc</code> object that can be later invoked with call method as we will see soon. Method add_handler checks whether block is passed to it and if it is stores Proc object as a value in the <code>\</code>handlers@ instance variable using event name as a key.</p>
+<div>
+<pre><code class='ruby'>class EventHandler
+def initialize
+@handlers = {}
+end
+def add_handler(event, &amp;block)
+if block_given?
+@handlers[event] = block
+end
+end
+def method_missing(event, *args)
+if @handlers[event.to_s]
+@handlers[event.to_s].call(*args)
+end
+end
+<p>end</code></pre></p>
+</div>
+<p>In the <code>initialize</code> method we are defining hash variable that will keep all registered event handler methods. Next method, <code>add_handler</code> receives event name in the first argument and block that should be executed when event is fired in the second argument. Using &amp; in front of the argument actually tells Ruby to convert block to the <code>Proc</code> object that can be later invoked with call method as we will see soon. Method add_handler checks whether block is passed to it and if it is stores Proc object as a value in the <code>\</code>handlers@ instance variable using event name as a key.</p>
 <p>All the magic of <code>EventHandler</code> class happens in the last method, <code>method_missing</code>. This method will be called whenever we try to call methods that are not defined. First argument of the method is name of the method that does not exist. Second argument uses Ruby construct <code>*args</code> to collect all arguments which are passed to non-existing method to an array. Our <code>method_missing</code> checks whether we have handler for requested method and if we do, it executes it, passing it all original arguments. Let&#8217;s try our new class in interactive ruby.</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">C</span><span class="p">:\</span><span class="n">projects</span><span class="p">\</span><span class="n">ruby</span><span class="p">\</span><span class="n">ruby_win</span><span class="p">\</span><span class="n">internet_explorer</span><span class="o">&gt;</span><span class="n">irb</span> <span class="o">-</span><span class="n">I</span><span class="o">.</span> <span class="o">-</span><span class="n">revent_handler</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">eh</span> <span class="o">=</span> <span class="no">EventHandler</span><span class="o">.</span><span class="n">new</span>
-<span class="o">=&gt;</span> <span class="c1">#&lt;EventHandler:0x1c8bad8 @handlers={}&gt;</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">002</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">eh</span><span class="o">.</span><span class="n">HandleMyEvent</span>
-<span class="o">=&gt;</span> <span class="kp">nil</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">eh</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="s1">&#39;HandleMyEvent&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">004</span><span class="p">:</span><span class="mi">1</span><span class="o">*</span> <span class="nb">puts</span> <span class="s2">&quot;Called HandleMyEvent(</span><span class="si">#{</span><span class="n">args</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">005</span><span class="p">:</span><span class="mi">1</span><span class="o">&gt;</span> <span class="k">end</span>
-<span class="o">=&gt;</span> <span class="c1">#&lt;Proc:0x15c7050@(irb):3&gt;</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">006</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">eh</span><span class="o">.</span><span class="n">HandleMyEvent</span>
-<span class="no">Called</span> <span class="no">HandleMyEvent</span><span class="p">()</span>
-<span class="o">=&gt;</span> <span class="kp">nil</span>
-<span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">007</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">eh</span><span class="o">.</span><span class="n">HandleMyEvent</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">)</span>
-<span class="no">Called</span> <span class="no">HandleMyEvent</span><span class="p">(</span><span class="n">one</span><span class="p">,</span> <span class="n">two</span><span class="p">,</span> <span class="n">three</span><span class="p">)</span>
-</code></pre>
-</div><p>We are starting interactive ruby with <code>-I.</code> argument which tells it to add current path to the Ruby&#8217;s <code>$LOAD_PATH</code> variable. This variable keeps a list of paths that will be searched when we require file. Ruby 1.9 contrary to 1.8 doesn&#8217;t add current path to the <code>$LOAD_PATH</code> list. Next we tell interactive ruby to load our new file with <code>-revent_handler</code>. After we create new <code>EventHandler</code> object we are calling <code>HandleMyEvent</code> method. Since this method is not defined we get <code>nil</code> as a result of this call. In the next three statements we are adding new event handler which just prints out information about name and arguments passed during method call. After that, if we call method with the name given in the first argument of add_handler and no arguments we see message that correctly displays which method is called without arguments. In the last statement we are calling same method with three arguments.</p>
+<div>
+<pre><code class='ruby'>C:\projects\ruby\ruby_win\internet_explorer&amp;gt;irb -I. -revent_handler
+<p>irb(main):001:0&gt; eh = EventHandler.new<br />
+=&gt; #&lt;EventHandler:0&#215;1c8bad8 <code>handlers={}&amp;gt;
+irb(main):002:0&amp;gt; eh.HandleMyEvent
+=&amp;gt; nil
+irb(main):003:0&amp;gt; eh.add_handler('HandleMyEvent') do |*args|
+irb(main):004:1* puts &amp;quot;Called HandleMyEvent(#{args.join(', ')})&amp;quot;
+irb(main):005:1&amp;gt; end
+=&amp;gt; #&amp;lt;Proc:0x15c7050</code>(irb):3&gt;<br />
+irb(main):006:0&gt; eh.HandleMyEvent<br />
+Called HandleMyEvent()<br />
+=&gt; nil<br />
+irb(main):007:0&gt; eh.HandleMyEvent(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;)<br />
+Called HandleMyEvent(one, two, three)</code></pre></p>
+</div>
+<p>We are starting interactive ruby with <code>-I.</code> argument which tells it to add current path to the Ruby&#8217;s <code>$LOAD_PATH</code> variable. This variable keeps a list of paths that will be searched when we require file. Ruby 1.9 contrary to 1.8 doesn&#8217;t add current path to the <code>$LOAD_PATH</code> list. Next we tell interactive ruby to load our new file with <code>-revent_handler</code>. After we create new <code>EventHandler</code> object we are calling <code>HandleMyEvent</code> method. Since this method is not defined we get <code>nil</code> as a result of this call. In the next three statements we are adding new event handler which just prints out information about name and arguments passed during method call. After that, if we call method with the name given in the first argument of add_handler and no arguments we see message that correctly displays which method is called without arguments. In the last statement we are calling same method with three arguments.</p>
 <p>Handling arguments in such a way is possible because we used <code>*args</code> construct in block definition. Using asterisk &#8216;<code>*</code>&#8217; before argument name tells Ruby to collect all subsequent arguments in the array. If we do not pass arguments when we call method, array will be empty. Contrary, if arguments are used in  method call, they will be collected in one array and passed to the block which can later use them.</p>
 <p>With <code>EventHandler</code> class in place we can start to improve <code>IERunner</code> class. This is our new <code>initialize</code> method.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">initialize</span>
-  <span class="vi">@type</span> <span class="o">=</span> <span class="no">WIN32OLE_TYPE</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Microsoft Internet Controls&quot;</span><span class="p">,</span> <span class="s2">&quot;InternetExplorer&quot;</span><span class="p">)</span>
-  <span class="vi">@app</span> <span class="o">=</span> <span class="no">WIN32OLE</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;InternetExplorer.Application&quot;</span><span class="p">)</span>
-  <span class="vi">@ev_handler</span> <span class="o">=</span> <span class="no">EventHandler</span><span class="o">.</span><span class="n">new</span>
-  <span class="vi">@run_loop</span> <span class="o">=</span> <span class="kp">true</span>
-
-  <span class="vi">@app_event</span> <span class="o">=</span> <span class="no">WIN32OLE_EVENT</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@app</span><span class="p">)</span>
-  <span class="vi">@app_event</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="vi">@ev_handler</span>
-
-  <span class="vi">@ev_handler</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="s2">&quot;OnQuit&quot;</span><span class="p">)</span> <span class="p">{</span><span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="n">exit_message_loop</span><span class="p">}</span>
-  <span class="vi">@ev_handler</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="s2">&quot;DocumentComplete&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span>
-    <span class="k">unless</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">innerHTML</span><span class="o">.</span><span class="n">empty?</span>
-      <span class="vi">@doc_event</span> <span class="o">=</span> <span class="no">WIN32OLE_EVENT</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="p">)</span>
-      <span class="vi">@doc_event</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="vi">@ev_handler</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>First we create <code>EventHandler</code> object and define flag for exiting application. After that, we create new Internet Explorer event and set our <code>EventHandler</code> object as a handler for browser&#8217;s events. At the end we are subscribing to two events <code>OnQuit</code> and <code>DocumentComplete</code>. <code>OnQuit</code> event handler will be called when Internet Explorer is closed. It just calls <code>exit_message_loop</code> and exits.</p>
+<div>
+<pre><code class='ruby'>def initialize
+@type = WIN32OLE_TYPE.new(&quot;Microsoft Internet Controls&quot;, &quot;InternetExplorer&quot;)
+@app = WIN32OLE.new(&quot;InternetExplorer.Application&quot;)
+@ev_handler = EventHandler.new
+@run_loop = true
+<code>app_event = WIN32OLE_EVENT.new(</code>app)
+@app_event.handler = @ev_handler
+@ev_handler.add_handler(&quot;OnQuit&quot;) {|*args| exit_message_loop}
+@ev_handler.add_handler(&quot;DocumentComplete&quot;) do |*args|
+unless @app.document.body.innerHTML.empty?
+<code>doc_event = WIN32OLE_EVENT.new(</code>app.document)
+@doc_event.handler = @ev_handler
+end
+end
+<p>end</code></pre></p>
+</div>
+<p>First we create <code>EventHandler</code> object and define flag for exiting application. After that, we create new Internet Explorer event and set our <code>EventHandler</code> object as a handler for browser&#8217;s events. At the end we are subscribing to two events <code>OnQuit</code> and <code>DocumentComplete</code>. <code>OnQuit</code> event handler will be called when Internet Explorer is closed. It just calls <code>exit_message_loop</code> and exits.</p>
 <p>We also want to handle events related to loaded documents. Every time we navigate browser to a new <span class="caps">URL</span>, new document will be created and <code>DocumentComplete</code> event will be fired when document reaches <code>ReadyState_Complete</code>. Unless we loaded empty page, we create new event for loaded document and set our <code>EventHandler</code> object as a main handler for document related events. Note that even though we set handler in the event we will not process any event till we define event handling method. But before we do that we need to implement few more things.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">register_handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-  <span class="vi">@ev_handler</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span> <span class="k">unless</span> <span class="n">event</span> <span class="o">==</span> <span class="s1">&#39;OnQuit&#39;</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">exit_message_loop</span>
-  <span class="nb">puts</span> <span class="s2">&quot;IE exiting...&quot;</span>
-  <span class="vi">@run_loop</span> <span class="o">=</span> <span class="kp">false</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">run</span>
-  <span class="k">while</span><span class="p">(</span><span class="vi">@run_loop</span><span class="p">)</span>
-    <span class="no">WIN32OLE_EVENT</span><span class="o">.</span><span class="n">message_loop</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>First method added to our <code>IERunner</code> class is part of our simple <span class="caps">API</span>. <code>IERunner</code> clients should use this method instead of directly accessing <code>EventHandler</code> object. Reason for this is we already registered our event handler for <code>OnQuit</code> event because we need it for graceful finish message loop, and we do not want our clients to override that. Next method is used to signal message loop to finish. Finally we are defining run method that runs message loop.</p>
+<div>
+<pre><code class='ruby'>def register_handler(event, &amp;amp;block)
+@ev_handler.add_handler(event, &amp;block) unless event == &#8216;OnQuit&#8217;
+<p>end</p>
+<p>def exit_message_loop<br />
+  puts &quot;IE exiting&#8230;&quot;<br />
+  @run_loop = false<br />
+end</p>
+<p>def run<br />
+  while(@run_loop)<br />
+    WIN32OLE_EVENT.message_loop<br />
+  end<br />
+end</code></pre></p>
+</div>
+<p>First method added to our <code>IERunner</code> class is part of our simple <span class="caps">API</span>. <code>IERunner</code> clients should use this method instead of directly accessing <code>EventHandler</code> object. Reason for this is we already registered our event handler for <code>OnQuit</code> event because we need it for graceful finish message loop, and we do not want our clients to override that. Next method is used to signal message loop to finish. Finally we are defining run method that runs message loop.</p>
 <p>Look at the following code from <code>runner_sampler.rb</code>.</p>
-<div class="highlight"><pre><code class="ruby"><span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">unshift</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
-<span class="nb">require</span> <span class="s1">&#39;ie_runner&#39;</span>
-
-<span class="n">ier</span> <span class="o">=</span> <span class="no">IERunner</span><span class="o">.</span><span class="n">new</span>
-<span class="n">ier</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="s2">&quot;BeforeNavigate2&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span>
-  <span class="nb">puts</span> <span class="s2">&quot;About to go to: </span><span class="si">#{</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="k">end</span>
-<span class="n">ier</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kp">true</span>
-<span class="n">ier</span><span class="o">.</span><span class="n">goto</span> <span class="s2">&quot;http://www.rubyinstaller.org&quot;</span>
-<span class="n">ier</span><span class="o">.</span><span class="n">run</span>
-</code></pre>
-</div><p>After requiring <code>ie_runner</code> file, we are creating runner object. Next we are registering new event handler for <code>BeforeNavigate2</code> event. Finally we are displaying Internet Explorer window, navigating to the RubyInstaller home page and starting message loop so our <code>EventHandler</code> object gets the chance to process events fired by browser. When this script is started new Internet Explorer window opens and, before page is loaded, script prints out <span class="caps">URL</span> that is passed to the browser. Since our script runs as long as Internet Explorer is running it can be a good starting point for creating macros. While script is running we can use browser as we usually do and within a script store navigated URLs, save them in the file and replay later.</p>
+<div>
+<pre><code class='ruby'>$LOAD_PATH.unshift File.expand_path('../', __FILE__)
+<p>require &#8216;ie_runner&#8217;</p>
+<p>ier = IERunner.new<br />
+ier.register_handler(&quot;BeforeNavigate2&quot;) do |*args|<br />
+  puts &quot;About to go to: #{args<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>}&quot;<br />
+end<br />
+ier.visible = true<br />
+ier.goto &quot;http://www.rubyinstaller.org&quot;<br />
+ier.run</code></pre></p>
+</div>
+<p>After requiring <code>ie_runner</code> file, we are creating runner object. Next we are registering new event handler for <code>BeforeNavigate2</code> event. Finally we are displaying Internet Explorer window, navigating to the RubyInstaller home page and starting message loop so our <code>EventHandler</code> object gets the chance to process events fired by browser. When this script is started new Internet Explorer window opens and, before page is loaded, script prints out <span class="caps">URL</span> that is passed to the browser. Since our script runs as long as Internet Explorer is running it can be a good starting point for creating macros. While script is running we can use browser as we usually do and within a script store navigated URLs, save them in the file and replay later.</p>
 <p>Now when we know how to handle events without blocking message queue we can further improve our <code>IERunner</code> class so it can be used not only for navigating to various URLs, but also for testing web applications within Internet Explorer. First thing we need is a way to find various elements in loaded pages. Fortunately document object within Internet Explorer already has methods that do that and we only have to expose them through our interface.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">element_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-  <span class="k">return</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="nb">id</span><span class="o">.</span><span class="n">to_s</span><span class="p">)</span> <span class="k">unless</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">nil?</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">elements_by_name</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="k">return</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">getElementsByName</span><span class="p">(</span><span class="nb">name</span><span class="o">.</span><span class="n">to_s</span><span class="p">)</span> <span class="k">unless</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">nil?</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">elements_by_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
-  <span class="k">return</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">to_s</span><span class="p">)</span> <span class="k">unless</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">nil?</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>First method returns single element and next two return collection of elements because there can be more than one element with given name or tag on the page. Naturally we want to be able to simulate elements clicking so let&#8217;s add this method too.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">click</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-  <span class="n">elem</span> <span class="o">=</span> <span class="n">element_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-  <span class="n">elem</span><span class="o">.</span><span class="n">click</span> <span class="k">unless</span> <span class="n">elem</span><span class="o">.</span><span class="n">nil?</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Further we need methods to fill text, set check-box value, select value by index in select box and find child element by attribute value.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">fill_text</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-  <span class="n">elem</span> <span class="o">=</span> <span class="n">element_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-  <span class="n">elem</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="k">unless</span> <span class="n">elem</span><span class="o">.</span><span class="n">nil?</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">set_check_box</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="kp">true</span><span class="p">)</span>
-  <span class="n">elem</span> <span class="o">=</span> <span class="n">element_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-  <span class="n">elem</span><span class="o">.</span><span class="n">checked</span> <span class="o">=</span> <span class="n">value</span> <span class="k">unless</span> <span class="n">elem</span><span class="o">.</span><span class="n">nil?</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">select_index</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
-  <span class="n">elem</span> <span class="o">=</span> <span class="n">element_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-  <span class="n">elem</span><span class="o">.</span><span class="n">selectedIndex</span> <span class="o">=</span> <span class="n">idx</span> <span class="k">unless</span> <span class="n">elem</span><span class="o">.</span><span class="n">nil?</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">child_with_attrib_value</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">attrib</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">parent</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span><span class="o">.</span><span class="n">hasChildNodes</span>
-    <span class="n">parent</span><span class="o">.</span><span class="n">childNodes</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">cn</span><span class="o">|</span>
-      <span class="k">begin</span>
-        <span class="k">return</span> <span class="n">cn</span> <span class="k">if</span> <span class="n">cn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">attrib</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span>
-      <span class="k">rescue</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Although <code>IERunner</code> functionality can be improved with additional methods that search elements by XPath, <span class="caps">CSS</span> selectors or multiple attributes values, it is good enough to illustrate Internet Explorer automation through Ruby scripts. But before we start using <code>IERunner</code> there is one more problem to be solved. Namely we saw that, in order to be able to process events fired by browser, we must use <code>message_loop</code> method. This method keeps messages pumping and enables browser and our Ruby script running simultaneously. Unfortunately there is one drawback in this approach. If we call <code>IERunner::run</code> method it will not exit as long as Internet Explorer is running. Therefore any statement after function call will not be executed. At the same time whenever we navigate to a new <span class="caps">URL</span>, page will not be loaded immediately and we will have to wait till it loads in order to continue our processing.</p>
+<div>
+<pre><code class='ruby'>def element_by_id(id)
+return @app.document.getElementById(id.to_s) unless @app.document.nil?
+<p>end</p>
+<p>def elements_by_name(name)<br />
+  return @app.document.getElementsByName(name.to_s) unless @app.document.nil?<br />
+end</p>
+<p>def elements_by_tag(tag)<br />
+  return @app.document.getElementsByTagName(tag.to_s) unless @app.document.nil?<br />
+end</code></pre></p>
+</div>
+<p>First method returns single element and next two return collection of elements because there can be more than one element with given name or tag on the page. Naturally we want to be able to simulate elements clicking so let&#8217;s add this method too.</p>
+<div>
+<pre><code class='ruby'>def click(id)
+elem = element_by_id(id)
+elem.click unless elem.nil?
+<p>end</code></pre></p>
+</div>
+<p>Further we need methods to fill text, set check-box value, select value by index in select box and find child element by attribute value.</p>
+<div>
+<pre><code class='ruby'>def fill_text(id, value)
+elem = element_by_id(id)
+elem.value = value unless elem.nil?
+<p>end</p>
+<p>def set_check_box(id, value = true)<br />
+  elem = element_by_id(id)<br />
+  elem.checked = value unless elem.nil?<br />
+end</p>
+<p>def select_index(id, idx)<br />
+  elem = element_by_id(id)<br />
+  elem.selectedIndex = idx unless elem.nil?<br />
+end</p>
+<p>def child_with_attrib_value(parent, attrib, value)<br />
+  if parent &amp;&amp; parent.hasChildNodes<br />
+    parent.childNodes.each do |cn|<br />
+      begin<br />
+        return cn if cn.send(attrib) == value<br />
+      rescue<br />
+      end<br />
+    end<br />
+  end<br />
+end</code></pre></p>
+</div>
+<p>Although <code>IERunner</code> functionality can be improved with additional methods that search elements by XPath, <span class="caps">CSS</span> selectors or multiple attributes values, it is good enough to illustrate Internet Explorer automation through Ruby scripts. But before we start using <code>IERunner</code> there is one more problem to be solved. Namely we saw that, in order to be able to process events fired by browser, we must use <code>message_loop</code> method. This method keeps messages pumping and enables browser and our Ruby script running simultaneously. Unfortunately there is one drawback in this approach. If we call <code>IERunner::run</code> method it will not exit as long as Internet Explorer is running. Therefore any statement after function call will not be executed. At the same time whenever we navigate to a new <span class="caps">URL</span>, page will not be loaded immediately and we will have to wait till it loads in order to continue our processing.</p>
 <p>This means we will have to change our approach and to implement function that will not block message queue, our script and, at the same time, enable us to wait till page is loaded or timeout expires. Let&#8217;s do it now. First we have to define flag that will signalize us whether page is loaded or not. Add following statement in <code>IERunner::initialize</code> method.</p>
-<div class="highlight"><pre><code class="ruby"><span class="vi">@document_complete</span> <span class="o">=</span> <span class="kp">false</span>
-</code></pre>
-</div><p>Whenever document is loaded we will set this variable to true and will reset it to false when we are about to go to new <span class="caps">URL</span>. We will do this by handling two events. First event, <code>DocumentComplete</code>, is called when document reaches <code>ReadyState_Complete</code> or, in other words, when page is completely loaded. Second one is called just before browser is navigated to a new <span class="caps">URL</span>. Add following lines to <code>IERunner::initialize</code> method.</p>
-<div class="highlight"><pre><code class="ruby"><span class="vi">@ev_handler</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="s2">&quot;DocumentComplete&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span>
-  <span class="vi">@document_complete</span> <span class="o">=</span> <span class="kp">true</span>
-<span class="k">end</span>
-<span class="vi">@ev_handler</span><span class="o">.</span><span class="n">add_handler</span><span class="p">(</span><span class="s2">&quot;BeforeNavigate2&quot;</span><span class="p">)</span> <span class="p">{</span><span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="vi">@document_complete</span> <span class="o">=</span> <span class="kp">false</span><span class="p">}</span>
-</code></pre>
-</div><p>We see that call to the <code>DocumentComplete</code> event handler will cause our flag to be set to true, and firing <code>BeforeNavigate2</code> event causes @ @document_complete@ flag to be set to <code>false</code>. That was exactly what we wanted.</p>
+<div>
+<pre><code class='ruby'>@document_complete = false</code></pre>
+</div>
+<p>Whenever document is loaded we will set this variable to true and will reset it to false when we are about to go to new <span class="caps">URL</span>. We will do this by handling two events. First event, <code>DocumentComplete</code>, is called when document reaches <code>ReadyState_Complete</code> or, in other words, when page is completely loaded. Second one is called just before browser is navigated to a new <span class="caps">URL</span>. Add following lines to <code>IERunner::initialize</code> method.</p>
+<div>
+<pre><code class='ruby'>@ev_handler.add_handler(&amp;quot;DocumentComplete&amp;quot;) do |*args|
+@document_complete = true
+<p>end<br />
+@ev_handler.add_handler(&quot;BeforeNavigate2&quot;) {|*args| @document_complete = false}</code></pre></p>
+</div>
+<p>We see that call to the <code>DocumentComplete</code> event handler will cause our flag to be set to true, and firing <code>BeforeNavigate2</code> event causes @ @document_complete@ flag to be set to <code>false</code>. That was exactly what we wanted.</p>
 <p>If we want, for example, to process clicking on the document or handle keys pressing we have to subscribe to document events. Event <code>DocumentComplete</code> is the one which we can use to accomplish this. Whenever new page is loaded in the browser, new document object is created and we have to attach to it&#8217;s events. This can be done usin following code added to <code>DocumentComplete</code> event handler.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">unless</span> <span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">innerHTML</span><span class="o">.</span><span class="n">empty?</span>
-  <span class="vi">@doc_event</span> <span class="o">=</span> <span class="no">WIN32OLE_EVENT</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="vi">@app</span><span class="o">.</span><span class="n">document</span><span class="p">)</span>
-  <span class="vi">@doc_event</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="vi">@ev_handler</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>There is just one more thing we must implement in our <code>IERunner</code> class – wait method which is given below.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">wait_complete</span><span class="p">(</span><span class="n">secs</span><span class="p">,</span> <span class="n">interval</span> <span class="o">=</span> <span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
-  <span class="n">elapsed</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="vi">@document_complete</span> <span class="o">&amp;&amp;</span> <span class="n">elapsed</span> <span class="o">&lt;=</span> <span class="n">secs</span><span class="p">)</span>
-    <span class="n">elapsed</span> <span class="o">+=</span> <span class="n">interval</span>
-    <span class="nb">sleep</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
-    <span class="no">WIN32OLE_EVENT</span><span class="o">.</span><span class="n">message_loop</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Our <code>wait_complete</code> method accepts two arguments. The first one is timeout interval in seconds and the second one is length of sleeping interval. Second argument has default value meaning that if we do not pass this argument during function call sleeping interval of 0.05 seconds will be used.</p>
+<div>
+<pre><code class='ruby'>unless @app.document.body.innerHTML.empty?
+<code>doc_event = WIN32OLE_EVENT.new(</code>app.document)
+@doc_event.handler = @ev_handler
+<p>end</code></pre></p>
+</div>
+<p>There is just one more thing we must implement in our <code>IERunner</code> class – wait method which is given below.</p>
+<div>
+<pre><code class='ruby'>def wait_complete(secs, interval = 0.5)
+elapsed = 0
+while(!@document_complete &amp;&amp; elapsed &lt;= secs)
+elapsed += interval
+sleep(interval)
+WIN32OLE_EVENT.message_loop
+end
+<p>end</code></pre></p>
+</div>
+<p>Our <code>wait_complete</code> method accepts two arguments. The first one is timeout interval in seconds and the second one is length of sleeping interval. Second argument has default value meaning that if we do not pass this argument during function call sleeping interval of 0.05 seconds will be used.</p>
 <p>Inside method we are running <code>while</code> loop either as long as document is not fully loaded or timeout expires. Within loop we are calling <code>WIN32OLE_EVENT#message_loop</code> method giving Internet Explorer a chance to process messages posted to it.</p>
 <p><code>IERunner</code> class is now ready. We can navigate Internet Explorer, search for elements, click links and wait for a document to be completely loaded. Here is a full source of new <code>runner_sample.rb</code> script.</p>
-<div class="highlight"><pre><code class="ruby"><span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">unshift</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
-<span class="nb">require</span> <span class="s1">&#39;ie_runner&#39;</span>
-
-<span class="n">ier</span> <span class="o">=</span> <span class="no">IERunner</span><span class="o">.</span><span class="n">new</span>
-<span class="n">ier</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kp">true</span>
-<span class="n">ier</span><span class="o">.</span><span class="n">goto</span> <span class="s2">&quot;http://www.google.com/language_tools&quot;</span>
-<span class="n">ier</span><span class="o">.</span><span class="n">wait_complete</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-
-<span class="n">ier</span><span class="o">.</span><span class="n">fill_text</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;Interesantan primer&quot;</span><span class="p">)</span>
-<span class="n">td</span> <span class="o">=</span> <span class="n">ier</span><span class="o">.</span><span class="n">element_by_id</span><span class="p">(</span><span class="s2">&quot;submitcell&quot;</span><span class="p">)</span>
-<span class="nb">select</span> <span class="o">=</span> <span class="n">ier</span><span class="o">.</span><span class="n">child_with_attrib_value</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;sl&quot;</span><span class="p">)</span>
-<span class="nb">select</span><span class="o">.</span><span class="n">selectedIndex</span> <span class="o">=</span> <span class="mi">40</span>
-<span class="n">ier</span><span class="o">.</span><span class="n">child_with_attrib_value</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;Translate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span>
-</code></pre>
-</div><p>Our script starts new instance of Internet Explorer, navigates it to Google&#8217;s translate page and waits for document to be loaded. Script will exit from wait_complete method as soon as document reaches <code>ReadyState_Complete</code> or five seconds expire. After that script fills text in input field which has ID value equal to “source”. Next we are searching for element with ID “submitcell” and look for a child with name “sl”. This is actually select box of source language. At the end we are selecting source language and simulate clicking on the submit button. Script doesn&#8217;t close browser on exit. It leaves it on purpose so we can check whether we really end up with translated text.</p>
+<div>
+<pre><code class='ruby'>$LOAD_PATH.unshift File.expand_path('../', __FILE__)
+<p>require &#8216;ie_runner&#8217;</p>
+<p>ier = IERunner.new<br />
+ier.visible = true<br />
+ier.goto &quot;http://www.google.com/language_tools&quot;<br />
+ier.wait_complete(5)</p>
+<p>ier.fill_text(&quot;source&quot;, &quot;Interesantan primer&quot;)<br />
+td = ier.element_by_id(&quot;submitcell&quot;)<br />
+select = ier.child_with_attrib_value(td, &quot;name&quot;, &quot;sl&quot;)<br />
+select.selectedIndex = 40<br />
+ier.child_with_attrib_value(td, &quot;value&quot;, &quot;Translate&quot;).click</code></pre></p>
+</div>
+<p>Our script starts new instance of Internet Explorer, navigates it to Google&#8217;s translate page and waits for document to be loaded. Script will exit from wait_complete method as soon as document reaches <code>ReadyState_Complete</code> or five seconds expire. After that script fills text in input field which has ID value equal to “source”. Next we are searching for element with ID “submitcell” and look for a child with name “sl”. This is actually select box of source language. At the end we are selecting source language and simulate clicking on the submit button. Script doesn&#8217;t close browser on exit. It leaves it on purpose so we can check whether we really end up with translated text.</p>
 <p>Having all needed methods in place we are ready to use <code>IERunner</code> for Web application testing. Even though running tests in real browser is actually functional testing, we will, for the sake of simplicity, use unit testing framework, <code>test-unit</code>, that is a part of standard Ruby library. Here is our test case class.</p>
-<div class="highlight"><pre><code class="ruby"><span class="vg">$LOAD_PATH</span><span class="o">.</span><span class="n">unshift</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
-<span class="nb">require</span> <span class="s1">&#39;ie_runner&#39;</span>
-<span class="nb">require</span> <span class="s1">&#39;test/unit&#39;</span>
-
-<span class="k">class</span> <span class="nc">IETest</span> <span class="o">&lt;</span> <span class="no">Test</span><span class="o">::</span><span class="no">Unit</span><span class="o">::</span><span class="no">TestCase</span>
-  <span class="k">def</span> <span class="nf">setup</span>
-    <span class="vi">@ier</span> <span class="o">=</span> <span class="no">IERunner</span><span class="o">.</span><span class="n">new</span>
-    <span class="vi">@ier</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kp">true</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">teardown</span>
-    <span class="vi">@ier</span><span class="o">.</span><span class="n">close</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">test_translate</span>
-    <span class="vi">@ier</span><span class="o">.</span><span class="n">goto</span> <span class="s2">&quot;http://www.google.com/language_tools&quot;</span>
-    <span class="vi">@ier</span><span class="o">.</span><span class="n">wait_complete</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">assert_equal</span><span class="p">(</span><span class="kp">false</span><span class="p">,</span> <span class="vi">@ier</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">empty?</span><span class="p">,</span> <span class="s2">&quot;Document not loaded&quot;</span><span class="p">)</span>
-    <span class="n">td</span> <span class="o">=</span> <span class="vi">@ier</span><span class="o">.</span><span class="n">element_by_id</span><span class="p">(</span><span class="s2">&quot;submitcell&quot;</span><span class="p">)</span>
-    <span class="n">assert_not_nil</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="s2">&quot;Element submit cell not found&quot;</span><span class="p">)</span>
-
-    <span class="nb">select</span> <span class="o">=</span> <span class="vi">@ier</span><span class="o">.</span><span class="n">child_with_attrib_value</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;sl&quot;</span><span class="p">)</span>
-    <span class="n">assert_not_nil</span><span class="p">(</span><span class="nb">select</span><span class="p">,</span> <span class="s2">&quot;Select element not found&quot;</span><span class="p">)</span>
-
-    <span class="nb">select</span><span class="o">.</span><span class="n">selectedIndex</span> <span class="o">=</span> <span class="mi">40</span>
-    <span class="vi">@ier</span><span class="o">.</span><span class="n">fill_text</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;Interesantna knjiga&quot;</span><span class="p">)</span>
-    <span class="vi">@ier</span><span class="o">.</span><span class="n">child_with_attrib_value</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;Translate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span>
-    <span class="vi">@ier</span><span class="o">.</span><span class="n">wait_complete</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">assert_equal</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span> <span class="vi">@ier</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s2">&quot;Interesting book&quot;</span><span class="p">),</span> <span class="s2">&quot;Submit failed&quot;</span><span class="p">)</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p><code>test-unit</code> framework will call setup method before any test. Knowing this we can use it to perform all initializations needed by tests. In the setup method of our test case we are creating new <code>IERunner</code> object, which opens Internet Explorer. In the only test we are opening page we want to test, selecting specific value in a select box, filling input field and finally clicking on the button to submit form. In the final line we are checking whether translation has successful or not. We can run this test from the command line using this:</p>
-<div class="highlight"><pre><code class="bat">C:\projects\ruby\ruby_win\internet_explorer<span class="p">&gt;</span><span class="n">ruby</span> ie_test.rb
-Loaded suite ie_test
-Started
-.
-Finished in <span class="m">5</span>.<span class="m">090483</span> seconds.
-
-<span class="m">1</span> tests<span class="p">,</span> <span class="m">4</span> assertions<span class="p">,</span> <span class="m">0</span> failures<span class="p">,</span> <span class="m">0</span> errors<span class="p">,</span> <span class="m">0</span> skips
-
-Test run options: --seed <span class="m">21861</span>
-</code></pre>
-</div><p>Since we closed browser in a teardown method of our test case and this method is called after each test this time contrary to previous example, browser will be properly closed. At this stage we have a way to check whether our application behaves as we expect, by checking for specific string on the loaded page, and we do not have to leave browser open in order to verify that.</p>
+<div>
+<pre><code class='ruby'>$LOAD_PATH.unshift File.expand_path('../', __FILE__)
+<p>require &#8216;ie_runner&#8217;<br />
+require &#8216;test/unit&#8217;</p>
+<p>class IETest &lt; Test::Unit::TestCase<br />
+  def setup<br />
+    @ier = IERunner.new<br />
+    @ier.visible = true<br />
+  end</p>
+def teardown
+@ier.close
+end
+def test_translate
+@ier.goto &quot;http://www.google.com/language_tools&quot;
+@ier.wait_complete(10)
+assert_equal(false, @ier.html.empty?, &quot;Document not loaded&quot;)
+td = @ier.element_by_id(&quot;submitcell&quot;)
+assert_not_nil(td, &quot;Element submit cell not found&quot;)
+select = @ier.child_with_attrib_value(td, &quot;name&quot;, &quot;sl&quot;)
+assert_not_nil(select, &quot;Select element not found&quot;)
+select.selectedIndex = 40
+@ier.fill_text(&quot;source&quot;, &quot;Interesantna knjiga&quot;)
+@ier.child_with_attrib_value(td, &quot;value&quot;, &quot;Translate&quot;).click
+@ier.wait_complete(5)
+assert_equal(true, @ier.html.include?(&quot;Interesting book&quot;), &quot;Submit failed&quot;)
+end
+<p>end</code></pre></p>
+</div>
+<p><code>test-unit</code> framework will call setup method before any test. Knowing this we can use it to perform all initializations needed by tests. In the setup method of our test case we are creating new <code>IERunner</code> object, which opens Internet Explorer. In the only test we are opening page we want to test, selecting specific value in a select box, filling input field and finally clicking on the button to submit form. In the final line we are checking whether translation has successful or not. We can run this test from the command line using this:</p>
+<div>
+<pre><code class='bat'>C:\projects\ruby\ruby_win\internet_explorer&amp;gt;ruby ie_test.rb
+<p>Loaded suite ie_test<br />
+Started<br />
+.<br />
+Finished in 5.090483 seconds.</p>
+<p>1 tests, 4 assertions, 0 failures, 0 errors, 0 skips</p>
+<p>Test run options: &#8212;seed 21861</code></pre></p>
+</div>
+<p>Since we closed browser in a teardown method of our test case and this method is called after each test this time contrary to previous example, browser will be properly closed. At this stage we have a way to check whether our application behaves as we expect, by checking for specific string on the loaded page, and we do not have to leave browser open in order to verify that.</p>
 <p>Our example obviously misuses unit testing framework. The proper way would be to use a library, like Cucumber, that is made for functional testing. Moreover we have a big overhead in our test class. Since setup method is executed before and teardown after each test, Internet Explorer will keep opening and closing. This is very expensive and will make our test run too long. Better solution would be to open browser before all tests and close it at the end. Unfortunately test-unit that is a part of the standard Ruby library does not support this. You can however install new version through Rubygems and use startup and shutdown methods which are executed before and after complete set of tests.</p>
 
       <br/>

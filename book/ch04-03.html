@@ -92,287 +92,293 @@
 <p>Word is well known part of Microsoft Office package. It is widely used for writing documents and, as the most of Microsoft&#8217;s applications, it supports <span class="caps">COM</span> automation. Instead of learning Word automation by writing bunch of small scripts that, for example, create new, open existing document or alter document&#8217;s content we&#8217;ll learn it by developing small utility that will convert Textile to Word documents.</p>
 <p>Textile is lightweight markup language which is mostly used to write web pages, blogs or wikis. Due to the simple syntax, textile documents are easy to write. However they are rarely used in raw format. Instead, they are processed and converted to <span class="caps">HTML</span> or some other format.</p>
 <p>Processing Textile format requires adequate parser. In Ruby, the most easier way to parse and process Textile documents, is through RedCloth library. This gem has built-in support for converting Textile documents to <span class="caps">HTML</span> or LaTeX format. Windows version is packed as a fat-binary gem that supports Ruby 1.8 and 1.9 and is easily installed.</p>
-<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">gem</span> install RedCloth
-Successfully installed RedCloth<span class="m">-4</span>.<span class="m">2</span>.<span class="m">7</span>-x<span class="m">86</span>-mingw<span class="m">32</span>
-<span class="m">1</span> gem installed
-Installing ri documentation <span class="k">for</span> RedCloth<span class="m">-4</span>.<span class="m">2</span>.<span class="m">7</span>-x<span class="m">86</span>-mingw<span class="m">32</span>...
-Installing RDoc documentation <span class="k">for</span> RedCloth<span class="m">-4</span>.<span class="m">2</span>.<span class="m">7</span>-x<span class="m">86</span>-mingw<span class="m">32</span>...
-</code></pre>
-</div><p>Converting Textile to <span class="caps">HTML</span> with RedCloth is very simple. We have to create RedCloth object with Textile string as an argument passed to the constructor and call its <code>to_html</code> method.</p>
-<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">ruby</span> -rredcloth -e <span class="s2">&quot;puts RedCloth.new(&#39;Some *bold* text&#39;).to_html&quot;</span>
-<span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span><span class="n">String</span> with some <span class="p">&lt;</span><span class="n">strong</span><span class="p">&gt;</span><span class="n">bold</span>&lt;<span class="n">/strong&gt;</span> text&lt;<span class="n">/p&gt;</span>
-</code></pre>
-</div><p>Our goal is to extend RedCloth in such a way that we can create Word documents in a similar way.</p>
-<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">ruby</span> -rredcloth -e <span class="s2">&quot;puts RedCloth.new(&#39;Some *bold* text&#39;).to_word&quot;</span>
-</code></pre>
-</div><p>Actually our <code>to_word</code> method will have to accept path or name of the file where Word document will be saved but we will come to that later. First let&#8217;s see how we can extend RedCloth.</p>
+<div>
+<pre><code class='bat'>c:\&amp;gt;gem install RedCloth
+<p>Successfully installed RedCloth-4.2.7-x86-mingw32<br />
+1 gem installed<br />
+Installing ri documentation for RedCloth-4.2.7-x86-mingw32&#8230;<br />
+Installing RDoc documentation for RedCloth-4.2.7-x86-mingw32&#8230;</code></pre></p>
+</div>
+<p>Converting Textile to <span class="caps">HTML</span> with RedCloth is very simple. We have to create RedCloth object with Textile string as an argument passed to the constructor and call its <code>to_html</code> method.</p>
+<div>
+<pre><code class='bat'>C:\&amp;gt;ruby -rredcloth -e &amp;quot;puts RedCloth.new('Some *bold* text').to_html&amp;quot;
+<p>&lt;p&gt;String with some &lt;strong&gt;bold&lt;/strong&gt; text&lt;/p&gt;</code></pre></p>
+</div>
+<p>Our goal is to extend RedCloth in such a way that we can create Word documents in a similar way.</p>
+<div>
+<pre><code class='bat'>C:\&amp;gt;ruby -rredcloth -e &amp;quot;puts RedCloth.new('Some *bold* text').to_word&amp;quot;</code></pre>
+</div>
+<p>Actually our <code>to_word</code> method will have to accept path or name of the file where Word document will be saved but we will come to that later. First let&#8217;s see how we can extend RedCloth.</p>
 <p>On the RedCloth&#8217;s site there is a small section how to customize gem to perform new conversion. We have to create new formatter that will output text in the desired format. Just to be sure what we have to do let&#8217;s check gem&#8217;s sources and see how library itself is performing conversions. In the file <code>textile_doc.rb</code> in <code>lib\redcloth</code> directory under RedCloth&#8217;s installation directory we can find definition of <code>to_html</code> method.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">to_html</span><span class="p">(</span> <span class="o">*</span><span class="n">rules</span> <span class="p">)</span>
-  <span class="n">apply_rules</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span>
-
-  <span class="n">to</span><span class="p">(</span><span class="no">RedCloth</span><span class="o">::</span><span class="no">Formatters</span><span class="o">::</span><span class="no">HTML</span><span class="p">)</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Method applies rules passed as arguments and calls to method passing it a name of the module defined in the <code>lib\redcloth\formatters\html.rb</code> file. This module is used to extend Ruby String class with methods called by parser. During parsing, whenever new Textile marker is found in the input string, RedCloth calls method that should perform conversion corresponding to the current marker, passing it a hash with values relevant to the current context. We can see what this actually means by making one simple formatter that only prints out names of methods called by parser altogether with arguments passed to them. In the <code>rwin_book</code> folder create new directory word and create file <code>missing_formatter.rb</code> with the following code.</p>
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;redcloth&#39;</span>
-
-<span class="k">module</span> <span class="nn">RedCloth</span>
-  <span class="k">module</span> <span class="nn">Formatters</span>
-    <span class="k">module</span> <span class="nn">Missing</span>
-      <span class="kp">include</span> <span class="no">RedCloth</span><span class="o">::</span><span class="no">Formatters</span><span class="o">::</span><span class="no">Base</span>
-
-      <span class="k">def</span> <span class="nf">escape</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-        <span class="n">text</span>
-      <span class="k">end</span>
-
-      <span class="k">def</span> <span class="nf">p</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">value</span><span class="o">[</span><span class="ss">:text</span><span class="o">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-      <span class="k">end</span>
-
-      <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-        <span class="nb">puts</span> <span class="s2">&quot;Called </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2"> with arguments </span><span class="si">#{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="ss">:text</span><span class="o">]</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="k">module</span> <span class="nn">RedCloth</span>
-  <span class="k">class</span> <span class="nc">TextileDoc</span>
-    <span class="k">def</span> <span class="nf">to_missing</span><span class="p">(</span><span class="o">*</span><span class="n">rules</span><span class="p">)</span>
-      <span class="n">apply_rules</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span>
-      <span class="n">to</span><span class="p">(</span><span class="no">RedCloth</span><span class="o">::</span><span class="no">Formatters</span><span class="o">::</span><span class="no">Missing</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>This simple module has three methods. The first one, escape, is called for each word found in the input string and can be used to escape special characters or perform per-word transformations if needed. Next method is responsible for paragraphs processing. Paragraphs in Textile are blocks of lines separated by blank lines. Whenever new paragraph is found method p is called. The last method we are defining is method_missing. We already met this <code>Kernel</code> method in previous chapters. Here, we are using it just to log messages and their arguments sent from the parser to our string object. At the end we are defining new method in the TextileDoc class – <code>to_missing</code>.</p>
+<div>
+<pre><code class='ruby'>def to_html( *rules )
+apply_rules(rules)
+to(RedCloth::Formatters::<span class="caps">HTML</span>)
+<p>end</code></pre></p>
+</div>
+<p>Method applies rules passed as arguments and calls to method passing it a name of the module defined in the <code>lib\redcloth\formatters\html.rb</code> file. This module is used to extend Ruby String class with methods called by parser. During parsing, whenever new Textile marker is found in the input string, RedCloth calls method that should perform conversion corresponding to the current marker, passing it a hash with values relevant to the current context. We can see what this actually means by making one simple formatter that only prints out names of methods called by parser altogether with arguments passed to them. In the <code>rwin_book</code> folder create new directory word and create file <code>missing_formatter.rb</code> with the following code.</p>
+<div>
+<pre><code class='ruby'>require 'redcloth'
+<p>module RedCloth<br />
+  module Formatters<br />
+    module Missing<br />
+      include RedCloth::Formatters::Base</p>
+def escape(text)
+text
+end
+def p(value)
+value[:text] + &quot;\n&quot;
+end
+def method_missing(name, *args, &amp;block)
+puts &quot;Called #{name} with arguments #{args}&quot;
+args<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>[:text]
+end
+end
+end
+<p>end</p>
+<p>module RedCloth<br />
+  class TextileDoc<br />
+    def to_missing(*rules)<br />
+      apply_rules(rules)<br />
+      to(RedCloth::Formatters::Missing)<br />
+    end<br />
+  end<br />
+end</code></pre></p>
+</div>
+<p>This simple module has three methods. The first one, escape, is called for each word found in the input string and can be used to escape special characters or perform per-word transformations if needed. Next method is responsible for paragraphs processing. Paragraphs in Textile are blocks of lines separated by blank lines. Whenever new paragraph is found method p is called. The last method we are defining is method_missing. We already met this <code>Kernel</code> method in previous chapters. Here, we are using it just to log messages and their arguments sent from the parser to our string object. At the end we are defining new method in the TextileDoc class – <code>to_missing</code>.</p>
 <p>Before we use new formatter we need one Textile document that will be processed. Here is a content of a <code>sample1.textile</code> file that will be used.</p>
-<div class="highlight"><pre><code class="bat">h<span class="m">1</span>. Give RedCloth a try!
-
-h<span class="m">2</span>. Sub heading of level <span class="m">2</span>
-
-h<span class="m">3</span>. Sub-sub heading of level <span class="m">3</span>
-
-A *_simple_* paragraph with _simple_ *text*
-a line break<span class="p">,</span> some _emphasis_ and a <span class="s2">&quot;link&quot;</span><span class="nl">:http</span>:<span class="n">//redcloth.org</span>
-
-
-*-bold strikethrough text-*
-*_-+bold italic strikethrough underlined text+-_*
-</code></pre>
-</div><p>Last step is to create script <code>sample_missing_formatter.rb</code> that uses new RedCloth&#8217;s “formatter” for processing Textile.</p>
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s2">&quot;./missing_formatter&quot;</span>
-<span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample1.textile&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
-  <span class="n">r</span> <span class="o">=</span> <span class="no">RedCloth</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="n">r</span><span class="o">.</span><span class="n">to_missing</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Running this script gives following output.</p>
-<div class="highlight"><pre><code class="bat">Z:\projects\ruby\ruby_win\word<span class="p">&gt;</span><span class="n">ruby</span> sample_missing_formatting.rb
-Called p with arguments {<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;h1. Give RedCloth a try!&quot;</span>}
-Called p with arguments {<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;h2. Sub heading of level 2&quot;</span>}
-Called p with arguments {<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;h3. Sub-sub heading of level 3&quot;</span>}
-Called em with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;simple&quot;</span>}]
-Called strong with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;simple&quot;</span>}]
-Called em with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;simple&quot;</span>}]
-Called strong with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;text&quot;</span>}]
-Called em with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;emphasis&quot;</span>}]
-Called link with arguments [{<span class="nl">:name</span><span class="o">=</span>&gt;<span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="nl">:href</span><span class="o">=</span>&gt;<span class="s2">&quot;http://redcloth.org&quot;</span><span class="p">,</span> <span class="nl">:name_without_attributes</span><span class="o">=</span>&gt;<span class="s2">&quot;link&quot;</span>}]
-Called p with arguments {<span class="nl">:type</span><span class="o">=</span>&gt;<span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;A simple paragraph with simple text\na line break, some emphasis and a link&quot;</span>}
-Called <span class="k">del</span> with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;bold strikethrough text&quot;</span>}]
-Called strong with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;bold strikethrough text&quot;</span>}]
-Called ins with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;bold italic strikethrough underlined text&quot;</span>}]
-Called <span class="k">del</span> with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;bold italic strikethrough underlined text&quot;</span>}]
-Called em with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;bold italic strikethrough underlined text&quot;</span>}]
-Called strong with arguments [{<span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;bold italic strikethrough underlined text&quot;</span>}]
-Called p with arguments {<span class="nl">:type</span><span class="o">=</span>&gt;<span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="nl">:text</span><span class="o">=</span>&gt;<span class="s2">&quot;bold strikethrough text\nbold italic strikethrough underlined text&quot;</span>}
-h<span class="m">1</span>. Give RedCloth a try!
-h<span class="m">2</span>. Sub heading of level <span class="m">2</span>
-h<span class="m">3</span>. Sub-sub heading of level <span class="m">3</span>
-A simple paragraph with simple text
-a line break<span class="p">,</span> some emphasis and a link
-bold strikethrough text
-bold italic strikethrough underlined text
-</code></pre>
-</div><p>This rough analysis of conversion process gives us initial knowledge about requirements put on a future formatter that should convert Textile to Word documents. Comparing input file and output log reveals set of functions we have to implement. Each phrase modifier for italic, bold, strikethrough or underline font, triggers a call to em, strong, del and ins methods respectively. Each method is passed a hash with source text as a value of a <code>:text</code> key. In a similar way document structure modifiers like heading, bullets or table markers are processed, except corresponding formatter&#8217;s methods will not be called unless they are defined.</p>
+<div>
+<pre><code class='bat'>h1. Give RedCloth a try!
+<h2>Sub heading of level 2</h2>
+<h3>Sub-sub heading of level 3</h3>
+<p>A <strong><em>simple</em></strong> paragraph with <em>simple</em> <strong>text</strong><br />
+a line break, some <em>emphasis</em> and a &quot;link&quot;:http://redcloth.org</p>
+<p><strong><del>bold strikethrough text</del></strong><br />
+<strong><em><del><ins>bold italic strikethrough underlined text</ins></del></em></strong></code></pre></p>
+</div>
+<p>Last step is to create script <code>sample_missing_formatter.rb</code> that uses new RedCloth&#8217;s “formatter” for processing Textile.</p>
+<div>
+<pre><code class='ruby'>require &amp;quot;./missing_formatter&amp;quot;
+<p>File.open(&#8216;sample1.textile&#8217;, &#8216;r&#8217;) do |f|<br />
+  r = RedCloth.new(f.read)<br />
+  puts r.to_missing<br />
+end</code></pre></p>
+</div>
+<p>Running this script gives following output.</p>
+<div>
+<pre><code class='bat'>Z:\projects\ruby\ruby_win\word&amp;gt;ruby sample_missing_formatting.rb
+<p>Called p with arguments {:text=&gt;&quot;h1. Give RedCloth a try!&quot;}<br />
+Called p with arguments {:text=&gt;&quot;h2. Sub heading of level 2&quot;}<br />
+Called p with arguments {:text=&gt;&quot;h3. Sub-sub heading of level 3&quot;}<br />
+Called em with arguments [{:text=&gt;&quot;simple&quot;}]<br />
+Called strong with arguments [{:text=&gt;&quot;simple&quot;}]<br />
+Called em with arguments [{:text=&gt;&quot;simple&quot;}]<br />
+Called strong with arguments [{:text=&gt;&quot;text&quot;}]<br />
+Called em with arguments [{:text=&gt;&quot;emphasis&quot;}]<br />
+Called link with arguments [{:name=&gt;&quot;link&quot;, :text=&gt;&quot;link&quot;, :href=&gt;&quot;http://redcloth.org&quot;, :name_without_attributes=&gt;&quot;link&quot;}]<br />
+Called p with arguments {:type=&gt;&quot;p&quot;, :text=&gt;&quot;A simple paragraph with simple text\na line break, some emphasis and a link&quot;}<br />
+Called del with arguments [{:text=&gt;&quot;bold strikethrough text&quot;}]<br />
+Called strong with arguments [{:text=&gt;&quot;bold strikethrough text&quot;}]<br />
+Called ins with arguments [{:text=&gt;&quot;bold italic strikethrough underlined text&quot;}]<br />
+Called del with arguments [{:text=&gt;&quot;bold italic strikethrough underlined text&quot;}]<br />
+Called em with arguments [{:text=&gt;&quot;bold italic strikethrough underlined text&quot;}]<br />
+Called strong with arguments [{:text=&gt;&quot;bold italic strikethrough underlined text&quot;}]<br />
+Called p with arguments {:type=&gt;&quot;p&quot;, :text=&gt;&quot;bold strikethrough text\nbold italic strikethrough underlined text&quot;}<br />
+h1. Give RedCloth a try!<br />
+h2. Sub heading of level 2<br />
+h3. Sub-sub heading of level 3<br />
+A simple paragraph with simple text<br />
+a line break, some emphasis and a link<br />
+bold strikethrough text<br />
+bold italic strikethrough underlined text</code></pre></p>
+</div>
+<p>This rough analysis of conversion process gives us initial knowledge about requirements put on a future formatter that should convert Textile to Word documents. Comparing input file and output log reveals set of functions we have to implement. Each phrase modifier for italic, bold, strikethrough or underline font, triggers a call to em, strong, del and ins methods respectively. Each method is passed a hash with source text as a value of a <code>:text</code> key. In a similar way document structure modifiers like heading, bullets or table markers are processed, except corresponding formatter&#8217;s methods will not be called unless they are defined.</p>
 <p>First line within our <code>Missing</code> formatter hides two calls to functions we will need in <code>Word</code> formatter. It includes <code>RedCloth::Formatter::Base</code> module in our module and functions <code>before_transform</code> and <code>after_transform</code> are already defined in it. As their names already say these methods are called before any transformation begins and after transformation of whole input string is finished.</p>
 <p>Having this knowledge about a way RedCloth gem is functioning, we can start to implement our Word converter. Contrary to the usual way Textile documents are processed in which result of transformation is string, Word conversion will result in a file. That means we have to pass a file name to our formatter before transformation starts. Here is how method <code>to_word</code> might be implemented.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">RedCloth</span>
-  <span class="k">class</span> <span class="nc">TextileDoc</span>
-    <span class="k">def</span> <span class="nf">to_word</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="o">*</span><span class="n">rules</span><span class="p">)</span>
-      <span class="n">apply_rules</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span>
-      <span class="vi">@word_file</span> <span class="o">=</span> <span class="n">file</span>
-      <span class="n">to</span><span class="p">(</span><span class="no">RedCloth</span><span class="o">::</span><span class="no">Formatters</span><span class="o">::</span><span class="no">Word</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>We now have name of the Word file in TextileDoc class which we can use in future formatter. First thing we have to do in the formatter is to prevent document processing if file name is not defined. We can use <code>before_transform</code> method to check if file name is defined and raise an error if not.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">RedCloth</span>
-  <span class="k">module</span> <span class="nn">Formatters</span>
-    <span class="k">module</span> <span class="nn">Word</span>
-      <span class="k">def</span> <span class="nf">before_transform</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="err">“</span><span class="n">undefined</span> <span class="n">file</span> <span class="nb">name</span><span class="err">”</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">file</span><span class="o">.</span><span class="n">empty?</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>We are working with Word and, naturally, we have to start application and create new document before we try to write anything in it. We could do it in <code>before_transform</code>, set instance variables and use them later in the code, but we will, instead, create two methods which will be used for that purpose.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">word</span>
-  <span class="vi">@word</span> <span class="o">||=</span> <span class="no">WIN32OLE</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="err">“</span><span class="no">Word</span><span class="o">.</span><span class="n">Application</span><span class="err">”</span><span class="p">)</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">doc</span>
-  <span class="vi">@doc</span> <span class="o">||=</span> <span class="n">word</span><span class="o">.</span><span class="n">documents</span><span class="o">.</span><span class="n">add</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>In the first method we are starting Word if @ @word@ variable is not defined, which is the case when method is called for the first time. Every other call will immediately return already running Word instance remembered in the @ @word@ variable. Second method calls add method on Word&#8217;s documents collection. This method creates new, empty, document and returns it as a result. Instance of Document <span class="caps">COM</span> object is stored in the @ @doc@ variable and returned as a result of each subsequent call.</p>
+<div>
+<pre><code class='ruby'>module RedCloth
+class TextileDoc
+def to_word(file, *rules)
+apply_rules(rules)
+@word_file = file
+to(RedCloth::Formatters::Word)
+end
+end
+<p>end</code></pre></p>
+</div>
+<p>We now have name of the Word file in TextileDoc class which we can use in future formatter. First thing we have to do in the formatter is to prevent document processing if file name is not defined. We can use <code>before_transform</code> method to check if file name is defined and raise an error if not.</p>
+<div>
+<pre><code class='ruby'>module RedCloth
+module Formatters
+module Word
+def before_transform(value)
+raise “undefined file name” if file.nil? || file.empty?
+end
+end
+end
+<p>end</code></pre></p>
+</div>
+<p>We are working with Word and, naturally, we have to start application and create new document before we try to write anything in it. We could do it in <code>before_transform</code>, set instance variables and use them later in the code, but we will, instead, create two methods which will be used for that purpose.</p>
+<div>
+<pre><code class='ruby'>def word
+@word ||= WIN32OLE.new(“Word.Application”)
+<p>end</p>
+<p>def doc<br />
+  @doc ||= word.documents.add<br />
+end</code></pre></p>
+</div>
+<p>In the first method we are starting Word if @ @word@ variable is not defined, which is the case when method is called for the first time. Every other call will immediately return already running Word instance remembered in the @ @word@ variable. Second method calls add method on Word&#8217;s documents collection. This method creates new, empty, document and returns it as a result. Instance of Document <span class="caps">COM</span> object is stored in the @ @doc@ variable and returned as a result of each subsequent call.</p>
 <p>There is just one more thing we have to do before we start to implement methods that will perform conversions from Textile to Word. Just as we checked whether file name is set or not before any transformation we have to save and close our document and quit Word. As you might already guessed we will use <code>after_transform</code> method.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">after_transform</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">saveas</span> <span class="n">file</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">close</span>
-  <span class="n">word</span><span class="o">.</span><span class="n">quit</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Without this method we will end with numerous instances of Word application, one per each call of <code>to_word</code> method.</p>
+<div>
+<pre><code class='ruby'>def after_transform(value)
+doc.saveas file
+doc.close
+word.quit
+<p>end</code></pre></p>
+</div>
+<p>Without this method we will end with numerous instances of Word application, one per each call of <code>to_word</code> method.</p>
 <p>When we used <code>RedCloth::Formatters::Missing</code> formatter we saw that each Textile modifier has corresponding method that will be called by the parser. We will start implementation of conversion methods with the set of headings processing functions. Heading markers in Textile are denoted by letter &#8216;<code>h</code>&#8217; followed by the number of heading level and ended by a dot (&#8216;.&#8217;) character. Parser looks for methods named same way (without a dot) and if formatter has defined such a method it will be called. In Word heading is defined through style of the paragraph. Names of heading styles are “Heading 1”, “Heading 2”, etc. Therefore whenever our heading method in formatter is called we have to add text passed as an argument, change style of current paragraph, add line break to make a place for new paragraph and reset style to “Normal”. Following these rules we can define our first heading processor.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">h1</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">paragraphs</span><span class="o">.</span><span class="n">add</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">nil?</span>
-  <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="n">value</span><span class="o">[</span><span class="ss">:text</span><span class="o">]</span>
-  <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">style</span> <span class="o">=</span> <span class="err">“</span><span class="no">Heading</span> <span class="mi">1</span><span class="err">”</span>
-  <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="o">=</span> <span class="err">“</span><span class="p">\</span><span class="n">n</span><span class="err">”</span>
-  <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">style</span> <span class="o">=</span> <span class="err">“</span><span class="no">Normal</span><span class="err">”</span>
-  <span class="err">“”</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>First line of <code>h1</code> method adds a new paragraph to the document if document is empty, which we test by checking whether Word&#8217;s selection object is <code>nil</code>. Next, we are using selection&#8217;s typetext method which adds text to the current paragraph. After that we change style of the current paragraph to “Heading 1”, creating a new paragraph by adding a line break at the end of the current paragraph and reseting style to “Normal”. RedCloth expects all methods to return string value. Usually this string is modified according to a target format. In the case of <span class="caps">HTML</span> formatter it will return original text surrounded by <code>&lt;h1&gt;...&lt;/h1&gt;</code> tags. Since we do not expect Word formatter to have string as a final result we are just returning empty string as a result of <code>h1</code> method execution.</p>
+<div>
+<pre><code class='ruby'>def h1(value)
+doc.paragraphs.add if word.selection.nil?
+word.selection.typetext value[:text]
+word.selection.style = “Heading 1”
+word.selection.typetext = “\n”
+word.selection.style = “Normal”
+“”
+<p>end</code></pre></p>
+</div>
+<p>First line of <code>h1</code> method adds a new paragraph to the document if document is empty, which we test by checking whether Word&#8217;s selection object is <code>nil</code>. Next, we are using selection&#8217;s typetext method which adds text to the current paragraph. After that we change style of the current paragraph to “Heading 1”, creating a new paragraph by adding a line break at the end of the current paragraph and reseting style to “Normal”. RedCloth expects all methods to return string value. Usually this string is modified according to a target format. In the case of <span class="caps">HTML</span> formatter it will return original text surrounded by <code>&lt;h1&gt;...&lt;/h1&gt;</code> tags. Since we do not expect Word formatter to have string as a final result we are just returning empty string as a result of <code>h1</code> method execution.</p>
 <p>For each heading level we should make similar method. This can be boring task, so let&#8217;s do it Ruby way by adding following right after including Base formatter in our <code>RedCloth::Formatters::Word</code> module</p>
-<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="ss">:h1</span><span class="p">,</span> <span class="ss">:h2</span><span class="p">,</span> <span class="ss">:h3</span><span class="p">,</span> <span class="ss">:h4</span><span class="p">,</span> <span class="ss">:h5</span><span class="p">,</span> <span class="ss">:h6</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">heading</span><span class="o">|</span>
-  <span class="n">define_method</span><span class="p">(</span><span class="n">heading</span><span class="p">)</span> <span class="k">do</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span>
-    <span class="n">heading_level</span> <span class="o">=</span> <span class="n">heading</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sr">/h(\d)/</span><span class="p">)</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">paragraphs</span><span class="o">.</span><span class="n">add</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">nil?</span>
-
-    <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="ss">:text</span><span class="o">]</span>
-    <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">style</span> <span class="o">=</span> <span class="s2">&quot;Heading </span><span class="si">#{</span><span class="n">heading_level</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-    <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">style</span> <span class="o">=</span> <span class="s2">&quot;Normal&quot;</span>
-    <span class="s2">&quot;&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>For each element in the array we are defining a method which first determines heading level by using regular expression.</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">heading_level</span> <span class="o">=</span> <span class="n">heading</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sr">/h(\d)/</span><span class="p">)</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
-</code></pre>
-</div><p>Regular expression matches letter &#8216;<code>h</code>&#8217; followed by a digit which is captured and this capture is used to set a value of heading_level variable. After this line, code is similar to the one used in <code>h1</code> method.</p>
+<div>
+<pre><code class='ruby'>[:h1, :h2, :h3, :h4, :h5, :h6].each do |heading|
+define_method(heading) do |*args|
+heading_level = heading.to_s.match(/h(\d)/)<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>
+doc.paragraphs.add if word.selection.nil?
+word.selection.typetext args<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>[:text]
+word.selection.style = &quot;Heading #{heading_level}&quot;
+word.selection.typetext &quot;\n&quot;
+word.selection.style = &quot;Normal&quot;
+&quot;&quot;
+end
+<p>end</code></pre></p>
+</div>
+<p>For each element in the array we are defining a method which first determines heading level by using regular expression.</p>
+<div>
+<pre><code class='ruby'>heading_level = heading.to_s.match(/h(\d)/)[1]</code></pre>
+</div>
+<p>Regular expression matches letter &#8216;<code>h</code>&#8217; followed by a digit which is captured and this capture is used to set a value of heading_level variable. After this line, code is similar to the one used in <code>h1</code> method.</p>
 <p>Due to the way Textile parsers works, handling phrase modifiers is a little bit more complicated than handling document structure ones. RedCloth expects formatter to return formatted string form each of modifier handling functions. It calls handling method each time it finds phrase modifier token, with the text that should be modified in the argument. Thus for <code>*_phrase_*</code> sequence parser will call two methods, first <code>em</code> and after that <code>strong</code> with the same argument <code>{:text =&gt; “phrase”}</code>. If we are about to convert it to the <span class="caps">HTML</span> we can simply return <code>&lt;em&gt;phrase&lt;/em&gt;</code> as a result of a call to <code>em</code> method, and <code>&lt;strong&gt;&lt;em&gt;phrase&lt;/em&gt;&lt;/strong&gt;</code> as a result of call to <code>strong</code> function. Although final result has actually inverted places of italic and bold modifiers it will have no influence when this code is rendered in browser.</p>
 <p>It is hard to use this approach in Word. Same text can occur more than once in one paragraph. If we change font weight and add text during first method call there is no way to know whether call to the next modifier method (strong in this case) is for a new word which should be displayed in bold text or it is just a new font weight for the previous phrase. Instead of sequentially changing input text in each call to phrase modifier handler we can replace input text with a placeholder and store target format in a variable. When whole paragraph is processed resulting text will be set of text that should be displayed in normal font and our placeholders. Additionally, each new modifier sequence must be replaced with unique placeholder so we can later directly find correct set of font weights along with the text they should be applied to.</p>
 <p>Although this approach seems complex it is actually quite simple which we will see shortly. First thing we need is a way to convert Textile font tokens to Word font weights and a hash where we will keep our placeholders with the information about target text and font weights.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">styles_map</span>
-  <span class="p">{</span>
-    <span class="ss">:strong</span> <span class="o">=&gt;</span> <span class="ss">:bold</span><span class="p">,</span>
-    <span class="ss">:em</span> <span class="o">=&gt;</span> <span class="ss">:italic</span><span class="p">,</span>
-    <span class="ss">:ins</span> <span class="o">=&gt;</span> <span class="ss">:underline</span><span class="p">,</span>
-    <span class="ss">:del_phrase</span> <span class="o">=&gt;</span> <span class="ss">:strikethrough</span><span class="p">,</span>
-    <span class="ss">:del</span> <span class="o">=&gt;</span> <span class="ss">:strikethrough</span><span class="p">,</span>
-  <span class="p">}</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">styles</span>
-  <span class="vi">@styles</span> <span class="o">||=</span> <span class="p">{}</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Method <code>styles_map</code> returns a hash with Textile modifiers as keys and Word font weights as values and styles returns instance variable <code>styles</code> which is, on the first call, assigned an empty hash.</p>
+<div>
+<pre><code class='ruby'>def styles_map
+{
+:strong =&gt; :bold,
+:em =&gt; :italic,
+:ins =&gt; :underline,
+:del_phrase =&gt; :strikethrough,
+:del =&gt; :strikethrough,
+}
+<p>end</p>
+<p>def styles<br />
+  @styles ||= {}<br />
+end</code></pre></p>
+</div>
+<p>Method <code>styles_map</code> returns a hash with Textile modifiers as keys and Word font weights as values and styles returns instance variable <code>styles</code> which is, on the first call, assigned an empty hash.</p>
 <p>We must also decide what we will use for placeholders. Let&#8217;s use less then character &#8216;<code>&lt;</code>&#8217; followed by &#8216;<code>wf</code>&#8217;, number of the placeholder and greater then character &#8216;<code>&gt;</code>&#8217;. Thus placeholders will be of the form <code>&lt;wf1&gt;</code>. This is not the best solution since such sequence of characters might be found in the source text. Better way would be to use random sequence of characters but for this purpose our placeholders will be good enough. Now let&#8217;s see how one of the phrase modifier handlers should look like.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">em</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-  <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">value</span><span class="o">[</span><span class="ss">:text</span><span class="o">].</span><span class="n">match</span><span class="p">(</span><span class="sr">/&lt;wf(\d+)&gt;/</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">styles</span><span class="o">[</span><span class="s2">&quot;&lt;wf</span><span class="si">#{</span><span class="vg">$1</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="o">]</span>
-    <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&lt;wf</span><span class="si">#{</span><span class="vg">$1</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
-    <span class="n">styles</span><span class="o">[</span><span class="n">val</span><span class="o">][</span><span class="ss">:styles</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="n">styles_map</span><span class="o">[</span><span class="n">tag</span><span class="o">]</span>
-  <span class="k">else</span>
-    <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&lt;wf</span><span class="si">#{</span><span class="n">next_tag_no</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
-    <span class="n">styles</span><span class="o">[</span><span class="n">val</span><span class="o">]</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="o">[</span><span class="ss">:text</span><span class="o">]</span><span class="p">,</span> <span class="ss">:styles</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">styles_map</span><span class="o">[</span><span class="n">tag</span><span class="o">]]</span><span class="p">}</span>
-  <span class="k">end</span>
-  <span class="n">val</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>First we are testing whether input text matches placeholder pattern. If it doesn&#8217;t we are creating new placeholder. Number of placeholder is returned by the method <code>next_tag_no</code>.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">next_tag_no</span>
-  <span class="vi">@tag_no</span> <span class="o">||=</span> <span class="mi">0</span>
-  <span class="vi">@tag_no</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>After that we are using placeholder as a key in our <code>styles</code> hash and value is a new hash. In a <code>:text</code> key we are storing original text and in a <code>:styles</code> array values of Word font weights. Return value of function in this case is current placeholder. Since parser uses this value when it calls next phrase modifier handler for the same part of text our next modifier, if called, will receive placeholder as a value of a key <code>:text</code> in the input hash argument.</p>
+<div>
+<pre><code class='ruby'>def em(value)
+val = &quot;&quot;
+if value[:text].match(/&lt;wf(\d+)&gt;/) &amp;&amp; styles[&quot;&lt;wf#{$1}&gt;&quot;]
+val = &quot;&lt;wf#{$1}&gt;&quot;
+styles[val][:styles] &lt;&lt; styles_map[tag]
+else
+val = &quot;&lt;wf#{next_tag_no}&gt;&quot;
+styles[val] = {:text =&gt; value[:text], :styles =&gt; [styles_map[tag]]}
+end
+val
+<p>end</code></pre></p>
+</div>
+<p>First we are testing whether input text matches placeholder pattern. If it doesn&#8217;t we are creating new placeholder. Number of placeholder is returned by the method <code>next_tag_no</code>.</p>
+<div>
+<pre><code class='ruby'>def next_tag_no
+@tag_no ||= 0
+@tag_no += 1
+<p>end</code></pre></p>
+</div>
+<p>After that we are using placeholder as a key in our <code>styles</code> hash and value is a new hash. In a <code>:text</code> key we are storing original text and in a <code>:styles</code> array values of Word font weights. Return value of function in this case is current placeholder. Since parser uses this value when it calls next phrase modifier handler for the same part of text our next modifier, if called, will receive placeholder as a value of a key <code>:text</code> in the input hash argument.</p>
 <p><code>if</code> clause first tests whether input text matches placeholder pattern and if it is, it additionally checks if we already have information about text and font weights in the <code>styles</code> hash. Only if both conditions are met we set return value to the current placeholder and add new font weight to the array of existing font weights.</p>
 <p>Similarly to the heading modifiers handling we want to avoid writing one function per phrase modifier and will again turn to the beauty of Ruby language.</p>
-<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="ss">:strong</span><span class="p">,</span> <span class="ss">:em</span><span class="p">,</span> <span class="ss">:ins</span><span class="p">,</span> <span class="ss">:del</span><span class="p">,</span> <span class="ss">:del_phrase</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">tag</span><span class="o">|</span>
-  <span class="n">define_method</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="k">do</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span>
-    <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="ss">:text</span><span class="o">].</span><span class="n">match</span><span class="p">(</span><span class="sr">/&lt;wf(\d+)&gt;/</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">styles</span><span class="o">[</span><span class="s2">&quot;&lt;wf</span><span class="si">#{</span><span class="vg">$1</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="o">]</span>
-      <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&lt;wf</span><span class="si">#{</span><span class="vg">$1</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
-      <span class="n">styles</span><span class="o">[</span><span class="n">val</span><span class="o">][</span><span class="ss">:styles</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="n">styles_map</span><span class="o">[</span><span class="n">tag</span><span class="o">]</span>
-    <span class="k">else</span>
-      <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&lt;wf</span><span class="si">#{</span><span class="n">next_tag_no</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
-      <span class="n">styles</span><span class="o">[</span><span class="n">val</span><span class="o">]</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">][</span><span class="ss">:text</span><span class="o">]</span><span class="p">,</span> <span class="ss">:styles</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">styles_map</span><span class="o">[</span><span class="n">tag</span><span class="o">]]</span><span class="p">}</span>
-    <span class="k">end</span>
-    <span class="n">val</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Handling links is simpler since they are processed in a single call and we only need to store text that will be displayed and an <span class="caps">URL</span>.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-  <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&lt;wf</span><span class="si">#{</span><span class="n">next_tag_no</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
-  <span class="n">styles</span><span class="o">[</span><span class="n">val</span><span class="o">]</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:text</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="o">[</span><span class="ss">:text</span><span class="o">]</span><span class="p">,</span> <span class="ss">:href</span> <span class="o">=&gt;</span> <span class="n">value</span><span class="o">[</span><span class="ss">:href</span><span class="o">]</span><span class="p">,</span> <span class="ss">:styles</span> <span class="o">=&gt;</span> <span class="o">[]</span><span class="p">}</span>
-  <span class="n">val</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>At the end of paragraph processing RedCloth will call formatter&#8217;s <code>p</code> method with  the text that contains all our placeholders, and in the @ @styles@ hash we will have all the information needed to properly format paragraph in the Word document. Modified text of the first paragraph of our sample Textile document is given below.</p>
-<div class="highlight"><pre><code class="bat">A <span class="p">&lt;</span><span class="n">wf1</span><span class="p">&gt;</span> <span class="n">paragraph</span> with <span class="p">&lt;</span><span class="n">wf2</span>&gt; <span class="p">&lt;</span><span class="n">wf3</span><span class="p">&gt;</span>
-<span class="n">a</span> line break<span class="p">,</span> some <span class="p">&lt;</span><span class="n">wf4</span><span class="p">&gt;</span> <span class="n">and</span> a <span class="p">&lt;</span><span class="n">wf5</span>&gt;
-<span class="p">&lt;</span><span class="n">wf6</span>&gt;
-<span class="p">&lt;</span><span class="n">wf7</span>&gt;
-</code></pre>
-</div><p>And the <code>styles</code> hash will have a following content.</p>
-<div class="highlight"><pre><code class="ruby"><span class="p">{</span><span class="s2">&quot;&lt;wf1&gt;&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="ss">:text</span><span class="o">=&gt;</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="ss">:styles</span><span class="o">=&gt;[</span><span class="ss">:italic</span><span class="p">,</span> <span class="ss">:bold</span><span class="o">]</span><span class="p">},</span>
- <span class="s2">&quot;&lt;wf2&gt;&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="ss">:text</span><span class="o">=&gt;</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="ss">:styles</span><span class="o">=&gt;[</span><span class="ss">:italic</span><span class="o">]</span><span class="p">},</span>
- <span class="s2">&quot;&lt;wf3&gt;&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="ss">:text</span><span class="o">=&gt;</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="ss">:styles</span><span class="o">=&gt;[</span><span class="ss">:bold</span><span class="o">]</span><span class="p">},</span>
- <span class="s2">&quot;&lt;wf4&gt;&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="ss">:text</span><span class="o">=&gt;</span><span class="s2">&quot;emphasis&quot;</span><span class="p">,</span> <span class="ss">:styles</span><span class="o">=&gt;[</span><span class="ss">:italic</span><span class="o">]</span><span class="p">},</span>
- <span class="s2">&quot;&lt;wf5&gt;&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="ss">:text</span><span class="o">=&gt;</span><span class="s2">&quot;link&quot;</span><span class="p">,</span> <span class="ss">:href</span><span class="o">=&gt;</span><span class="s2">&quot;http://redcloth.org&quot;</span><span class="p">,</span> <span class="ss">:styles</span><span class="o">=&gt;[]</span><span class="p">}}</span>
-</code></pre>
-</div><p>It is pretty much clear what we have to do now. All unaltered parts of text we have to simply add to the Word document and whenever we find placeholder we will use value of <code>:text</code> key from the corresponding element of <code>styles</code> hash and apply font kept in the <code>:styles</code> key.</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">p</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">paragraphs</span><span class="o">.</span><span class="n">add</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">nil?</span>
-
-  <span class="k">if</span> <span class="n">styles</span><span class="o">.</span><span class="n">empty?</span>
-    <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="n">value</span><span class="o">[</span><span class="ss">:text</span><span class="o">]</span>
-  <span class="k">else</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="o">[</span><span class="n">value</span><span class="o">[</span><span class="ss">:text</span><span class="o">]]</span>
-    <span class="n">styles</span><span class="o">.</span><span class="n">keys</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">st</span><span class="o">|</span>
-      <span class="n">parts</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">t</span><span class="o">|</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span> <span class="n">st</span><span class="p">}</span><span class="o">.</span><span class="n">flatten</span>
-      <span class="n">curr</span> <span class="o">=</span> <span class="n">parts</span><span class="o">.</span><span class="n">shift</span>
-      <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="n">curr</span>
-
-      <span class="k">if</span> <span class="n">styles</span><span class="o">[</span><span class="n">st</span><span class="o">][</span><span class="ss">:href</span><span class="o">]</span>
-        <span class="n">doc</span><span class="o">.</span><span class="n">hyperlinks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">range</span><span class="p">,</span>
-                           <span class="n">styles</span><span class="o">[</span><span class="n">st</span><span class="o">][</span><span class="ss">:href</span><span class="o">]</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span>
-                           <span class="kp">nil</span><span class="p">,</span> <span class="n">styles</span><span class="o">[</span><span class="n">st</span><span class="o">][</span><span class="ss">:text</span><span class="o">]</span><span class="p">)</span>
-      <span class="k">else</span>
-        <span class="n">set_font_styles</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">font</span><span class="p">,</span> <span class="n">styles</span><span class="o">[</span><span class="n">st</span><span class="o">][</span><span class="ss">:styles</span><span class="o">]</span><span class="p">)</span>
-        <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="n">styles</span><span class="o">[</span><span class="n">st</span><span class="o">][</span><span class="ss">:text</span><span class="o">]</span>
-        <span class="n">reset_font_styles</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">font</span><span class="p">,</span> <span class="n">styles</span><span class="o">[</span><span class="n">st</span><span class="o">][</span><span class="ss">:styles</span><span class="o">]</span><span class="p">)</span>
-      <span class="k">end</span>
-
-      <span class="n">text</span> <span class="o">=</span> <span class="n">parts</span>
-    <span class="k">end</span>
-    <span class="n">styles</span><span class="o">.</span><span class="n">clear</span>
-    <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="n">text</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="k">unless</span> <span class="n">text</span><span class="o">.</span><span class="n">empty?</span>
-  <span class="k">end</span>
-  <span class="n">word</span><span class="o">.</span><span class="n">selection</span><span class="o">.</span><span class="n">typetext</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-  <span class="s2">&quot;&quot;</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Just as we did for headings we are adding new paragraph to the Word document if we are about to add text to the empty document. If no styles were used, paragraph is added to the end of the document.</p>
+<div>
+<pre><code class='ruby'>[:strong, :em, :ins, :del, :del_phrase].each do |tag|
+define_method(tag) do |*args|
+val = &quot;&quot;
+if args<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>[:text].match(/&lt;wf(\d+)&gt;/) &amp;&amp; styles[&quot;&lt;wf#{$1}&gt;&quot;]
+val = &quot;&lt;wf#{$1}&gt;&quot;
+styles[val][:styles] &lt;&lt; styles_map[tag]
+else
+val = &quot;&lt;wf#{next_tag_no}&gt;&quot;
+styles[val] = {:text =&gt; args<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>[:text], :styles =&gt; [styles_map[tag]]}
+end
+val
+end
+<p>end</code></pre></p>
+</div>
+<p>Handling links is simpler since they are processed in a single call and we only need to store text that will be displayed and an <span class="caps">URL</span>.</p>
+<div>
+<pre><code class='ruby'>def link(value)
+val = &quot;&lt;wf#{next_tag_no}&gt;&quot;
+styles[val] = {:text =&gt; value[:text], :href =&gt; value[:href], :styles =&gt; []}
+val
+<p>end</code></pre></p>
+</div>
+<p>At the end of paragraph processing RedCloth will call formatter&#8217;s <code>p</code> method with  the text that contains all our placeholders, and in the @ @styles@ hash we will have all the information needed to properly format paragraph in the Word document. Modified text of the first paragraph of our sample Textile document is given below.</p>
+<div>
+<pre><code class='bat'>A &amp;lt;wf1&amp;gt; paragraph with &amp;lt;wf2&amp;gt; &amp;lt;wf3&amp;gt;
+<p>a line break, some &lt;wf4&gt; and a &lt;wf5&gt;<br />
+&lt;wf6&gt;<br />
+&lt;wf7&gt;</code></pre></p>
+</div>
+<p>And the <code>styles</code> hash will have a following content.</p>
+<div>
+<pre><code class='ruby'>{&amp;quot;&amp;lt;wf1&amp;gt;&amp;quot;=&amp;gt;{:text=&amp;gt;&amp;quot;simple&amp;quot;, :styles=&amp;gt;[:italic, :bold]},
+&quot;&lt;wf2&gt;&quot;=&gt;{:text=&gt;&quot;simple&quot;, :styles=&gt;[:italic]},
+&quot;&lt;wf3&gt;&quot;=&gt;{:text=&gt;&quot;text&quot;, :styles=&gt;[:bold]},
+&quot;&lt;wf4&gt;&quot;=&gt;{:text=&gt;&quot;emphasis&quot;, :styles=&gt;[:italic]},
+&quot;&lt;wf5&gt;&quot;=&gt;{:text=&gt;&quot;link&quot;, :href=&gt;&quot;http://redcloth.org&quot;, :styles=&gt;[]}}</code></pre>
+</div>
+<p>It is pretty much clear what we have to do now. All unaltered parts of text we have to simply add to the Word document and whenever we find placeholder we will use value of <code>:text</code> key from the corresponding element of <code>styles</code> hash and apply font kept in the <code>:styles</code> key.</p>
+<div>
+<pre><code class='ruby'>def p(value)
+doc.paragraphs.add if word.selection.nil?
+if styles.empty?
+word.selection.typetext value[:text]
+else
+text = [value[:text]]
+styles.keys.each do |st|
+parts = text.collect {|t| t.split st}.flatten
+curr = parts.shift
+word.selection.typetext curr
+if styles[st][:href]
+doc.hyperlinks.add(word.selection.range,
+styles[st][:href], nil,
+nil, styles[st][:text])
+else
+set_font_styles(word.selection.font, styles[st][:styles])
+word.selection.typetext styles[st][:text]
+reset_font_styles(word.selection.font, styles[st][:styles])
+end
+text = parts
+end
+styles.clear
+word.selection.typetext text<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup> unless text.empty?
+end
+word.selection.typetext &quot;\n&quot;
+&quot;&quot;
+<p>end</code></pre></p>
+</div>
+<p>Just as we did for headings we are adding new paragraph to the Word document if we are about to add text to the empty document. If no styles were used, paragraph is added to the end of the document.</p>
 
       <br/>
       

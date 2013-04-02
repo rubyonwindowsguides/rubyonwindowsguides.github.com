@@ -98,21 +98,24 @@
 <p>In addition you can associate <code>.rb</code> and <code>.rbw</code> files with this Ruby installation which will give you a possibility to execute Ruby scripts by double-clicking Ruby files. This step is not essential so you can skip it if you do not want to start Ruby scripts from <span class="caps">GUI</span>. Figure 2-1 shows installer&#8217;s page where both options are chosen.</p>
 <p><img src="/images/fig0201.png" title="Ruby installation options" alt="Ruby installation options" /></p>
 <p>When installation is complete open up new Command Prompt or Console2 window and check that everything is installed correctly:</p>
-<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">ruby</span> -v
-ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>p<span class="m">136</span> (<span class="m">2010-12-25</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
-C:\&gt;
-</code></pre>
-</div><p>Let&#8217;s stop here for the moment and check what installer has actually done. Lot of experienced developers agree that good way to learn programming is to explore other&#8217;s code. This is not related only to programming and we will use same approach here.</p>
+<div>
+<pre><code class='bat'>C:\&amp;gt;ruby -v
+<p>ruby 1.9.2p136 (2010-12-25) [i386-mingw32]<br />
+C:\&gt;</code></pre></p>
+</div>
+<p>Let&#8217;s stop here for the moment and check what installer has actually done. Lot of experienced developers agree that good way to learn programming is to explore other&#8217;s code. This is not related only to programming and we will use same approach here.</p>
 <p>Apart from the fact that installer has put all Ruby files in the selected directory, <code>C:\Ruby\192</code> in our case it added this path to system path and that&#8217;s why we are able to start ruby in new command prompt. Besides it created few shortcuts in the start menu. You can find them under Ruby 1.9.2-p136 sub-menu item.</p>
 <p>First shortcut has a title “Interactive Ruby”. Click on it. New Command Prompt opens with Interactive Ruby (<code>irb</code>) already started. This program is actually Ruby interpreter which you can use to experiment with your code in real-time. Each statement is immediately executed and you can see its results. This is excellent tool if you started to learn Ruby. Click again on Start Menu and on Ruby 1.9.2-p136 sub-menu. Right-click on Interactive Ruby and Properties in the context menu. Look at the text box next to Target label on Shortcut tab. This is command used to start <code>irb</code>. We will use it in Console2. Click on <code>Edit-&gt;Settings...</code> and then click on Tabs in the left tree. Click on Add button to add new kind of tab to Console2 and in the Shell text box type same command as you have in the Properties dialog box for irb shortcut. In our case it is:</p>
-<div class="highlight"><pre><code class="bat">C:\Ruby\<span class="m">192</span>\bin\irb.bat
-</code></pre>
-</div><p>In the Title text box type <code>irb192</code>. Since this is third tab we added to Console2 you can open it with <code>Ctrl-F3</code> hot-key combination. Do it now and irb will be opened in Console2 tab. If you want to exit irb session just type quit and pres Return button on your keyboard. Not that if you didn&#8217;t check “Add Ruby executables to your PATH”, irb tab just created in Console2 will still work.</p>
+<div>
+<pre><code class='bat'>C:\Ruby\192\bin\irb.bat</code></pre>
+</div>
+<p>In the Title text box type <code>irb192</code>. Since this is third tab we added to Console2 you can open it with <code>Ctrl-F3</code> hot-key combination. Do it now and irb will be opened in Console2 tab. If you want to exit irb session just type quit and pres Return button on your keyboard. Not that if you didn&#8217;t check “Add Ruby executables to your PATH”, irb tab just created in Console2 will still work.</p>
 <p>Let&#8217;s create one more tab in Console2 in which you can use Ruby even if it is not on you path. Go to tab part of Settings dialog box and add new tab. In the Shell text box type: <code>C:\Windows\System32\cmd.exe /E:ON /K c:\Ruby\192\bin\setrbvars.bat</code> and type Ruby 1.9.2 Console for the title. Since this is fourth tab in Console2 press <code>Ctrl-F4</code> and new tab opens with Ruby in your path:</p>
-<div class="highlight"><pre><code class="bat">ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span>p<span class="m">136</span> (<span class="m">2010-12-25</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
-c:\&gt;
-</code></pre>
-</div><p>In Figure 2-2. you can see Console2 Settings dialog box with all four tabs defined.</p>
+<div>
+<pre><code class='bat'>ruby 1.9.2p136 (2010-12-25) [i386-mingw32]
+<p>c:\&gt;</code></pre></p>
+</div>
+<p>In Figure 2-2. you can see Console2 Settings dialog box with all four tabs defined.</p>
 <p><img src="/images/fig0202.png" title="Ruby installation options" alt="Ruby installation options" /></p>
 <p>Finally if you have checked “Associate .rb and .rbw files with this Ruby installation” option during installation installer has made changes to your <span class="caps">PATHEXT</span> system variable. This variable contains list of file extensions and it tells Windows what is it supposed to do with files who&#8217;s extension match one of the listed values. Basically this is list of executable files and the most common extensions are <code>.EXE</code>, <code>.BAT</code> and <code>.CMD</code>.</p>
 <p>Installer has added two more, <code>.RB</code> and <code>.RBW</code>. New file types are defined in the Windows registry. In order to completely understand this association open Registry Editor by clicking on Start button and typing <code>regedit</code> and pressing Enter. Expand <code>Computer</code> and <code>HKEY_CLASSES_ROOT</code> node in the left tree control and scroll down to the <code>.rb</code> and <code>.rbw</code> nodes. Clicking on them will display values stored for these nodes, <code>RubyFile</code> and <code>RubyWFile</code> respectively. Now scroll down till you find keys named <code>RubyFile</code> and <code>RubyWFile</code> expand all nodes. You should end up with the tree that looks like shown in Figure 2-3.</p>
@@ -120,39 +123,40 @@ c:\&gt;
 <p>Each key has several sub-keys. The first one, <code>DefaultIcon</code>, tells Windows Explorer which icon to display for Ruby files. Next value is stored in the <code>shell\open\command</code> key and it tells Windows what to do with these Ruby files. Values are: <code>"c:\Ruby\192\bin\ruby.exe" "%1" %*</code> for RubyFile (extension <code>.RB</code>) and <code>"c:\Ruby\192\bin\rubyw.exe" "%1" %*</code> for RubyWFile (extension <code>.RBW</code>) and they tell Windows to invoke Ruby interpreter and pass it file name (argument <code>“%1”</code>) and other arguments (<code>%*</code>).</p>
 <p>Notice that these values use different Ruby executables. The first one, <code>ruby.exe</code>, is “standard” Ruby interpreter which is meant to be used in Command Prompt. Each time it is invoked new Command Prompt window will be opened and Ruby script will be executed in it. But if you want to call Ruby from another process or you want to execute Ruby script as a background task rubyw.exe is more appropriate. It is exactly the same Ruby interpreter except it doesn&#8217;t provide standard in, out and error streams. Besides it doesn&#8217;t launch new Command Prompt when executed.</p>
 <p>Let us test our new file association. Create new directory where we will keep our Ruby sources in <code>C:\projects</code>. Within that directory create subdirectory called misc and edit new file called <code>ruby_args.rb</code> with following code:</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">if</span> <span class="no">ARGV</span><span class="o">.</span><span class="n">empty?</span>
-  <span class="nb">puts</span> <span class="s2">&quot;No arguments supplied&quot;</span>
-<span class="k">else</span>
-  <span class="no">ARGV</span><span class="o">.</span><span class="n">each_with_index</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg</span><span class="p">,</span> <span class="n">idx</span><span class="o">|</span>
-    <span class="nb">puts</span> <span class="s2">&quot;Argument </span><span class="si">#{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> is: </span><span class="si">#{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre>
-</div><p>Double click this file in Windows Explorer. New Command Prompt window will open, “No arguments supplied” will be printed out and window will close. Change extension to <code>.rbw</code> and double click again. Have you seen the difference? No window was opened even though script was executed. Change extension back to <code>.rb</code>. This feature is similar to the so called shebang line on Unix-like systems which tells system how to execute script.</p>
+<div>
+<pre><code class='ruby'>if ARGV.empty?
+puts &quot;No arguments supplied&quot;
+<p>else<br />
+  <span class="caps">ARGV</span>.each_with_index do |arg, idx|<br />
+    puts &quot;Argument #{idx} is: #{arg}&quot;<br />
+  end<br />
+end</code></pre></p>
+</div>
+<p>Double click this file in Windows Explorer. New Command Prompt window will open, “No arguments supplied” will be printed out and window will close. Change extension to <code>.rbw</code> and double click again. Have you seen the difference? No window was opened even though script was executed. Change extension back to <code>.rb</code>. This feature is similar to the so called shebang line on Unix-like systems which tells system how to execute script.</p>
 <p>Open up new Command Prompt window, go to <code>c:\projects\misc</code> directory, type name of our script with extension and hit Enter. Result should be:</p>
-<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">cd</span> projects\misc
-c:\projects\misc<span class="p">&gt;</span><span class="n">ruby_args</span>.rb
-No arguments supplied
-</code></pre>
-</div><p>Now execute script but provide some arguments to it:</p>
-<div class="highlight"><pre><code class="bat">c:\projects\misc<span class="p">&gt;</span><span class="n">ruby_args</span>.rb arg<span class="m">1</span> arg<span class="m">2</span> arg<span class="m">3</span>
-Argument <span class="m">0</span> is: arg<span class="m">1</span>
-Argument <span class="m">1</span> is: arg<span class="m">2</span>
-Argument <span class="m">2</span> is: arg<span class="m">3</span>
-</code></pre>
-</div><p>You see that, with these file associations, there is no need to explicitly use ruby interpreter. Operating system will do that for us. Nevertheless you can still use it by giving full path to <code>ruby.exe</code> if you haven&#8217;t added it to the path or by using <code>ruby.exe</code> or just ruby if it is in your path. All three versions are displayed below.</p>
-<div class="highlight"><pre><code class="bat">c:\projects\misc<span class="p">&gt;</span><span class="n">c</span>:\Ruby\<span class="m">192</span>\bin\ruby.exe ruby_args.rb one two
-Argument <span class="m">0</span> is: one
-Argument <span class="m">1</span> is: two
-
-c:\projects\misc<span class="p">&gt;</span><span class="n">ruby</span>.exe ruby_args.rb one two
-Argument <span class="m">0</span> is: one
-Argument <span class="m">1</span> is: two
-
-c:\projects\misc<span class="p">&gt;</span><span class="n">ruby</span> ruby_args.rb one two
-Argument <span class="m">0</span> is: one
-Argument <span class="m">1</span> is: two
-</code></pre>
+<div>
+<pre><code class='bat'>c:\&amp;gt;cd projects\misc
+<p>c:\projects\misc&gt;ruby_args.rb<br />
+No arguments supplied</code></pre></p>
+</div>
+<p>Now execute script but provide some arguments to it:</p>
+<div>
+<pre><code class='bat'>c:\projects\misc&amp;gt;ruby_args.rb arg1 arg2 arg3
+<p>Argument 0 is: arg1<br />
+Argument 1 is: arg2<br />
+Argument 2 is: arg3</code></pre></p>
+</div>
+<p>You see that, with these file associations, there is no need to explicitly use ruby interpreter. Operating system will do that for us. Nevertheless you can still use it by giving full path to <code>ruby.exe</code> if you haven&#8217;t added it to the path or by using <code>ruby.exe</code> or just ruby if it is in your path. All three versions are displayed below.</p>
+<div>
+<pre><code class='bat'>c:\projects\misc&amp;gt;c:\Ruby\192\bin\ruby.exe ruby_args.rb one two
+<p>Argument 0 is: one<br />
+Argument 1 is: two</p>
+<p>c:\projects\misc&gt;ruby.exe ruby_args.rb one two<br />
+Argument 0 is: one<br />
+Argument 1 is: two</p>
+<p>c:\projects\misc&gt;ruby ruby_args.rb one two<br />
+Argument 0 is: one<br />
+Argument 1 is: two</code></pre></p>
 </div>
 
       <br/>
