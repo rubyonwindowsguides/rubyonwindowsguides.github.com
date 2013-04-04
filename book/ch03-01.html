@@ -170,41 +170,37 @@
       create  tmp<span class="n">/pids</span>
       create  vendor<span class="n">/plugins</span>
       create  vendor<span class="n">/plugins/.gitkeep</span>
-</code></pre>
-</div><p>Rails has created basic structure of our application. If you open config\database.yml file in the editor you will see that application is completely configured for SQlite3 database:</p>
+</code></pre></div><p>Rails has created basic structure of our application. If you open config\database.yml file in the editor you will see that application is completely configured for SQlite3 database:</p>
 <div class="highlight"><pre><code class="ruby"><span class="c1"># SQLite version 3.x</span>
 <span class="c1">#   gem install sqlite3-ruby (not necessary on OS X Leopard)</span>
-<span class="n">development</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
-  <span class="n">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">sqlite3</span>
-  <span class="n">pool</span><span class="p">:</span> <span class="mi">5</span>
-  <span class="n">timeout</span><span class="p">:</span> <span class="mi">5000</span>
+<span class="ss">development</span><span class="p">:</span>
+  <span class="ss">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
+  <span class="ss">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">sqlite3</span>
+  <span class="ss">pool</span><span class="p">:</span> <span class="mi">5</span>
+  <span class="ss">timeout</span><span class="p">:</span> <span class="mi">5000</span>
 
 <span class="c1"># Warning: The database defined as &quot;test&quot; will be erased and</span>
 <span class="c1"># re-generated from your development database when you run &quot;rake&quot;.</span>
 <span class="c1"># Do not set this db to the same as development or production.</span>
 <span class="nb">test</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
-  <span class="n">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="nb">test</span><span class="o">.</span><span class="n">sqlite3</span>
-  <span class="n">pool</span><span class="p">:</span> <span class="mi">5</span>
-  <span class="n">timeout</span><span class="p">:</span> <span class="mi">5000</span>
+  <span class="ss">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
+  <span class="ss">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="nb">test</span><span class="o">.</span><span class="n">sqlite3</span>
+  <span class="ss">pool</span><span class="p">:</span> <span class="mi">5</span>
+  <span class="ss">timeout</span><span class="p">:</span> <span class="mi">5000</span>
 
-<span class="n">production</span><span class="p">:</span>
-  <span class="n">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
-  <span class="n">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">sqlite3</span>
-  <span class="n">pool</span><span class="p">:</span> <span class="mi">5</span>
-  <span class="n">timeout</span><span class="p">:</span> <span class="mi">5000</span>
-</code></pre>
-</div><p>All three environments: development, test and production will use different SQlite3 databases named after the name of the corresponding environment with extension .sqlite3.</p>
+<span class="ss">production</span><span class="p">:</span>
+  <span class="ss">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
+  <span class="ss">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">sqlite3</span>
+  <span class="ss">pool</span><span class="p">:</span> <span class="mi">5</span>
+  <span class="ss">timeout</span><span class="p">:</span> <span class="mi">5000</span>
+</code></pre></div><p>All three environments: development, test and production will use different SQlite3 databases named after the name of the corresponding environment with extension .sqlite3.</p>
 <p>Let&#8217;s start our new application. Go to rwin_book directory and execute:</p>
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> server
-</code></pre>
-</div><p>If you get following message:</p>
+</code></pre></div><p>If you get following message:</p>
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span>
 Could not find gem <span class="s1">&#39;sqlite3-ruby (&gt;= 0, runtime)&#39;</span> in any of the gem
 sources listed in your Gemfile.
-</code></pre>
-</div><p>Try running `bundle install`.</p>
+</code></pre></div><p>Try running `bundle install`.</p>
 <p>You probably have Rails 3.0.3 version which uses sqlite3-ruby gem which is obsolete. Between versions 1.3.2 and 1.3.3 sqlite3-ruby gem was renamed to sqlite3. However sqlite3-ruby still can be installed for compatibility purposes. This gem is actually empty one that just requires new sqlite3 gem and can be used till all applications are updated to use new one. So if this is the case just install sqlite3-ruby:</p>
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">gem</span> install sqlite<span class="m">3</span>-ruby --no-rdoc --no-ri
 #######################################################
@@ -220,8 +216,7 @@ Thanks from the Ruby sqlite<span class="m">3</span> team!
 #######################################################
 Successfully installed sqlite<span class="m">3</span>-ruby<span class="m">-1</span>.<span class="m">3</span>.<span class="m">3</span>
 <span class="m">1</span> gem installed
-</code></pre>
-</div><p>You can now start application WEBrick server. If you followed all instructions from the book you will see server&#8217;s log messages in the Command Prompt:</p>
+</code></pre></div><p>You can now start application WEBrick server. If you followed all instructions from the book you will see server&#8217;s log messages in the Command Prompt:</p>
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> server
 <span class="o">=</span><span class="p">&gt;</span> <span class="n">Booting</span> WEBrick
 <span class="o">=</span><span class="p">&gt;</span> <span class="n">Rails</span> <span class="m">3</span>.<span class="m">0</span>.<span class="m">3</span> application starting in development <span class="k">on</span> http:<span class="n">//0.0.0.0:3000</span>
@@ -230,23 +225,20 @@ Successfully installed sqlite<span class="m">3</span>-ruby<span class="m">-1</sp
 [<span class="m">2011-02-02</span> <span class="m">19</span><span class="nl">:01:07</span>] INFO  WEBrick <span class="m">1</span>.<span class="m">3</span>.<span class="m">1</span>
 [<span class="m">2011-02-02</span> <span class="m">19</span><span class="nl">:01:07</span>] INFO  ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span> (<span class="m">2010-12-25</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
 [<span class="m">2011-02-02</span> <span class="m">19</span><span class="nl">:01:07</span>] INFO  WEBrick<span class="c">::HTTPServer#start: pid=800 port=3000</span>
-</code></pre>
-</div><p>But if you jumped right to this chapter you there are few important things I must emphasize. If you built sqlite3 gem from the sources it is linked against libsqlite3-0.dll and this shared library must be in the path. In the chapter Building Native Gems we copied it to the C:\tools folder and added this directory to the path. You have to copy sqlite3.exe file to that folder too since we will need it soon.</p>
+</code></pre></div><p>But if you jumped right to this chapter you there are few important things I must emphasize. If you built sqlite3 gem from the sources it is linked against libsqlite3-0.dll and this shared library must be in the path. In the chapter Building Native Gems we copied it to the C:\tools folder and added this directory to the path. You have to copy sqlite3.exe file to that folder too since we will need it soon.</p>
 <p>On the other hand if you just installed binary version of sqlite3 gem it is linked against sqlite3.dll. This is actually the same shared library but with different name. In that case you have two solutions. The first one is to just rename built dll or you can download official version from SQlite3 site and unpack it to the folder that is in the path. Nevertheless SQlite3&#8217;s shared library and executable must be in the path. This is common mistake of Rails on Windows beginners so keep that on your mind.</p>
 <p><img src="/images/fig0301.png" title="Rails welcome page" alt="Rails welcome page" /></p>
 <p>Now open Web browser and go to Rails welcome page at http://localhost:3000. It gives you few hints how to start developing Rails application and, if you click on the top link, it will show you information about your application&#8217;s environment.</p>
 <p>So far, so good. Be we still haven&#8217;t do anything with the database so we cannot be sure the SQlite3 gem is working as expected. Open new Command Prompt, go to the root folder of your new Rails application and execute following rake task:</p>
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rake</span> db:create
-</code></pre>
-</div><p>If you get warning messages that database files already exist do not worry since this is just and information that application has found newly created databases. Namely for SQlite3 there is no need to create database in advance. Rails will do that for you if database does not exist. Finally start Rails database console and check a list of all tables in the database:</p>
+</code></pre></div><p>If you get warning messages that database files already exist do not worry since this is just and information that application has found newly created databases. Namely for SQlite3 there is no need to create database in advance. Rails will do that for you if database does not exist. Finally start Rails database console and check a list of all tables in the database:</p>
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> dbconsole
 SQLite version <span class="m">3</span>.<span class="m">7</span>.<span class="m">4</span>
 Enter <span class="s2">&quot;.help&quot;</span> <span class="k">for</span> instructions
 Enter SQL statements terminated with a <span class="s2">&quot;;&quot;</span>
 sqlite&gt; .tables
 sqlite&gt;
-</code></pre>
-</div><p>Of course we didn&#8217;t create any table so the list is empty. Time is to create some. Since we are working with Ruby on Rails we will not create tables directly but will do it Rails way. The most simple approach is to generate model, view and controller with Rails scaffold generator:</p>
+</code></pre></div><p>Of course we didn&#8217;t create any table so the list is empty. Time is to create some. Since we are working with Ruby on Rails we will not create tables directly but will do it Rails way. The most simple approach is to generate model, view and controller with Rails scaffold generator:</p>
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> generate scaffold RubyWinSource name:string \
  author:string url:string
       invoke  active_record
@@ -273,20 +265,17 @@ sqlite&gt;
       create        test<span class="n">/unit/helpers/ruby_win_sources_helper_test.rb</span>
       invoke  stylesheets
       create    public<span class="n">/stylesheets/scaffold.css</span>
-</code></pre>
-</div><p>Scaffold generator will create model, migration file which will create database table that corresponds to it, controller and few basic views. We will not dive into Rails internals and will focus on the database related parts instead. Going on the Rails way let&#8217;s start database migration:</p>
+</code></pre></div><p>Scaffold generator will create model, migration file which will create database table that corresponds to it, controller and few basic views. We will not dive into Rails internals and will focus on the database related parts instead. Going on the Rails way let&#8217;s start database migration:</p>
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rake</span> db:migrate
 (in c:<span class="n">/projects/rwin_book)</span>
 <span class="o">==</span>  CreateRubyWinSources: migrating <span class="o">===========================================</span>
 -- create_table(<span class="nl">:ruby_win_sources</span>)
    -<span class="p">&gt;</span> <span class="n">0</span>.<span class="m">0000</span>s
 <span class="o">==</span>  CreateRubyWinSources: migrated (<span class="m">0</span>.<span class="m">0000</span>s) <span class="o">==================================</span>
-</code></pre>
-</div><p>If you want you can also list existing tables in Rails database console:</p>
+</code></pre></div><p>If you want you can also list existing tables in Rails database console:</p>
 <div class="highlight"><pre><code class="bat">sqlite&gt; .tables
 ruby_win_sources   schema_migrations
-</code></pre>
-</div><p>Finally let&#8217;s add few good Web sources related to Ruby on Windows:</p>
+</code></pre></div><p>Finally let&#8217;s add few good Web sources related to Ruby on Windows:</p>
 <p><img src="/images/fig0302.png" title="List of Ruby on Windows sources." alt="List of Ruby on Windows sources." /></p>
 <p>What we&#8217;ve accomplished so far? We created new Rails application, test SQlite3 connection through Rails database console, created new model and inserted few records in the database. Now when we know that Rails and SQlite3 are working on Windows, it is time to move on and explore other database adapters.</p>
 

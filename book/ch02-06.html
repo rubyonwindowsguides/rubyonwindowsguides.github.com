@@ -101,22 +101,19 @@ AddClipboardFormatListener
 AdjustWindowRect
 AdjustWindowRectEx
 ...
-</code></pre>
-</div><p>You are already aware of the fact that if you want to create exports definition file you must know, or somehow get, a list of all exported symbols. If number of symbols is large this can be quite a boring and error prone task. Fortunately there are tools that can help us automate the whole process.</p>
+</code></pre></div><p>You are already aware of the fact that if you want to create exports definition file you must know, or somehow get, a list of all exported symbols. If number of symbols is large this can be quite a boring and error prone task. Fortunately there are tools that can help us automate the whole process.</p>
 <p>If shared library is MinGW compliant, dlltool, shipped with DevKit, is what you need. Question is what does “MinGW compliant” mean? All shared libraries created with MinGW compliers can be analyzed by dlltool. On the other hand if dll is created with Microsoft Visual Studio, there is a chance dlltool will not be able to create exports definition file from it. In that case you have to download <a href="http://www.mingw.org/wiki/Community_Supplied_Links">pexports tool</a>. Unpack it to the <code>DevKit</code> folder and you are ready to go.</p>
 <p>Armed with this knowledge it&#8217;s now time to enforce it in practice. We&#8217;ll use mysql2 gem, newer and better version of Ruby binding for MySQL database. This gem is much better and faster then mysql one. Even though you can install it as binary gem, if some bugs are found and fixed you will have to wait till next version is released, which might not be what you want. I will show you how you can install gem from the source.</p>
 <p>MySQL binding gem requires shared libraries bundled in MySQL installation. If you already installed MySQL you will find required dlls in the lib sub-directory of the root where you&#8217;ve installed database. For the purpose of this book I&#8217;ll used <span class="caps">ZIP</span> archive which you can download from MySQL site (mysql-5.5.8-win32.zip). If you look at the lib directory within folder in which you unpacked archive you will see several files with <code>.dll</code>, <code>.lib</code> and <code>.pdb</code> extensions. Files with <code>.dll</code> extension are shared libraries, those with <code>.lib</code> and <code>.pdb</code> are import libraries and debugging symbols created with Microsoft Visual Studio. These import libraries cannot be used by MinGW linker so we&#8217;ll have to create new ones.</p>
 <p>I already mentioned that shared libraries created with Visual Studio might cause problems for dlltool, but there is no way to know it in advance so let&#8217;s try to create exports definition file for <code>libmysql.dll</code>. Go to the lib folder where MySQL shared libraries are and execute following command in the Command Prompt:</p>
 <div class="highlight"><pre><code class="bat">C:\mysql<span class="m">-5</span>.<span class="m">5</span>.<span class="m">8</span>-win<span class="m">32</span>\lib<span class="p">&gt;</span><span class="n">dlltool</span> -z mysql.def –export-all-symbol libmysql.dll
 dlltool: libmysql.dll: no symbols
-</code></pre>
-</div><p>Apparently dlltool was not able to read exported symbols from shared library. There are number of reasons why dll might not be compatible with dlltool. One  example is difference in sizes of types. If long long size is different in <span class="caps">GCC</span> and Visual Studio compilers, and struct that has long long members is exported, dlltool will not be able to read information from the shared library.</p>
+</code></pre></div><p>Apparently dlltool was not able to read exported symbols from shared library. There are number of reasons why dll might not be compatible with dlltool. One  example is difference in sizes of types. If long long size is different in <span class="caps">GCC</span> and Visual Studio compilers, and struct that has long long members is exported, dlltool will not be able to read information from the shared library.</p>
 <p>Dlltool accepts number of arguments which you can use to alter the way exports definition file&#8217;s content. You can see them all with <code>dlltool -–help</code>. Above statement tells dlltool to save result in the file <code>mysql.def</code>, to export all symbols found in the shared library and finally passes it the name of the library to be processed. This should be enough for most MinGW compatible dlls.</p>
 <p>Since <code>libmysql.dll</code> is not dlltool compatible we have to use different approach and use pexports. While you are in the MySQL&#8217;s lib directory execute following commands:</p>
 <div class="highlight"><pre><code class="bat">C:\mysql<span class="m">-5</span>.<span class="m">5</span>.<span class="m">8</span>-win<span class="m">32</span>\lib<span class="p">&gt;</span><span class="n">pexports</span> libmysql.dll <span class="p">&gt;</span> <span class="n">mysql</span>.def
 C:\mysql<span class="m">-5</span>.<span class="m">5</span>.<span class="m">8</span>-win<span class="m">32</span>\lib<span class="p">&gt;</span><span class="n">dlltool</span> -d mysql.def -l libmysql.a
-</code></pre>
-</div><p>We are now ready to install mysql2 gem from sources. Likewise sqlite3 gem installing mysql2 from sources will fail because mkmf cannot find required library:</p>
+</code></pre></div><p>We are now ready to install mysql2 gem from sources. Likewise sqlite3 gem installing mysql2 from sources will fail because mkmf cannot find required library:</p>
 <div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">gem</span> install mysql<span class="m">2</span> –platform<span class="o">=</span>ruby
 c:\Ruby\<span class="m">192</span>\lib\ruby\gems\<span class="m">1</span>.<span class="m">9</span>.<span class="m">1</span>\gems<span class="p">&gt;</span><span class="n">gem</span> install mysql<span class="m">2</span> --platform<span class="o">=</span>ruby
 Building native extensions.  This could take a while...
@@ -126,8 +123,7 @@ ERROR:  Error installing mysql<span class="m">2</span>:
 
 Gem files will remain installed in C:<span class="n">/Ruby/192/lib/ruby/gems/1.9.1/gems/mysql2-0.2.6</span> <span class="k">for</span> inspection.
 Results logged to C:<span class="n">/Ruby/192/lib/ruby/gems/1.9.1/gems/mysql2-0.2.6/ext/mysql2/gem_make.out</span>
-</code></pre>
-</div><p>Go to <code>mysql2-0.2.6/ext/mysql2</code> directory, configure and build native extension:</p>
+</code></pre></div><p>Go to <code>mysql2-0.2.6/ext/mysql2</code> directory, configure and build native extension:</p>
 <div class="highlight"><pre><code class="bat">ruby extconf.rb -- --with-mysql-include<span class="o">=</span>z:\mysql<span class="m">-5</span>.<span class="m">5</span>.<span class="m">8</span>-win<span class="m">32</span>\include –with-mysql-lib<span class="o">=</span>z:\mysql<span class="m">-5</span>.<span class="m">5</span>.<span class="m">8</span>-win<span class="m">32</span>\lib
 checking <span class="k">for</span> rb_thread_blocking_region()... yes
 checking <span class="k">for</span> main() in -llibmysql... yes
@@ -144,8 +140,7 @@ gcc -I. -IC:<span class="n">/Ruby/192/include/ruby-1.9.1/i386-mingw32</span> -I<
 -Wpointer-arith -Wwrite-strings -Wno-missing-field-initializers -Wno-long-long -Wall -funroll-loops \
 -o client.o -c client.c
 ...
-</code></pre>
-</div><p>All you have to do now is to extract gemspec file like we did with sqlite3 gem and mysql2 gem will be ready to use.</p>
+</code></pre></div><p>All you have to do now is to extract gemspec file like we did with sqlite3 gem and mysql2 gem will be ready to use.</p>
 
       <br/>
       

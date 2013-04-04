@@ -129,11 +129,9 @@ Success. You can now start the database server using:
     <span class="s2">&quot;postgres&quot;</span> -D <span class="s2">&quot;../data&quot;</span>
 or
     <span class="s2">&quot;pg_ctl&quot;</span> -D <span class="s2">&quot;../data&quot;</span> -l logfile start
-</code></pre>
-</div><p>As output of the initdb command suggests we can now start database server:</p>
+</code></pre></div><p>As output of the initdb command suggests we can now start database server:</p>
 <div class="highlight"><pre><code class="bat">C:\pgsql\bin<span class="p">&gt;</span><span class="n">postgres</span> -D ..\data
-</code></pre>
-</div><p>Let&#8217;s check whether our server is working. Don&#8217;t forget to change &#8216;bosko&#8217; with the user name under which you are working in Windows in the command below (this name is displayed in the first line of the log message if initdb command):</p>
+</code></pre></div><p>Let&#8217;s check whether our server is working. Don&#8217;t forget to change &#8216;bosko&#8217; with the user name under which you are working in Windows in the command below (this name is displayed in the first line of the log message if initdb command):</p>
 <div class="highlight"><pre><code class="bat">C:\pgsql\bin<span class="p">&gt;</span><span class="n">psql</span> -d template<span class="m">1</span> -U bosko
 psql (<span class="m">9</span>.<span class="m">0</span>.<span class="m">2</span>)
 WARNING: Console code page (<span class="m">437</span>) differs from Windows code page (<span class="m">1252</span>)
@@ -152,18 +150,15 @@ postgres<span class="o">=</span># \l
            |       |          |                            |                            <span class="p">|</span> <span class="n">bosko</span><span class="o">=</span>CTc<span class="n">/bosko</span>
 (<span class="m">3</span> rows)
 postgres<span class="o">=</span>#
-</code></pre>
-</div><p>If you see above lines your PostgreSQL server is running and ready. It is now time to create database for our rwin_book application. For this you can use <span class="caps">GUI</span> application pgAdmin3.exe or already started psql console client. I will stick with the console application. In the psql prompt execute following command:</p>
+</code></pre></div><p>If you see above lines your PostgreSQL server is running and ready. It is now time to create database for our rwin_book application. For this you can use <span class="caps">GUI</span> application pgAdmin3.exe or already started psql console client. I will stick with the console application. In the psql prompt execute following command:</p>
 <div class="highlight"><pre><code class="bat">postgres<span class="o">=</span># create database rwin_book_devel;
-</code></pre>
-</div><p>In two chapters dedicated to native gems installation we installed sqlite3 and mysql2 gems so we were ready for these databases. For the PostgreSQL server we are still missing gem extension needed to connect to it. Before we configure our Rails application to use new database we have to install it:</p>
+</code></pre></div><p>In two chapters dedicated to native gems installation we installed sqlite3 and mysql2 gems so we were ready for these databases. For the PostgreSQL server we are still missing gem extension needed to connect to it. Before we configure our Rails application to use new database we have to install it:</p>
 <div class="highlight"><pre><code class="bat">c:\projects\rwin_book<span class="p">&gt;</span><span class="n">gem</span> install pg --version<span class="o">=</span><span class="m">0</span>.<span class="m">9</span>.<span class="m">0</span>
 Successfully installed pg<span class="m">-0</span>.<span class="m">9</span>.<span class="m">0</span>-x<span class="m">86</span>-mingw<span class="m">32</span>
 <span class="m">1</span> gem installed
 Installing ri documentation <span class="k">for</span> pg<span class="m">-0</span>.<span class="m">9</span>.<span class="m">0</span>-x<span class="m">86</span>-mingw<span class="m">32</span>...
 Installing RDoc documentation <span class="k">for</span> pg<span class="m">-0</span>.<span class="m">9</span>.<span class="m">0</span>-x<span class="m">86</span>-mingw<span class="m">32</span>...
-</code></pre>
-</div><p>Version 0.9.0 has MinGW binaries that work on Windows. That&#8217;s the reason why we must install this and not the latest version. At the end we have to configure Rails application to use new database. For that use postgresql for adapter name in database.yml and add a line that requires pg in the application&#8217;s Gemfile. As we did we previous databases we must start database migration:</p>
+</code></pre></div><p>Version 0.9.0 has MinGW binaries that work on Windows. That&#8217;s the reason why we must install this and not the latest version. At the end we have to configure Rails application to use new database. For that use postgresql for adapter name in database.yml and add a line that requires pg in the application&#8217;s Gemfile. As we did we previous databases we must start database migration:</p>
 <div class="highlight"><pre><code class="bat">c:\projects\rwin_book<span class="p">&gt;</span><span class="n">rake</span> db:migrate
 (in c:<span class="n">/projects/rwin_book)</span>
 <span class="o">==</span>  CreateRubyWinSources: migrating <span class="o">===========================================</span>
@@ -174,8 +169,7 @@ NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index <span class="s2">
 <span class="k">for</span> table <span class="s2">&quot;ruby_win_sources&quot;</span>
    -<span class="p">&gt;</span> <span class="n">0</span>.<span class="m">3605</span>s
 <span class="o">==</span>  CreateRubyWinSources: migrated (<span class="m">0</span>.<span class="m">3605</span>s) <span class="o">==================================</span>
-</code></pre>
-</div><p>This ends our journey through built-in support for database engines. All of them are functional and it is up to you which one you will use in Rails applications.</p>
+</code></pre></div><p>This ends our journey through built-in support for database engines. All of them are functional and it is up to you which one you will use in Rails applications.</p>
 
       <br/>
       
