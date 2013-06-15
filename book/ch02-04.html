@@ -252,7 +252,7 @@ C:<span class="n">/Ruby/193dev</span>
 <span class="k">end</span>
 </code></pre></div><p>The code calls singleton method <code>pre_install</code> of Gem module and passes it a block. This method is actually a hook that will be called prior to any gem installation. It accepts a block of code, converts it to Proc object and adds it to the list of procedures that will be called before any gem is installed.</p>
 <p>Block passed to the pre-install hook checks whether gem has native extensions. If it has, it further checks for tools essential for building them. These tools are compiler (gcc), shell script (sh) and make. For each of them script executes simple shell command and if it was successfully finished it does nothing. Otherwise it informs us that we need build tools and where to get them. It is strongly recommended to run so called smoke test and check if DevKit works correctly:</p>
-<div class="highlight"><pre><code class="bat">C:\Ruby\DevKit<span class="p">&gt;</span><span class="n">gem</span> install rdiscount –platform<span class="o">=</span>ruby
+<div class="highlight"><pre><code class="bat">C:\Ruby\DevKit<span class="p">&gt;</span><span class="n">gem</span> install rdiscount -–platform<span class="o">=</span>ruby
 Temporarily enhancing PATH to include DevKit...
 Building native extensions.  This could take a while...
 Successfully installed rdiscount<span class="m">-1</span>.<span class="m">6</span>.<span class="m">8</span>
