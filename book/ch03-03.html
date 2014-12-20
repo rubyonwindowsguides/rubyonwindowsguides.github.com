@@ -92,7 +92,7 @@
       <br/><br/>
 
       <h2>PostgreSQL database</h2>
-<p>This is the third in a row of databases with built-in support in Ruby on Rails. Similarly to MySQL we will skip installation and will use server from .zip archive. Unpack archive to the root of your <code>C:</code> drive (or any other one if you want). New directory <code>pgsql</code> will be created and all files will be extracted there. The very first thing we have to do is to initialize server instance. This will create all necessary files needed for PostgreSQL server. Go to the bin sub-directory within <code>pgsql</code> directory and execute <code>intidb</code> command and pass it directory where data files will be stored. Output should look similar to the one given below:</p>
+<p>This is the third in a row of databases with built-in support in Ruby on Rails. Similarly to MySQL we will skip installation and will use server from .zip archive. Unpack archive to the root of your <code>C:</code> drive (or any other one if you want). New directory <code>pgsql</code> will be created and all files will be extracted there. The very first thing we have to do is to initialize server instance. This will create all necessary files needed for PostgreSQL server. Go to the bin sub-directory within <code>pgsql</code> directory and execute <code>initdb</code> command and pass it directory where data files will be stored. Output should look similar to the one given below:</p>
 <div class="highlight"><pre><code class="bat">C:\pgsql\bin<span class="p">&gt;</span><span class="n">initdb</span> -D ..\data
 The files belonging to this database system will be owned by user <span class="s2">&quot;bosko&quot;</span>.
 This user must also own the server process.
