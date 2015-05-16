@@ -1,0 +1,9 @@
+nav.navbar-fixed-top {
+  padding: 5px;
+  background-color: #eeeeee;
+  font-size: 1.15em;
+}
+
+nav.navbar-fixed-top a {
+  padding-right: 10px;
+}

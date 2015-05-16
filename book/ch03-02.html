@@ -5,22 +5,16 @@
    <title>Mysql Database</title>
    <meta name="author" content="Boško Ivanišević" />
 
-   <link rel="stylesheet" href="/css/960.css" type="text/css" />
-   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
-   <link rel="stylesheet" href="/css/text.css" type="text/css" />
-
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
-
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/menu.css" type="text/css" media="screen, projection" />
 
    <!-- Update your html tag to include the itemscope and itemtype attributes -->
    <html itemscope itemtype="http://schema.org/Book">
 
    <!-- Add the following three tags inside head -->
    <meta itemprop="name" content="Ruby On Windows Guides">
-   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
 
    <!-- Place this render call where appropriate -->
    <script type="text/javascript">
@@ -46,103 +40,105 @@
    </script>
 </head>
 <body>
+  <header>
+  </header>
+  <main class="content">
+    <section class="container">
+      <nav class="navbar-fixed-top">
+        <div class="container">
+          <a href="/">Book</a>
+          <a href="/about.html">About</a>
+          <span style="float: right;">
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone annotation="inline"></g:plusone>
+          </span>
+        </div>
+      </nav>
+      <div id="header">
+        <table>
+          <tr>
+            <td>
+              <h1>Ruby on Windows Guides</h1>
+              <h4 class="title">by Boško Ivanišević</h4>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="main" class="row-fluid">
+        <article class="post">
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch03-01.html"><i class="icon-double-angle-left"></i> Rails And Sqlite3 Database</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch03-03.html">Postgresql Database <i class=" icon-double-angle-right"></i></a>
+        
+            <hr>
+      </section>
 
-<div class="container_12">
-  <!--<div class="grid_2">
-    <br/>
-    <h1>Something</h1>
-    <p>
-      Lorem ipsum, etc, etc, so on and so forth
-    </p>
-  </div>-->
+          <section>
+            <h2>MySQL database</h2>
 
-  <div id="main" class="grid_10">
-    <div id="header" class="grid_10">
-      <br/>
-      <table>
-        <tr>
-          <td><img src="/images/rwg_logo_blue.png"/></td>
-          <td>
-            <h1>Ruby on Windows Guides</h1>
-            <h4>Comprehensive guides for Ruby on Windows</h4>
-            <h6>by Bosko Ivanisevic</h6>
-          </td>
-        </tr>
-      </table>
-    </div>
+<p>Contrary to SQlite3, Rails cannot create MySQL database directly. In order to create database we first have to start MySQL server. Go to the bin subdirectory of the folder where you have unpacked archive, <code>C:\mysql-5.6.23-win32\bin</code> in my case and start <code>mysqld.exe</code> application. Open new Command Prompt in the same folder, start MySQL client as root user and create database rwin<em>book</em>devel:</p>
 
-    <div id="menu" class="grid_10">
-      <a href="/">Book</a>
-      <a href="/about.html">About</a>
-      <!-- <a href="/something.html">Something</a> -->
-    </div>
-
-    <div id="content" class="grid_10">
-      <!-- Place this tag where you want the +1 button to render -->
-      <g:plusone annotation="inline"></g:plusone>
-      <br/>
-      
-      <a href="/book/ch03-01.html" title="Previous: Sqlite3 Database">&laquo; Sqlite3 Database</a>
-      
-
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch03-03.html" title="Next: Postgresql Database">Postgresql Database &raquo; </a>
-       
-      <br/><br/>
-
-      <h2>MySQL database</h2>
-<p>Contrary to SQlite3 Rails cannot create database directly. Before we start migration, tests or server we have to create database manually and grant rights for a user that will be used to connect to a database. Since we will use MySQL from the zip archive we will not have to deal with user rights. In order to create database we first have to start MySQL database. Go to the bin subdirectory of the folder where you have unpacked archive, <code>C:\mysql-5.5.8-win32\lib</code> in my case and start <code>mysqld.exe</code> application. Open new Command Prompt in the same folder, start MySQL client as root user and create database rwin_book:</p>
-<div class="highlight"><pre><code class="bat">Z:\mysql<span class="m">-5</span>.<span class="m">5</span>.<span class="m">8</span>-win<span class="m">32</span>\bin<span class="p">&gt;</span><span class="n">mysql</span> -u root
+<div class="highlight"><pre><code class="bat">c:\mysql<span class="m">-5</span>.<span class="m">6</span>.<span class="m">23</span>-win<span class="m">32</span>\bin<span class="p">&gt;</span><span class="n">mysql</span> -u root
 Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is <span class="m">12</span>
-Server version: <span class="m">5</span>.<span class="m">5</span>.<span class="m">8</span> MySQL Community Server (GPL)
+Your MySQL connection id is <span class="m">1</span>
+Server version: <span class="m">5</span>.<span class="m">6</span>.<span class="m">23</span> MySQL Community Server (GPL)
 
-Copyright (c) <span class="m">2000</span><span class="p">,</span> <span class="m">2010</span><span class="p">,</span> Oracle and<span class="n">/or</span> its affiliates. All rights reserved.
+Copyright (c) <span class="m">2000</span><span class="p">,</span> <span class="m">2015</span><span class="p">,</span> Oracle and<span class="n">/or</span> its affiliates. All rights reserved.
 
 Oracle is a registered trademark of Oracle Corporation and<span class="n">/or</span> its
 affiliates. Other names may be trademarks of their respective
 owners.
 
 Type <span class="s1">&#39;help;&#39;</span> or <span class="s1">&#39;\h&#39;</span> <span class="k">for</span> help. Type <span class="s1">&#39;\c&#39;</span> to clear the current input statement.
-mysql<span class="p">&gt;</span> <span class="n">create</span> database rwin_book_devel;
-<span class="k">If</span> you want to check whether database is create you can use show databases MySQL command:
-mysql<span class="p">&gt;</span> <span class="n">show</span> databases;
+
+mysql<span class="p">&gt;</span> <span class="n">create</span> database rwin_book_devel;</code></pre></div>
+
+<p>If you want to check whether database is created you can use <code>show databases</code> MySQL command:</p>
+
+<div class="highlight"><pre><code class="bat">mysql<span class="p">&gt;</span> <span class="n">show</span> databases;
 +--------------------+
 <span class="p">|</span> <span class="n">Database</span>           |
 +--------------------+
 <span class="p">|</span> <span class="n">information_schema</span> |
-<span class="p">|</span> <span class="n">database</span>           |
 <span class="p">|</span> <span class="n">mysql</span>              |
 <span class="p">|</span> <span class="n">performance_schema</span> |
 <span class="p">|</span> <span class="n">rwin_book_devel</span>    |
+<span class="p">|</span> <span class="n">test</span>               |
 +--------------------+
-<span class="m">6</span> rows in <span class="k">set</span> (<span class="m">0</span>.<span class="m">02</span> sec)
-</code></pre></div><p>With server up and running we have to configure Rails application to use MySQL database. Development section of database.yml file inside config directory should look like this:</p>
+<span class="m">5</span> rows in <span class="k">set</span> (<span class="m">0</span>.<span class="m">00</span> sec)</code></pre></div>
+
+<p>With DB server up and running we have to configure Rails application to use MySQL database. Development section of database.yml file inside config directory should look like this:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="ss">development</span><span class="p">:</span>
   <span class="ss">adapter</span><span class="p">:</span> <span class="n">mysql2</span>
   <span class="ss">encoding</span><span class="p">:</span> <span class="n">utf8</span>
   <span class="ss">database</span><span class="p">:</span> <span class="n">rwin_book_devel</span>
   <span class="ss">username</span><span class="p">:</span> <span class="n">root</span>
-  <span class="ss">password</span><span class="p">:</span>
-</code></pre></div><p>In addition we have to alter Gemfile so bundler knows which gems are required by our application. Without removing sqlite3 gem add new line to Gemfile and run bundle install to finish application configuration.</p>
-<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;mysql2&#39;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s1">&#39;mysql2&#39;</span>
-</code></pre></div><p>Before starting database migration we have to do one more thing. Our mysql2 is linked against <code>libmysql.dll</code> shared library and, just as we did with SQlite3, we must put this library in the path so operating system can find it when needed. Now you can migrate database with rake <code>db:migration</code> task and start rwin_book application.</p>
+  <span class="ss">password</span><span class="p">:</span></code></pre></div>
 
-      <br/>
-      
-      <a href="/book/ch03-01.html" title="Previous: Sqlite3 Database">&laquo; Sqlite3 Database</a>
-      
+<p>In addition we have to alter Gemfile so bundler knows which gems are required by our application. Without removing sqlite3 gem add new line to Gemfile and run bundle install to finish application configuration.</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch03-03.html" title="Next: Postgresql Database">Postgresql Database &raquo; </a>
-       
-    </div>
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;mysql2&#39;</span></code></pre></div>
 
-    <hr>
-  </div>
-</div>
+<p>Before starting database migration we have to do one more thing. Our mysql2 is linked against <code>libmysql.dll</code> shared library and, just as we did with SQlite3, we must put this library in the path so operating system can find it when needed. Now you can migrate database with <code>rake db:migrate</code> task and start rwin_book application.</p>
 
+            <hr>
+          </section>
+
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch03-01.html"><i class="icon-double-angle-left"></i> Rails And Sqlite3 Database</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch03-03.html">Postgresql Database <i class=" icon-double-angle-right"></i></a>
+        
+      </section>
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

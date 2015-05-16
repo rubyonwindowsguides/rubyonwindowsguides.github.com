@@ -2,25 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-   <title>Sqlite3 Database</title>
+   <title>Rails And Sqlite3 Database</title>
    <meta name="author" content="Boško Ivanišević" />
-
-   <link rel="stylesheet" href="/css/960.css" type="text/css" />
-   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
-   <link rel="stylesheet" href="/css/text.css" type="text/css" />
-
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
 
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/menu.css" type="text/css" media="screen, projection" />
 
    <!-- Update your html tag to include the itemscope and itemtype attributes -->
    <html itemscope itemtype="http://schema.org/Book">
 
    <!-- Add the following three tags inside head -->
    <meta itemprop="name" content="Ruby On Windows Guides">
-   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
 
    <!-- Place this render call where appropriate -->
    <script type="text/javascript">
@@ -46,253 +40,338 @@
    </script>
 </head>
 <body>
+  <header>
+  </header>
+  <main class="content">
+    <section class="container">
+      <nav class="navbar-fixed-top">
+        <div class="container">
+          <a href="/">Book</a>
+          <a href="/about.html">About</a>
+          <span style="float: right;">
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone annotation="inline"></g:plusone>
+          </span>
+        </div>
+      </nav>
+      <div id="header">
+        <table>
+          <tr>
+            <td>
+              <h1>Ruby on Windows Guides</h1>
+              <h4 class="title">by Boško Ivanišević</h4>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="main" class="row-fluid">
+        <article class="post">
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch03-00.html"><i class="icon-double-angle-left"></i> Ruby On Rails 4 On Windows</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch03-02.html">Mysql Database <i class=" icon-double-angle-right"></i></a>
+        
+            <hr>
+      </section>
 
-<div class="container_12">
-  <!--<div class="grid_2">
-    <br/>
-    <h1>Something</h1>
-    <p>
-      Lorem ipsum, etc, etc, so on and so forth
-    </p>
-  </div>-->
+          <section>
+            <h2>Rails And SQlite3 Database</h2>
 
-  <div id="main" class="grid_10">
-    <div id="header" class="grid_10">
-      <br/>
-      <table>
-        <tr>
-          <td><img src="/images/rwg_logo_blue.png"/></td>
-          <td>
-            <h1>Ruby on Windows Guides</h1>
-            <h4>Comprehensive guides for Ruby on Windows</h4>
-            <h6>by Bosko Ivanisevic</h6>
-          </td>
-        </tr>
-      </table>
-    </div>
+<p>SQlite3 database is default database used when new Ruby on Rails application is created. This can be changed with the <code>-d</code> or <code>--database</code> option with allowed values: <code>mysql</code>, <code>oracle</code>, <code>postgresql</code>, <code>sqlite3</code>, <code>frontbase</code>, <code>ibm_db</code>, <code>sqlserver</code>, <code>jdbcmysql</code>, <code>jdbcsqlite3</code>, <code>jdbcpostgresql</code>, <code>jdbc</code>. We&#39;ll stick with default value and create new Rails application:</p>
 
-    <div id="menu" class="grid_10">
-      <a href="/">Book</a>
-      <a href="/about.html">About</a>
-      <!-- <a href="/something.html">Something</a> -->
-    </div>
-
-    <div id="content" class="grid_10">
-      <!-- Place this tag where you want the +1 button to render -->
-      <g:plusone annotation="inline"></g:plusone>
-      <br/>
-      
-      <a href="/book/ch03-00.html" title="Previous: Ruby On Rails 3 On Windows">&laquo; Ruby On Rails 3 On Windows</a>
-      
-
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch03-02.html" title="Next: Mysql Database">Mysql Database &raquo; </a>
-       
-      <br/><br/>
-
-      <h2>SQlite3 database</h2>
-<p>SQlite3 database is default database used when new Ruby on Rails application is created. This can be changed with the <code>-d</code> or <code>--database</code> option with allowed values: <code>mysql</code>, <code>oracle</code>, <code>postgresql</code>, <code>sqlite3</code>, <code>frontbase</code>, <code>ibm_db</code>. We&#8217;ll stick with default value and create new Rails application:</p>
 <div class="highlight"><pre><code class="bat">C:\projects<span class="p">&gt;</span><span class="n">rails</span> new rwin_book
+DL is deprecated<span class="p">,</span> please use Fiddle
       create
-      create  README
+      create  README.rdoc
       create  Rakefile
       create  config.ru
       create  .gitignore
       create  Gemfile
       create  app
+      create  app<span class="n">/assets/javascripts/application.js</span>
+      create  app<span class="n">/assets/stylesheets/application.css</span>
       create  app<span class="n">/controllers/application_controller.rb</span>
       create  app<span class="n">/helpers/application_helper.rb</span>
-      create  app<span class="n">/mailers</span>
-      create  app<span class="n">/models</span>
       create  app<span class="n">/views/layouts/application.html.erb</span>
+      create  app<span class="n">/assets/images/.keep</span>
+      create  app<span class="n">/mailers/.keep</span>
+      create  app<span class="n">/models/.keep</span>
+      create  app<span class="n">/controllers/concerns/.keep</span>
+      create  app<span class="n">/models/concerns/.keep</span>
+      create  bin
+      create  bin<span class="n">/bundle</span>
+      create  bin<span class="n">/rails</span>
+      create  bin<span class="n">/rake</span>
+      create  bin<span class="n">/setup</span>
       create  config
       create  config<span class="n">/routes.rb</span>
       create  config<span class="n">/application.rb</span>
       create  config<span class="n">/environment.rb</span>
+      create  config<span class="n">/secrets.yml</span>
       create  config<span class="n">/environments</span>
       create  config<span class="n">/environments/development.rb</span>
       create  config<span class="n">/environments/production.rb</span>
       create  config<span class="n">/environments/test.rb</span>
       create  config<span class="n">/initializers</span>
+      create  config<span class="n">/initializers/assets.rb</span>
       create  config<span class="n">/initializers/backtrace_silencers.rb</span>
+      create  config<span class="n">/initializers/cookies_serializer.rb</span>
+      create  config<span class="n">/initializers/filter_parameter_logging.rb</span>
       create  config<span class="n">/initializers/inflections.rb</span>
       create  config<span class="n">/initializers/mime_types.rb</span>
-      create  config<span class="n">/initializers/secret_token.rb</span>
       create  config<span class="n">/initializers/session_store.rb</span>
+      create  config<span class="n">/initializers/wrap_parameters.rb</span>
       create  config<span class="n">/locales</span>
       create  config<span class="n">/locales/en.yml</span>
       create  config<span class="n">/boot.rb</span>
       create  config<span class="n">/database.yml</span>
       create  db
       create  db<span class="n">/seeds.rb</span>
-      create  doc
-      create  doc<span class="n">/README_FOR_APP</span>
       create  lib
       create  lib<span class="n">/tasks</span>
-      create  lib<span class="n">/tasks/.gitkeep</span>
+      create  lib<span class="n">/tasks/.keep</span>
+      create  lib<span class="n">/assets</span>
+      create  lib<span class="n">/assets/.keep</span>
       create  log
-      create  log<span class="n">/server.log</span>
-      create  log<span class="n">/production.log</span>
-      create  log<span class="n">/development.log</span>
-      create  log<span class="n">/test.log</span>
+      create  log<span class="n">/.keep</span>
       create  public
       create  public<span class="n">/404.html</span>
       create  public<span class="n">/422.html</span>
       create  public<span class="n">/500.html</span>
       create  public<span class="n">/favicon.ico</span>
-      create  public<span class="n">/index.html</span>
       create  public<span class="n">/robots.txt</span>
-      create  public<span class="n">/images</span>
-      create  public<span class="n">/images/rails.png</span>
-      create  public<span class="n">/stylesheets</span>
-      create  public<span class="n">/stylesheets/.gitkeep</span>
-      create  public<span class="n">/javascripts</span>
-      create  public<span class="n">/javascripts/application.js</span>
-      create  public<span class="n">/javascripts/controls.js</span>
-      create  public<span class="n">/javascripts/dragdrop.js</span>
-      create  public<span class="n">/javascripts/effects.js</span>
-      create  public<span class="n">/javascripts/prototype.js</span>
-      create  public<span class="n">/javascripts/rails.js</span>
-      create  script
-      create  script<span class="n">/rails</span>
-      create  test
       create  test<span class="n">/fixtures</span>
-      create  test<span class="n">/functional</span>
+      create  test<span class="n">/fixtures/.keep</span>
+      create  test<span class="n">/controllers</span>
+      create  test<span class="n">/controllers/.keep</span>
+      create  test<span class="n">/mailers</span>
+      create  test<span class="n">/mailers/.keep</span>
+      create  test<span class="n">/models</span>
+      create  test<span class="n">/models/.keep</span>
+      create  test<span class="n">/helpers</span>
+      create  test<span class="n">/helpers/.keep</span>
       create  test<span class="n">/integration</span>
-      create  test<span class="n">/performance/browsing_test.rb</span>
+      create  test<span class="n">/integration/.keep</span>
       create  test<span class="n">/test_helper.rb</span>
-      create  test<span class="n">/unit</span>
-      create  tmp
-      create  tmp<span class="n">/sessions</span>
-      create  tmp<span class="n">/sockets</span>
       create  tmp<span class="n">/cache</span>
-      create  tmp<span class="n">/pids</span>
-      create  vendor<span class="n">/plugins</span>
-      create  vendor<span class="n">/plugins/.gitkeep</span>
-</code></pre></div><p>Rails has created basic structure of our application. If you open config\database.yml file in the editor you will see that application is completely configured for SQlite3 database:</p>
+      create  tmp<span class="n">/cache/assets</span>
+      create  vendor<span class="n">/assets/javascripts</span>
+      create  vendor<span class="n">/assets/javascripts/.keep</span>
+      create  vendor<span class="n">/assets/stylesheets</span>
+      create  vendor<span class="n">/assets/stylesheets/.keep</span>
+         run  bundle install
+DL is deprecated<span class="p">,</span> please use Fiddle
+Fetching gem metadata from https:<span class="n">//rubygems.org/..........</span>
+Fetching version metadata from https:<span class="n">//rubygems.org/..</span>
+Resolving dependencies...
+Installing rake <span class="m">10</span>.<span class="m">4</span>.<span class="m">2</span>
+Using i<span class="m">18</span>n <span class="m">0</span>.<span class="m">7</span>.<span class="m">0</span>
+Installing json <span class="m">1</span>.<span class="m">8</span>.<span class="m">2</span>
+Using minitest <span class="m">5</span>.<span class="m">5</span>.<span class="m">1</span>
+Using thread_safe <span class="m">0</span>.<span class="m">3</span>.<span class="m">5</span>
+Using tzinfo <span class="m">1</span>.<span class="m">2</span>.<span class="m">2</span>
+Using activesupport <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Using builder <span class="m">3</span>.<span class="m">2</span>.<span class="m">2</span>
+Using erubis <span class="m">2</span>.<span class="m">7</span>.<span class="m">0</span>
+Using mini_portile <span class="m">0</span>.<span class="m">6</span>.<span class="m">2</span>
+Using nokogiri <span class="m">1</span>.<span class="m">6</span>.<span class="m">6</span>.<span class="m">2</span>
+Using rails-deprecated_sanitizer <span class="m">1</span>.<span class="m">0</span>.<span class="m">3</span>
+Using rails-dom-testing <span class="m">1</span>.<span class="m">0</span>.<span class="m">6</span>
+Using loofah <span class="m">2</span>.<span class="m">0</span>.<span class="m">1</span>
+Using rails-html-sanitizer <span class="m">1</span>.<span class="m">0</span>.<span class="m">2</span>
+Using actionview <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Using rack <span class="m">1</span>.<span class="m">6</span>.<span class="m">0</span>
+Using rack-test <span class="m">0</span>.<span class="m">6</span>.<span class="m">3</span>
+Using actionpack <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Using globalid <span class="m">0</span>.<span class="m">3</span>.<span class="m">3</span>
+Using activejob <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Using mime-types <span class="m">2</span>.<span class="m">4</span>.<span class="m">3</span>
+Using mail <span class="m">2</span>.<span class="m">6</span>.<span class="m">3</span>
+Using actionmailer <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Using activemodel <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Using arel <span class="m">6</span>.<span class="m">0</span>.<span class="m">0</span>
+Using activerecord <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Installing debug_inspector <span class="m">0</span>.<span class="m">0</span>.<span class="m">2</span>
+Installing binding_of_caller <span class="m">0</span>.<span class="m">7</span>.<span class="m">2</span>
+Using bundler <span class="m">1</span>.<span class="m">9</span>.<span class="m">1</span>
+Installing columnize <span class="m">0</span>.<span class="m">9</span>.<span class="m">0</span>
+Installing byebug <span class="m">4</span>.<span class="m">0</span>.<span class="m">4</span>
+Installing coffee-script-source <span class="m">1</span>.<span class="m">9</span>.<span class="m">1</span>
+Installing execjs <span class="m">2</span>.<span class="m">4</span>.<span class="m">0</span>
+Installing coffee-script <span class="m">2</span>.<span class="m">3</span>.<span class="m">0</span>
+Using thor <span class="m">0</span>.<span class="m">19</span>.<span class="m">1</span>
+Using railties <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Installing coffee-rails <span class="m">4</span>.<span class="m">1</span>.<span class="m">0</span>
+Using hike <span class="m">1</span>.<span class="m">2</span>.<span class="m">3</span>
+Using multi_json <span class="m">1</span>.<span class="m">11</span>.<span class="m">0</span>
+Installing jbuilder <span class="m">2</span>.<span class="m">2</span>.<span class="m">12</span>
+Installing jquery-rails <span class="m">4</span>.<span class="m">0</span>.<span class="m">3</span>
+Using tilt <span class="m">1</span>.<span class="m">4</span>.<span class="m">1</span>
+Using sprockets <span class="m">2</span>.<span class="m">12</span>.<span class="m">3</span>
+Installing sprockets-rails <span class="m">2</span>.<span class="m">2</span>.<span class="m">4</span>
+Using rails <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span>
+Installing rdoc <span class="m">4</span>.<span class="m">2</span>.<span class="m">0</span>
+Installing sass <span class="m">3</span>.<span class="m">4</span>.<span class="m">13</span>
+Installing sass-rails <span class="m">5</span>.<span class="m">0</span>.<span class="m">1</span>
+Installing sdoc <span class="m">0</span>.<span class="m">4</span>.<span class="m">1</span>
+Installing sqlite<span class="m">3</span> <span class="m">1</span>.<span class="m">3</span>.<span class="m">10</span>
+Installing turbolinks <span class="m">2</span>.<span class="m">5</span>.<span class="m">3</span>
+Installing tzinfo-data <span class="m">1</span>.<span class="m">2015</span>.<span class="m">2</span>
+Installing uglifier <span class="m">2</span>.<span class="m">7</span>.<span class="m">1</span>
+Installing web-console <span class="m">2</span>.<span class="m">1</span>.<span class="m">2</span>
+Bundle complete! <span class="m">12</span> Gemfile dependencies<span class="p">,</span> <span class="m">55</span> gems now installed.
+Use <span class="sb">`bundle show [gemname]`</span> to see where a bundled gem is installed.
+Post-install message from rdoc:
+Depending <span class="k">on</span> your version of ruby<span class="p">,</span> you may need to install ruby rdoc<span class="n">/ri</span> data:
+
+&lt;<span class="o">=</span> <span class="m">1</span>.<span class="m">8</span>.<span class="m">6</span> : unsupported
+<span class="o">=</span> <span class="m">1</span>.<span class="m">8</span>.<span class="m">7</span> : gem install rdoc-data; rdoc-data --install
+<span class="o">=</span> <span class="m">1</span>.<span class="m">9</span>.<span class="m">1</span> : gem install rdoc-data; rdoc-data --install
+&gt;<span class="o">=</span> <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span> : nothing to <span class="k">do</span>! Yay!</code></pre></div>
+
+<p>Rails has created basic structure of our application. If you open <code>config\database.yml</code> file in the editor you will see that application is completely configured for SQlite3 database:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="c1"># SQLite version 3.x</span>
-<span class="c1">#   gem install sqlite3-ruby (not necessary on OS X Leopard)</span>
-<span class="ss">development</span><span class="p">:</span>
+<span class="c1">#   gem install sqlite3</span>
+<span class="c1">#</span>
+<span class="c1">#   Ensure the SQLite 3 gem is defined in your Gemfile</span>
+<span class="c1">#   gem &#39;sqlite3&#39;</span>
+<span class="c1">#</span>
+<span class="ss">default</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">default</span>
   <span class="ss">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
-  <span class="ss">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">sqlite3</span>
   <span class="ss">pool</span><span class="p">:</span> <span class="mi">5</span>
   <span class="ss">timeout</span><span class="p">:</span> <span class="mi">5000</span>
+
+<span class="ss">development</span><span class="p">:</span>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">default</span>
+  <span class="ss">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">sqlite3</span>
 
 <span class="c1"># Warning: The database defined as &quot;test&quot; will be erased and</span>
 <span class="c1"># re-generated from your development database when you run &quot;rake&quot;.</span>
 <span class="c1"># Do not set this db to the same as development or production.</span>
 <span class="nb">test</span><span class="p">:</span>
-  <span class="ss">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">default</span>
   <span class="ss">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="nb">test</span><span class="o">.</span><span class="n">sqlite3</span>
-  <span class="ss">pool</span><span class="p">:</span> <span class="mi">5</span>
-  <span class="ss">timeout</span><span class="p">:</span> <span class="mi">5000</span>
 
 <span class="ss">production</span><span class="p">:</span>
-  <span class="ss">adapter</span><span class="p">:</span> <span class="n">sqlite3</span>
-  <span class="ss">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">sqlite3</span>
-  <span class="ss">pool</span><span class="p">:</span> <span class="mi">5</span>
-  <span class="ss">timeout</span><span class="p">:</span> <span class="mi">5000</span>
-</code></pre></div><p>All three environments: development, test and production will use different SQlite3 databases named after the name of the corresponding environment with extension .sqlite3.</p>
-<p>Let&#8217;s start our new application. Go to rwin_book directory and execute:</p>
+  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">default</span>
+  <span class="ss">database</span><span class="p">:</span> <span class="n">db</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">sqlite3</span></code></pre></div>
+
+<p>All three environments: development, test and production will use different SQlite3 databases named after the name of the corresponding environment with extension .sqlite3.</p>
+
+<p>You can now start application. If you followed all instructions from the book you will see server&#39;s log messages in the Command Prompt:</p>
+
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> server
-</code></pre></div><p>If you get following message:</p>
-<div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span>
-Could not find gem <span class="s1">&#39;sqlite3-ruby (&gt;= 0, runtime)&#39;</span> in any of the gem
-sources listed in your Gemfile.
-</code></pre></div><p>Try running `bundle install`.</p>
-<p>You probably have Rails 3.0.3 version which uses sqlite3-ruby gem which is obsolete. Between versions 1.3.2 and 1.3.3 sqlite3-ruby gem was renamed to sqlite3. However sqlite3-ruby still can be installed for compatibility purposes. This gem is actually empty one that just requires new sqlite3 gem and can be used till all applications are updated to use new one. So if this is the case just install sqlite3-ruby:</p>
-<div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">gem</span> install sqlite<span class="m">3</span>-ruby --no-rdoc --no-ri
-#######################################################
-
-Hello! The sqlite<span class="m">3</span>-ruby gem has changed it&#39;s name to just sqlite<span class="m">3</span>.  Rather than
-installing <span class="sb">`sqlite3-ruby`</span><span class="p">,</span> you should install <span class="sb">`sqlite3`</span>.  Please update your
-dependencies accordingly.
-
-Thanks from the Ruby sqlite<span class="m">3</span> team!
-
-<span class="p">&lt;</span><span class="n">3</span> <span class="p">&lt;</span><span class="n">3</span> <span class="p">&lt;</span><span class="n">3</span> <span class="p">&lt;</span><span class="n">3</span>
-
-#######################################################
-Successfully installed sqlite<span class="m">3</span>-ruby<span class="m">-1</span>.<span class="m">3</span>.<span class="m">3</span>
-<span class="m">1</span> gem installed
-</code></pre></div><p>You can now start application WEBrick server. If you followed all instructions from the book you will see server&#8217;s log messages in the Command Prompt:</p>
-<div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> server
+DL is deprecated<span class="p">,</span> please use Fiddle
 <span class="o">=</span><span class="p">&gt;</span> <span class="n">Booting</span> WEBrick
-<span class="o">=</span><span class="p">&gt;</span> <span class="n">Rails</span> <span class="m">3</span>.<span class="m">0</span>.<span class="m">3</span> application starting in development <span class="k">on</span> http:<span class="n">//0.0.0.0:3000</span>
-<span class="o">=</span><span class="p">&gt;</span> <span class="n">Call</span> with -d to detach
+<span class="o">=</span><span class="p">&gt;</span> <span class="n">Rails</span> <span class="m">4</span>.<span class="m">2</span>.<span class="m">1</span> application starting in development <span class="k">on</span> http:<span class="n">//localhost:3000</span>
+<span class="o">=</span><span class="p">&gt;</span> <span class="n">Run</span> <span class="sb">`rails server -h`</span> <span class="k">for</span> more startup options
 <span class="o">=</span><span class="p">&gt;</span> <span class="n">Ctrl</span>-C to shutdown server
-[<span class="m">2011-02-02</span> <span class="m">19</span><span class="nl">:01:07</span>] INFO  WEBrick <span class="m">1</span>.<span class="m">3</span>.<span class="m">1</span>
-[<span class="m">2011-02-02</span> <span class="m">19</span><span class="nl">:01:07</span>] INFO  ruby <span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span> (<span class="m">2010-12-25</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
-[<span class="m">2011-02-02</span> <span class="m">19</span><span class="nl">:01:07</span>] INFO  WEBrick<span class="c">::HTTPServer#start: pid=800 port=3000</span>
-</code></pre></div><p>But if you jumped right to this chapter you there are few important things I must emphasize. If you built sqlite3 gem from the sources it is linked against libsqlite3-0.dll and this shared library must be in the path. In the chapter Building Native Gems we copied it to the C:\tools folder and added this directory to the path. You have to copy sqlite3.exe file to that folder too since we will need it soon.</p>
-<p>On the other hand if you just installed binary version of sqlite3 gem it is linked against sqlite3.dll. This is actually the same shared library but with different name. In that case you have two solutions. The first one is to just rename built dll or you can download official version from SQlite3 site and unpack it to the folder that is in the path. Nevertheless SQlite3&#8217;s shared library and executable must be in the path. This is common mistake of Rails on Windows beginners so keep that on your mind.</p>
-<p><img src="/images/fig0301.png" title="Rails welcome page" alt="Rails welcome page" /></p>
-<p>Now open Web browser and go to Rails welcome page at http://localhost:3000. It gives you few hints how to start developing Rails application and, if you click on the top link, it will show you information about your application&#8217;s environment.</p>
-<p>So far, so good. Be we still haven&#8217;t do anything with the database so we cannot be sure the SQlite3 gem is working as expected. Open new Command Prompt, go to the root folder of your new Rails application and execute following rake task:</p>
-<div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rake</span> db:create
-</code></pre></div><p>If you get warning messages that database files already exist do not worry since this is just and information that application has found newly created databases. Namely for SQlite3 there is no need to create database in advance. Rails will do that for you if database does not exist. Finally start Rails database console and check a list of all tables in the database:</p>
+[<span class="m">2015-03-29</span> <span class="m">19</span><span class="nl">:22:11</span>] INFO  WEBrick <span class="m">1</span>.<span class="m">3</span>.<span class="m">1</span>
+[<span class="m">2015-03-29</span> <span class="m">19</span><span class="nl">:22:11</span>] INFO  ruby <span class="m">2</span>.<span class="m">1</span>.<span class="m">5</span> (<span class="m">2014-11-13</span>) [i<span class="m">386</span>-mingw<span class="m">32</span>]
+[<span class="m">2015-03-29</span> <span class="m">19</span><span class="nl">:22:11</span>] INFO  WEBrick<span class="c">::HTTPServer#start: pid=26020 port=3000</span></code></pre></div>
+
+<p>But if you jumped right to this chapter there are few important things I must emphasize. If you built sqlite3 gem from the sources it is linked against libsqlite3-0.dll and this shared library must be in the path. In the chapter <a href="/book/ch02-05.html">Installing Native Gems</a> we copied it to the <code>C:\tools</code> folder and added this directory to the path. You have to copy sqlite3.exe file to that folder too since we will need it soon.</p>
+
+<p>On the other hand if you just installed binary version of sqlite3 gem it is linked against sqlite3.dll. This is actually the same shared library but with different name. In that case you have two solutions. The first one is to just rename built dll or you can download official version from SQlite3 site and unpack it to the folder that is in the path. Nevertheless SQlite3&#39;s shared library and executable must be in the path. This is common mistake of Rails on Windows beginners so keep that on your mind.</p>
+
+<p><img src="/images/fig0301.png" alt="&quot;&quot;" title="Rails welcome page"></p>
+
+<p>Now open Web browser and go to Rails welcome page at http://localhost:3000. It gives you few hints how to start developing Rails application and, if you click on the top link, it will show you information about your application&#39;s environment.</p>
+
+<p>So far, so good. But we still haven&#39;t do anything with the database so we cannot be sure the SQlite3 gem is working as expected. Open new Command Prompt, go to the root folder of your new Rails application and execute following rake task:</p>
+
+<div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rake</span> db:create</code></pre></div>
+
+<p>If you get warning messages that database files already exist do not worry since this is just an information that application has found newly created database. Namely for SQlite3 there is no need to create database in advance. Rails will do that for you if database does not exist. Finally start Rails database console and check a list of all tables in the database:</p>
+
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> dbconsole
-SQLite version <span class="m">3</span>.<span class="m">7</span>.<span class="m">4</span>
-Enter <span class="s2">&quot;.help&quot;</span> <span class="k">for</span> instructions
-Enter SQL statements terminated with a <span class="s2">&quot;;&quot;</span>
+DL is deprecated<span class="p">,</span> please use Fiddle
+SQLite version <span class="m">3</span>.<span class="m">8</span>.<span class="m">8</span>.<span class="m">3</span> <span class="m">2015-02-25</span> <span class="m">13</span><span class="nl">:29:11</span>
+Enter <span class="s2">&quot;.help&quot;</span> <span class="k">for</span> usage hints.
 sqlite&gt; .tables
-sqlite&gt;
-</code></pre></div><p>Of course we didn&#8217;t create any table so the list is empty. Time is to create some. Since we are working with Ruby on Rails we will not create tables directly but will do it Rails way. The most simple approach is to generate model, view and controller with Rails scaffold generator:</p>
+sqlite&gt;</code></pre></div>
+
+<p>Of course we didn&#39;t create any table so the list is empty. Time is to create some. Since we are working with Ruby on Rails we will not create tables directly but will do it the Rails way. The most simple approach is to generate model, view and controller with Rails scaffold generator:</p>
+
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rails</span> generate scaffold RubyWinSource name:string \
  author:string url:string
       invoke  active_record
-      create    db<span class="n">/migrate/20110202205221_create_ruby_win_sources.rb</span>
-      create    app<span class="n">/models/ruby_win_source.rb</span>
-      invoke    test_unit
-      create      test<span class="n">/unit/ruby_win_source_test.rb</span>
-      create      test<span class="n">/fixtures/ruby_win_sources.yml</span>
-       route  resources <span class="nl">:ruby_win_sources</span>
-      invoke  scaffold_controller
-      create    app<span class="n">/controllers/ruby_win_sources_controller.rb</span>
-      invoke    erb
-      create      app<span class="n">/views/ruby_win_sources</span>
-      create      app<span class="n">/views/ruby_win_sources/index.html.erb</span>
-      create      app<span class="n">/views/ruby_win_sources/edit.html.erb</span>
-      create      app<span class="n">/views/ruby_win_sources/show.html.erb</span>
-      create      app<span class="n">/views/ruby_win_sources/new.html.erb</span>
-      create      app<span class="n">/views/ruby_win_sources/_form.html.erb</span>
-      invoke    test_unit
-      create      test<span class="n">/functional/ruby_win_sources_controller_test.rb</span>
-      invoke    helper
-      create      app<span class="n">/helpers/ruby_win_sources_helper.rb</span>
-      invoke      test_unit
-      create        test<span class="n">/unit/helpers/ruby_win_sources_helper_test.rb</span>
-      invoke  stylesheets
-      create    public<span class="n">/stylesheets/scaffold.css</span>
-</code></pre></div><p>Scaffold generator will create model, migration file which will create database table that corresponds to it, controller and few basic views. We will not dive into Rails internals and will focus on the database related parts instead. Going on the Rails way let&#8217;s start database migration:</p>
+     create    db<span class="n">/migrate/20150329172834_create_ruby_win_sources.rb</span>
+     create    app<span class="n">/models/ruby_win_source.rb</span>
+     invoke    test_unit
+     create      test<span class="n">/models/ruby_win_source_test.rb</span>
+     create      test<span class="n">/fixtures/ruby_win_sources.yml</span>
+     invoke  resource_route
+      route    resources <span class="nl">:ruby_win_sources</span>
+     invoke  scaffold_controller
+     create    app<span class="n">/controllers/ruby_win_sources_controller.rb</span>
+     invoke    erb
+     create      app<span class="n">/views/ruby_win_sources</span>
+     create      app<span class="n">/views/ruby_win_sources/index.html.erb</span>
+     create      app<span class="n">/views/ruby_win_sources/edit.html.erb</span>
+     create      app<span class="n">/views/ruby_win_sources/show.html.erb</span>
+     create      app<span class="n">/views/ruby_win_sources/new.html.erb</span>
+     create      app<span class="n">/views/ruby_win_sources/_form.html.erb</span>
+     invoke    test_unit
+     create      test<span class="n">/controllers/ruby_win_sources_controller_test.rb</span>
+     invoke    helper
+     create      app<span class="n">/helpers/ruby_win_sources_helper.rb</span>
+     invoke      test_unit
+     invoke    jbuilder
+     create      app<span class="n">/views/ruby_win_sources/index.json.jbuilder</span>
+     create      app<span class="n">/views/ruby_win_sources/show.json.jbuilder</span>
+     invoke  assets
+     invoke    coffee
+     create      app<span class="n">/assets/javascripts/ruby_win_sources.coffee</span>
+     invoke    scss
+     create      app<span class="n">/assets/stylesheets/ruby_win_sources.scss</span>
+     invoke  scss
+     create    app<span class="n">/assets/stylesheets/scaffolds.scss</span></code></pre></div>
+
+<p>Scaffold generator will create model, migration file which will create database table that corresponds to it, controller and few basic views. We will not dive into Rails internals and will focus on the database related parts instead. Going on the Rails way let&#39;s start database migration:</p>
+
 <div class="highlight"><pre><code class="bat">C:\projects\rwin_book<span class="p">&gt;</span><span class="n">rake</span> db:migrate
-(in c:<span class="n">/projects/rwin_book)</span>
-<span class="o">==</span>  CreateRubyWinSources: migrating <span class="o">===========================================</span>
+<span class="o">==</span> <span class="m">20150329172834</span> CreateRubyWinSources: migrating <span class="o">=============================</span>
 -- create_table(<span class="nl">:ruby_win_sources</span>)
-   -<span class="p">&gt;</span> <span class="n">0</span>.<span class="m">0000</span>s
-<span class="o">==</span>  CreateRubyWinSources: migrated (<span class="m">0</span>.<span class="m">0000</span>s) <span class="o">==================================</span>
-</code></pre></div><p>If you want you can also list existing tables in Rails database console:</p>
-<div class="highlight"><pre><code class="bat">sqlite&gt; .tables
-ruby_win_sources   schema_migrations
-</code></pre></div><p>Finally let&#8217;s add few good Web sources related to Ruby on Windows:</p>
-<p><img src="/images/fig0302.png" title="List of Ruby on Windows sources." alt="List of Ruby on Windows sources." /></p>
-<p>What we&#8217;ve accomplished so far? We created new Rails application, test SQlite3 connection through Rails database console, created new model and inserted few records in the database. Now when we know that Rails and SQlite3 are working on Windows, it is time to move on and explore other database adapters.</p>
+   -<span class="p">&gt;</span> <span class="n">0</span>.<span class="m">0156</span>s
+<span class="o">==</span> <span class="m">20150329172834</span> CreateRubyWinSources: migrated (<span class="m">0</span>.<span class="m">0156</span>s) <span class="o">====================</span></code></pre></div>
 
-      <br/>
-      
-      <a href="/book/ch03-00.html" title="Previous: Ruby On Rails 3 On Windows">&laquo; Ruby On Rails 3 On Windows</a>
-      
+<p>If you want you can also list existing tables in Rails database console:</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch03-02.html" title="Next: Mysql Database">Mysql Database &raquo; </a>
-       
-    </div>
+<div class="highlight"><pre><code class="bat">C:\projects\rwin_book\rails dbconsole
+SQLite version <span class="m">3</span>.<span class="m">8</span>.<span class="m">8</span>.<span class="m">3</span> <span class="m">2015-02-25</span> <span class="m">13</span><span class="nl">:29:11</span>
+Enter <span class="s2">&quot;.help&quot;</span> <span class="k">for</span> usage hints.
+sqlite&gt; .tables
+ruby_win_sources   schema_migrations</code></pre></div>
 
-    <hr>
-  </div>
-</div>
+<p>In order to simplify things lets remove some Rails features before we enter some data. Delete following two lines from <code>rwin_book\app\views\layouts\application.html.erb</code> file:</p>
 
+<div class="highlight"><pre><code class="html"><span class="err">&lt;</span>%= stylesheet_link_tag    &#39;application&#39;, media: &#39;all&#39;, &#39;data-turbolinks-track&#39; =&gt; true %&gt;
+<span class="err">&lt;</span>%= javascript_include_tag &#39;application&#39;, &#39;data-turbolinks-track&#39; =&gt; true %&gt;</code></pre></div>
+
+<p>Finally let&#39;s add few good Web sources related to Ruby on Windows. Start Rails server and go to <code>http://localhost:3000/ruby_win_sources</code> and click on &quot;New Ruby win source&quot; link, fill in the data and click on the button &quot;Create Ruby win source&quot;. On the image below you can see result with my sources.</p>
+
+<p><img src="/images/fig0302.png" alt="&quot;&quot;" title="List of Ruby on Windows sources."></p>
+
+<p>What we&#39;ve accomplished so far? We created new Rails application, tested SQlite3 connection through Rails database console, created new model and inserted few records in the database. Now when we know that Rails and SQlite3 are working on Windows, it is time to move on and explore other database adapters.</p>
+
+            <hr>
+          </section>
+
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch03-00.html"><i class="icon-double-angle-left"></i> Ruby On Rails 4 On Windows</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch03-02.html">Mysql Database <i class=" icon-double-angle-right"></i></a>
+        
+      </section>
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

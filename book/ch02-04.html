@@ -5,22 +5,16 @@
    <title>Devkit</title>
    <meta name="author" content="Boško Ivanišević" />
 
-   <link rel="stylesheet" href="/css/960.css" type="text/css" />
-   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
-   <link rel="stylesheet" href="/css/text.css" type="text/css" />
-
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
-
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/menu.css" type="text/css" media="screen, projection" />
 
    <!-- Update your html tag to include the itemscope and itemtype attributes -->
    <html itemscope itemtype="http://schema.org/Book">
 
    <!-- Add the following three tags inside head -->
    <meta itemprop="name" content="Ruby On Windows Guides">
-   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
 
    <!-- Place this render call where appropriate -->
    <script type="text/javascript">
@@ -46,57 +40,55 @@
    </script>
 </head>
 <body>
+  <header>
+  </header>
+  <main class="content">
+    <section class="container">
+      <nav class="navbar-fixed-top">
+        <div class="container">
+          <a href="/">Book</a>
+          <a href="/about.html">About</a>
+          <span style="float: right;">
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone annotation="inline"></g:plusone>
+          </span>
+        </div>
+      </nav>
+      <div id="header">
+        <table>
+          <tr>
+            <td>
+              <h1>Ruby on Windows Guides</h1>
+              <h4 class="title">by Boško Ivanišević</h4>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="main" class="row-fluid">
+        <article class="post">
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch02-03.html"><i class="icon-double-angle-left"></i> Ruby Version Managers</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch02-05.html">Installing Native Gems <i class=" icon-double-angle-right"></i></a>
+        
+            <hr>
+      </section>
 
-<div class="container_12">
-  <!--<div class="grid_2">
-    <br/>
-    <h1>Something</h1>
-    <p>
-      Lorem ipsum, etc, etc, so on and so forth
-    </p>
-  </div>-->
+          <section>
+            <h2>DevKit</h2>
 
-  <div id="main" class="grid_10">
-    <div id="header" class="grid_10">
-      <br/>
-      <table>
-        <tr>
-          <td><img src="/images/rwg_logo_blue.png"/></td>
-          <td>
-            <h1>Ruby on Windows Guides</h1>
-            <h4>Comprehensive guides for Ruby on Windows</h4>
-            <h6>by Bosko Ivanisevic</h6>
-          </td>
-        </tr>
-      </table>
-    </div>
+<p>Ruby gems can roughly be divided into two types. Gems that during installation do not require external tools and those that require them. First type of gems are either completely written in Ruby or have pre-built binaries for a system they are installed on. Second type of gems are written in C/C++ and require build tools capable of compiling C/C++ source and creating shared libraries. No matter if you use Linux, OS X or Windows operating system you must have build tools in order to install such gems.</p>
 
-    <div id="menu" class="grid_10">
-      <a href="/">Book</a>
-      <a href="/about.html">About</a>
-      <!-- <a href="/something.html">Something</a> -->
-    </div>
+<p>One of the goals of RubyInstaller project was to make it possible to install gems written in C/C++ on Windows. Solution was named DevKit. It is a set of MSYS and MinGW based build tools that make it easy and simple to build native C/C++ Ruby extensions. For Ruby 2.2 DevKit is based on 32 bit MinGW 4.7.2 compiler suite for Windows.</p>
 
-    <div id="content" class="grid_10">
-      <!-- Place this tag where you want the +1 button to render -->
-      <g:plusone annotation="inline"></g:plusone>
-      <br/>
-      
-      <a href="/book/ch02-03.html" title="Previous: Pik">&laquo; Pik</a>
-      
+<p>Go ahead and download RubyInstaller&#39;s <a href="http://cdn.rubyinstaller.org/archives/devkits/DevKit-mingw64-32-4.7.2-20130224-1151-sfx.exe">Ruby DevKit</a> self extracting archive and unpack it. It is recommended to unpack DevKit to a path without spaces since MSYS tools do not handle such paths correctly. Throughout the book I&#39;ll assume DevKit is located at <code>C:\Ruby\DevKit</code>.</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch02-05.html" title="Next: Installing Native Gems">Installing Native Gems &raquo; </a>
-       
-      <br/><br/>
+<p>You have to take some precautions if you want to assure proper DevKit functioning. If you have Cygwin or other MSYS/MinGW build tools in the path you should remove them. Usually these tools keep their configuration files (<code>.bashrc</code>, <code>.bash_profile</code>) in user&#39;s home directory and these files can be a cause of DevKit malfunctioning. Before you go on with DevKit installation check your system for any of these.</p>
 
-      <h2>DevKit</h2>
-<p>Ruby gems can roughly be divided into two types. Gems that during installation do not require external tools. These gems are either completely written in Ruby or have pre-built binaries for a system they are installed to. Second type of gems are written in C/C++ and require build tools capable of compiling C/C++ source and creating shared libraries. No matter if you use Linux, <span class="caps">OSX</span> or Windows operating system you must have build tools in order to install such gems.</p>
-<p>One of the goals of RubyInstaller project was to make it possible to install gems written in C/C++ on Windows. Solution was named DevKit. It is a set of <span class="caps">MSYS</span> and MinGW based build tools that make it easy and simple to build native C/C++ Ruby extensions. At the time of writing this book DevKit is based on <span class="caps">TDM</span> 4.5.1 compiler suite for Windows that include latest stable release of <span class="caps">GCC</span> tool set.</p>
-<p>Go ahead and download RubyInstaller&#8217;s <code>DevKit-tdm-32-4.5.1-20101214-1400-sfx.exe</code> self extracting archive and unpack it. It is recommended to unpack DevKit to a path without space since <span class="caps">MSYS</span> tools do not handle such paths correctly. Throughout the book I&#8217;ll assume DevKit is located at <code>C:\Ruby\DevKit</code>.</p>
-<p>You have to take some precautions if you want to assure proper DevKit functioning. If you have Cygwin or other <span class="caps">MSYS</span>/MinGW build tools in the path you should remove them from the path. Usually these tools keep their configuration files (<code>.bashrc</code>, <code>.bash_profile</code>) in user&#8217;s home directory and these files can be a cause of DevKit malfunction. Finally E-TextEditor, Windows version of TextMate – very popular editor among Ruby on Rails developers, comes with Cygwin which can prevent building native Ruby extensions with the DevKit. Before you go on with DevKit installation check your system.</p>
-<p>RubyInstaller&#8217;s DevKit comes with Ruby script that is used to inject it to all Ruby versions you have installed on the system. You will find dk.rb script in <code>C:\Ruby\DevKit</code> directory. Let&#8217;s execute it now and check the output:</p>
+<p>RubyInstaller&#39;s DevKit comes with Ruby script, dk.rb, that is used to inject it to all Ruby versions you have installed on the system. You will find dk.rb file in <code>C:\Ruby\DevKit</code> directory. Let&#39;s execute it now and check the output:</p>
+
 <div class="highlight"><pre><code class="bat">c:\Ruby\DevKit<span class="p">&gt;</span><span class="n">ruby</span> dk.rb
 
 Configures an MSYS<span class="n">/MinGW</span> based Development Kit (DevKit) <span class="k">for</span>
@@ -114,22 +106,27 @@ where COMMAND is one of:
 
 and <span class="s1">&#39;install&#39;</span> [options] are:
 
-  -f<span class="p">,</span> --force  overwrite existing helper scripts
-</code></pre></div><p>As indicated by the message you have to use one of three commands: <code>init</code>, <code>review</code> and <code>install</code> when you execute script. Moreover commands should be executed in the same order as they are listed in the output.</p>
-<p>First command collects data about installed Ruby versions on the system. Goto directory where you have unpacked DevKit (you&#8217;ll see in a moment why) and execute script passing it <code>init</code> command.</p>
-<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">cd</span> Ruby\DevKit
+  -f<span class="p">,</span> --force  overwrite existing helper scripts</code></pre></div>
+
+<p>As indicated by the message you have to use one of three commands: <code>init</code>, <code>review</code> and <code>install</code> when you execute script. Moreover commands should be executed in the same order as they are listed in the output.</p>
+
+<p>First command collects data about installed Ruby versions on the system. Goto directory where you have unpacked DevKit (you&#39;ll see in a moment why) and execute script passing it <code>init</code> command.</p>
+
+<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">cd</span> c:\Ruby\DevKit
 
 c:\Ruby\DevKit<span class="p">&gt;</span><span class="n">ruby</span> dk.rb init
-[INFO] found RubyInstaller v<span class="m">1</span>.<span class="m">9</span>.<span class="m">2</span> at c:<span class="n">/Ruby/192</span>
+[INFO] found RubyInstaller v<span class="m">2</span>.<span class="m">2</span>.<span class="m">1</span> at c:<span class="n">/Ruby/22</span>
 
 Initialization complete! Please review and modify the auto-generated
 <span class="s1">&#39;config.yml&#39;</span> file to ensure it contains the root directories to all
-of the installed Rubies you want enhanced by the DevKit.
-</code></pre></div><p>Script has created <code>config.yml</code> file in the folder from which script was executed. That&#8217;s why we switched to DevKit directory before we started it. As you can see only one Ruby version has been found, and that&#8217;s the one for which we have used installer. As Pik, DevKit searches your system&#8217;s registry for installed Rubies and for each version found, it displays a message and writes necessary data to the configuration file. Here is the code that lies behind this “magic”</p>
+of the installed Rubies you want enhanced by the DevKit.</code></pre></div>
+
+<p>Script has created <code>config.yml</code> file in the folder from which script was executed. That&#39;s why we switched to DevKit directory before we started it. As you can see only one Ruby version has been found, and that&#39;s the one for which we have used installer. As Pik, DevKit searches your system&#39;s registry for installed Rubies and for each version found, it displays a message and writes necessary data to the configuration file. Here is the code that lies behind this “magic”</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">scan_for</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
   <span class="n">ris</span> <span class="o">=</span> <span class="o">[]</span>
-  <span class="o">[</span><span class="ss">Win32</span><span class="p">:</span><span class="ss">:Registry</span><span class="o">::</span><span class="no">HKEY_LOCAL_MACHINE</span><span class="p">,</span>
-  <span class="ss">Win32</span><span class="p">:</span><span class="ss">:Registry</span><span class="o">::</span><span class="no">HKEY_CURRENT_USER</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">hive</span><span class="o">|</span>
+  <span class="o">[</span><span class="no">Win32</span><span class="o">::</span><span class="no">Registry</span><span class="o">::</span><span class="no">HKEY_LOCAL_MACHINE</span><span class="p">,</span>
+  <span class="no">Win32</span><span class="o">::</span><span class="no">Registry</span><span class="o">::</span><span class="no">HKEY_CURRENT_USER</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">hive</span><span class="o">|</span>
     <span class="k">begin</span>
       <span class="n">hive</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">ri_key</span><span class="o">|</span>
         <span class="n">ri_key</span><span class="o">.</span><span class="n">each_key</span> <span class="k">do</span> <span class="o">|</span><span class="n">skey</span><span class="p">,</span> <span class="n">wtime</span><span class="o">|</span>
@@ -143,12 +140,14 @@ of the installed Rubies you want enhanced by the DevKit.
           <span class="k">end</span>
         <span class="k">end</span>
       <span class="k">end</span>
-    <span class="k">rescue</span> <span class="ss">Win32</span><span class="p">:</span><span class="ss">:Registry</span><span class="o">::</span><span class="no">Error</span>
+    <span class="k">rescue</span> <span class="no">Win32</span><span class="o">::</span><span class="no">Registry</span><span class="o">::</span><span class="no">Error</span>
     <span class="k">end</span>
   <span class="k">end</span>
   <span class="n">ris</span>
-<span class="k">end</span>
-</code></pre></div><p>Script searches key within <code>HKLM</code> (<code>HKEY_LOCAL_MACHINE</code>) and <code>HKCU</code> (<code>HKEY_CURRENT_USER</code>) passed as an argument for sub-key that matches version pattern <code>/\d\.\d\.\d/</code>. This is regular expression that corresponds to three numbers (<code>\d</code>) separated by dots (<code>\.</code>). If it finds one it reads InstallLocation string value and replaces Windows path separator, backslash (<code>'\'</code>), with path separator which is correctly handled by MinGW – forward slash (<code>'/'</code>). Finally it stores path in the array which is returned as a result of the method. Keys that are searched are <code>Software\RubyInstaller\MRI</code> and <code>Software\RubyInstaller\Rubinius</code>. These are only Rubies that are supported by DevKit at the moment. We should see what has been written to the configuration file.</p>
+<span class="k">end</span></code></pre></div>
+
+<p>Script searches key within <code>HKLM</code> (<code>HKEY_LOCAL_MACHINE</code>) and <code>HKCU</code> (<code>HKEY_CURRENT_USER</code>) passed as an argument for sub-key that matches version pattern <code>/\d\.\d\.\d/</code>. This is regular expression that corresponds to three numbers (<code>\d</code>) separated by dots (<code>\.</code>). If it finds one, it reads InstallLocation string value and replaces Windows path separator, backslash (<code>&#39;\&#39;</code>), with path separator which is correctly handled by MinGW – forward slash (<code>&#39;/&#39;</code>). Finally it stores path in the array which is returned as a result of the method. Keys that are searched are <code>Software\RubyInstaller\MRI</code> and <code>Software\RubyInstaller\Rubinius</code>. These are only Rubies that are supported by DevKit at the moment. We should see what has been written to the configuration file.</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="c1"># This configuration file contains the absolute path locations of all</span>
 <span class="c1"># installed Rubies to be enhanced to work with the DevKit. This config</span>
 <span class="c1"># file is generated by the &#39;ruby dk.rb init&#39; step and may be modified</span>
@@ -163,38 +162,47 @@ of the installed Rubies you want enhanced by the DevKit.
 <span class="c1"># - C:/ruby192dev</span>
 <span class="c1">#</span>
 <span class="o">---</span>
-<span class="o">-</span> <span class="ss">c</span><span class="p">:</span><span class="sr">/Ruby/</span><span class="mi">192</span>
-</code></pre></div><p>Besides detailed explanation in the comments, script has actually serialized Ruby array with only one element, path to the Ruby version installed with the installer. Does it mean we cannot use DevKit for other Ruby versions we built or just unpacked? Of course not. We may modify this file and manually add all versions we intend to use DevKit with, as long as we follow <span class="caps">YAML</span> specification for serializing arrays.</p>
-<p><span class="caps">YAML</span> uses particular sequence of characters for array elements. Each entry begins on its own line and sequences indicates each entry with a dash and space (@- @). Sequence of scalars, as it is stated in the <span class="caps">YAML</span> specification, or entries in the Ruby array is therefore written as:</p>
+<span class="o">-</span> <span class="ss">c</span><span class="p">:</span><span class="sr">/Ruby/</span><span class="mi">22</span></code></pre></div>
+
+<p>Besides detailed explanation in the comments, script has actually serialized Ruby array with only one element, path to the Ruby version installed with the installer. Does it mean we cannot use DevKit for other Ruby versions we built or just unpacked? Of course not. We may modify this file and manually add all versions we intend to use DevKit with, as long as we follow YAML specification for serializing arrays.</p>
+
+<p>YAML uses particular sequence of characters for array elements. Each entry begins on its own line and sequences indicates each entry with a dash and space (<code>-</code>). Sequence of scalars, as it is stated in the YAML specification, or entries in the Ruby array is therefore written as:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="o">-</span> <span class="no">Ruby</span>
 <span class="o">-</span> <span class="n">is</span> <span class="n">a</span>
-<span class="o">-</span> <span class="n">great</span> <span class="n">programming</span> <span class="n">language</span>
-</code></pre></div><p>After parsing it in Ruby this set will result in an Array object with three elements:</p>
-<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="err">“</span><span class="no">Ruby</span><span class="err">”</span><span class="p">,</span> <span class="err">“</span><span class="n">is</span> <span class="n">a</span><span class="err">”</span><span class="p">,</span> <span class="err">“</span><span class="n">great</span> <span class="n">programming</span> <span class="n">language</span><span class="err">”</span><span class="o">]</span>
-</code></pre></div><p>With this background we are ready to add Ruby versions that we have on the system. Apart from Ruby 1.9.2p136 we have Ruby 1.8.7p330, Ruby 1.9.3dev and IronRuby. As stated above DevKit supports only <span class="caps">MRI</span> and Rubinius Rubies so we can leave out IronRuby. For each additional version we have on the system we must add one line that starts with a dash-space sequence followed by the full path where it is on the disk. Final version of <code>config.yml</code> file should be (comments omitted):</p>
+<span class="o">-</span> <span class="n">great</span> <span class="n">programming</span> <span class="n">language</span></code></pre></div>
+
+<p>After parsing it in Ruby this set will result in an Array object with three elements:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="err">“</span><span class="no">Ruby</span><span class="err">”</span><span class="p">,</span> <span class="err">“</span><span class="n">is</span> <span class="n">a</span><span class="err">”</span><span class="p">,</span> <span class="err">“</span><span class="n">great</span> <span class="n">programming</span> <span class="n">language</span><span class="err">”</span><span class="o">]</span></code></pre></div>
+
+<p>With this background we are ready to add Ruby versions that we have on the system. Apart from Ruby 2.2.1p85 we have Ruby Dev. For each additional version we have on the system we must add one line that starts with a dash-space sequence followed by the full path where it is on the disk. Final version of <code>config.yml</code> file should be (comments omitted):</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="o">---</span>
-<span class="o">-</span> <span class="ss">c</span><span class="p">:</span><span class="sr">/Ruby/</span><span class="mi">192</span>
-<span class="o">-</span> <span class="ss">c</span><span class="p">:</span><span class="sr">/Ruby/</span><span class="mi">187</span>
-<span class="o">-</span> <span class="ss">c</span><span class="p">:</span><span class="sr">/Ruby/</span><span class="mi">193</span><span class="n">dev</span>
-</code></pre></div><p>Next suggested <code>dk.rb</code> command is <code>review</code>. This command will check our configuration file and if it is valid, information will be printed out:</p>
+<span class="o">-</span> <span class="ss">c</span><span class="p">:</span><span class="sr">/Ruby/</span><span class="mi">22</span>
+<span class="o">-</span> <span class="ss">c</span><span class="p">:</span><span class="sr">/Ruby/</span><span class="no">Dev</span></code></pre></div>
+
+<p>Next suggested <code>dk.rb</code> command is <code>review</code>. This command will check our configuration file and if it is valid, information will be printed out:</p>
+
 <div class="highlight"><pre><code class="bat">c:\Ruby\DevKit<span class="p">&gt;</span><span class="n">ruby</span> dk.rb review
 Based upon the settings in the <span class="s1">&#39;config.yml&#39;</span> file generated
 from running <span class="s1">&#39;ruby dk.rb init&#39;</span> and any of your customizations<span class="p">,</span>
 DevKit functionality will be injected into the following Rubies
 when you run <span class="s1">&#39;ruby dk.rb install&#39;</span>.
 
-C:<span class="n">/Ruby/192</span>
-C:<span class="n">/Ruby/187</span>
-C:<span class="n">/Ruby/193dev</span>
-</code></pre></div><p>As expected <code>dk.rb</code> has found all Ruby versions we added, beside the one that was original added by init command. It is time to inject DevKit in all listed Ruby versions. Execute script with install command:</p>
+C:<span class="n">/Ruby/22</span>
+C:<span class="n">/Ruby/Dev</span></code></pre></div>
+
+<p>As expected <code>dk.rb</code> has found all Ruby versions we added, beside the one that was original added by init command. It is time to inject DevKit in all listed Ruby versions. Execute script with install command:</p>
+
 <div class="highlight"><pre><code class="bat">c:\Ruby\DevKit<span class="p">&gt;</span><span class="n">ruby</span> dk.rb install
-[INFO] Updating convenience notice gem override <span class="k">for</span> <span class="s1">&#39;C:/Ruby/192&#39;</span>
-[INFO] Installing <span class="s1">&#39;C:/Ruby/192/lib/ruby/site_ruby/devkit.rb&#39;</span>
-[INFO] Updating convenience notice gem override <span class="k">for</span> <span class="s1">&#39;C:/Ruby/187&#39;</span>
-[INFO] Installing <span class="s1">&#39;C:/Ruby/187/lib/ruby/site_ruby/devkit.rb&#39;</span>
-[INFO] Updating convenience notice gem override <span class="k">for</span> <span class="s1">&#39;C:/Ruby/193dev&#39;</span>
-[INFO] Installing <span class="s1">&#39;C:/Ruby/193dev/lib/ruby/site_ruby/devkit.rb&#39;</span>
-</code></pre></div><p>Script has installed <code>devkit.rb</code> file in <code>site_ruby</code> directories in each Ruby version that we added to configuration file. Directory <code>site_ruby</code> has special meaning. This is the place where you want to put Ruby extensions other than those managed by Rubygems. Therefore if you want to extend Ruby without building new gem this is the place where you will put your scripts. You shouldn&#8217;t use it too often. As a matter of act it should be used carefully and only if you really want to add some low-level extension. DevKit is exactly that – low level Ruby extension for Windows operating systems. Without it Ruby on Windows would not be capable to build native gems. So what is actually written in devkit.rb?</p>
+[INFO] Updating convenience notice gem override <span class="k">for</span> <span class="s1">&#39;C:/Ruby/22&#39;</span>
+[INFO] Installing <span class="s1">&#39;C:/Ruby/22/lib/ruby/site_ruby/devkit.rb&#39;</span>
+[INFO] Updating convenience notice gem override <span class="k">for</span> <span class="s1">&#39;C:/Ruby/Dev&#39;</span>
+[INFO] Installing <span class="s1">&#39;C:/Ruby/Dev/lib/ruby/site_ruby/devkit.rb&#39;</span></code></pre></div>
+
+<p>Script has installed <code>devkit.rb</code> file in <code>site_ruby</code> directories in each Ruby version that we added to configuration file. Directory <code>site_ruby</code> has special meaning. This is the place where you want to put Ruby extensions other than those managed by Rubygems. Therefore if you want to extend Ruby without building new gem this is the place where you will put your scripts. You shouldn&#39;t use it too often. As a matter of act it should be used carefully and only if you really want to add some low-level extension. DevKit is exactly that – low level Ruby extension for Windows operating systems. Without it Ruby on Windows would not be capable to build native gems. So what is actually written in devkit.rb?</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="c1"># enable RubyInstaller DevKit usage as a vendorable helper library</span>
 <span class="k">unless</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;PATH&#39;</span><span class="o">].</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;c:\\Ruby\\DevKit\\mingw\\bin&#39;</span><span class="p">)</span> <span class="k">then</span>
   <span class="nb">puts</span> <span class="s1">&#39;Temporarily enhancing PATH to include DevKit...&#39;</span>
@@ -203,9 +211,12 @@ C:<span class="n">/Ruby/193dev</span>
 <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;RI_DEVKIT&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;c:\\Ruby\\DevKit&#39;</span>
 <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;CC&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;gcc&#39;</span>
 <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;CPP&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;cpp&#39;</span>
-<span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;CXX&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;g++&#39;</span>
-</code></pre></div><p>Script first checks whether our DevKit is in the path. If it is not, it prints out informational message and adds necessary directories at the beginning of the path so they are very first directories searched for the executable files after directory from which executable is invoked. In other words if some Ruby, script tries to execute for example gcc, g++ or some other <span class="caps">MSYS</span>/MinGW executable and if it is not found in the current executing directory, first paths where they will be looked for are our DevKit directories. Besides it sets few environment variables needed for building native gems. Very clever solution, isn&#8217;t it? We do not have to have these directories in the path all the time. When needed they will be added.</p>
-<p>DevKit&#8217;s <code>dk.rb</code> script has printed out one more type of message though. This was <code>[INFO] Updating convenience notice gem override for &lt;ruby_version&gt;</code>. Script has obviously updated something so let&#8217;s check what. The relevant part of code in <code>dk.rb</code> is:</p>
+<span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;CXX&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;g++&#39;</span></code></pre></div>
+
+<p>Script first checks whether our DevKit is in the path. If it is not, it prints out informational message and adds necessary directories at the beginning of the path so they are very first directories searched for the executable files after directory from which executable is invoked. In other words if some Ruby, script tries to execute for example gcc, g++ or some other MSYS/MinGW executable and if it is not found in the current executing directory, first paths where they will be looked for are our DevKit directories. Besides, it sets few environment variables needed for building native gems. Very clever solution, isn&#39;t it? We do not have to have these directories in the path all the time. When needed they will be added.</p>
+
+<p>DevKit&#39;s <code>dk.rb</code> script has printed out one more type of message though. This was <code>[INFO] Updating convenience notice gem override for &lt;ruby_version&gt;</code>. Script has obviously updated something so let&#39;s check what. The relevant part of code in <code>dk.rb</code> is:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="n">target_ruby</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">folder</span><span class="o">|</span>
   <span class="n">target</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s1">&#39;defaults&#39;</span><span class="p">,</span> <span class="s1">&#39;operating_system.rb&#39;</span><span class="p">)</span>
   <span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
@@ -234,8 +245,10 @@ C:<span class="n">/Ruby/193dev</span>
     <span class="nb">puts</span> <span class="s2">&quot;[INFO] Installing &#39;</span><span class="si">#{</span><span class="n">target</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
     <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">gem_override</span><span class="p">)</span> <span class="p">}</span>
   <span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div><p>Without going in too much details, what can be seen from the code is that script is looking for <code>operating_system.rb</code> file in some directories. Depending whether it has found old versions of the file, it updates them and if <code>operating_system.rb</code> file is not found at all it will create new one if it is forced by passing <code>--force</code> argument to install command. The <code>operating_system.rb</code> file is bundled with all RubyInstaller versions and they alter a way Rubygems install gems. Content of newly created, or updated, <code>operating_system.rb</code> file is:</p>
+<span class="k">end</span></code></pre></div>
+
+<p>Without going in too much details, what can be seen from the code is that script is looking for <code>operating_system.rb</code> file in some directories. Depending whether it has found old versions of the file, it updates them and if <code>operating_system.rb</code> file is not found at all it will create new one if it is forced by passing <code>--force</code> argument to install command. The <code>operating_system.rb</code> file is bundled with all RubyInstaller versions and they alter a way Rubygems install gems. Content of newly created, or updated, <code>operating_system.rb</code> file is:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="no">Gem</span><span class="o">.</span><span class="n">pre_install</span> <span class="k">do</span> <span class="o">|</span><span class="n">gem_installer</span><span class="o">|</span>
   <span class="k">unless</span> <span class="n">gem_installer</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">empty?</span>
     <span class="k">unless</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;PATH&#39;</span><span class="o">].</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;c:\\Ruby\\DevKit\\mingw\\bin&#39;</span><span class="p">)</span> <span class="k">then</span>
@@ -249,42 +262,51 @@ C:<span class="n">/Ruby/193dev</span>
     <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;CPP&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;cpp&#39;</span>
     <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;CXX&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;g++&#39;</span>
   <span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div><p>The code calls singleton method <code>pre_install</code> of Gem module and passes it a block. This method is actually a hook that will be called prior to any gem installation. It accepts a block of code, converts it to Proc object and adds it to the list of procedures that will be called before any gem is installed.</p>
+<span class="k">end</span></code></pre></div>
+
+<p>The code calls singleton method <code>pre_install</code> of Gem module and passes it a block. This method is actually a hook that will be called prior to any gem installation. It accepts a block of code, converts it to Proc object and adds it to the list of procedures that will be called before any gem is installed.</p>
+
 <p>Block passed to the pre-install hook checks whether gem has native extensions. If it has, it further checks for tools essential for building them. These tools are compiler (gcc), shell script (sh) and make. For each of them script executes simple shell command and if it was successfully finished it does nothing. Otherwise it informs us that we need build tools and where to get them. It is strongly recommended to run so called smoke test and check if DevKit works correctly:</p>
-<div class="highlight"><pre><code class="bat">C:\Ruby\DevKit<span class="p">&gt;</span><span class="n">gem</span> install rdiscount –platform<span class="o">=</span>ruby
+
+<div class="highlight"><pre><code class="bat">c:\<span class="p">&gt;</span><span class="n">gem</span> install json --platform<span class="o">=</span>ruby
+Fetching: json<span class="m">-1</span>.<span class="m">8</span>.<span class="m">2</span>.gem (<span class="m">100</span>%)
 Temporarily enhancing PATH to include DevKit...
 Building native extensions.  This could take a while...
-Successfully installed rdiscount<span class="m">-1</span>.<span class="m">6</span>.<span class="m">8</span>
-<span class="m">1</span> gem installed
-Installing ri documentation <span class="k">for</span> rdiscount<span class="m">-1</span>.<span class="m">6</span>.<span class="m">8</span>...
-Installing RDoc documentation <span class="k">for</span> rdiscount<span class="m">-1</span>.<span class="m">6</span>.<span class="m">8</span>...
-</code></pre></div><p>First command installs RDiscount gem. Argument <code>–platform=ruby</code> tells Rubygems not to look for pre-built binaries for our system, but to install gem from sources. Since RDiscount gem is implemented in C we will need build tools for its installation.</p>
+Successfully installed json<span class="m">-1</span>.<span class="m">8</span>.<span class="m">2</span>
+Parsing documentation <span class="k">for</span> json<span class="m">-1</span>.<span class="m">8</span>.<span class="m">2</span>
+Installing ri documentation <span class="k">for</span> json<span class="m">-1</span>.<span class="m">8</span>.<span class="m">2</span>
+Done installing documentation <span class="k">for</span> json after <span class="m">1</span> seconds
+<span class="m">1</span> gem installed</code></pre></div>
+
+<p>First command installs json gem. Argument <code>–-platform=ruby</code> tells Rubygems not to look for pre-built binaries for our system, but to install gem from sources. Since json gem is implemented in C we will need build tools for its installation.</p>
+
 <p>DevKit comes with one more utility script. Batch file devkitvars.bat is used to add patch to DevKit folders at the beginning of the path so we can use build tools from any Command Prompt. Open up new Command Prompt window and execute this batch file.</p>
+
 <div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">c</span>:\Ruby\DevKit\devkitvars.bat
 Adding the DevKit to PATH...
 
 C:\<span class="p">&gt;</span><span class="n">gcc</span> --version
-gcc (tdm<span class="m">-1</span>) <span class="m">4</span>.<span class="m">5</span>.<span class="m">0</span>
-Copyright (C) <span class="m">2010</span> Free Software Foundation<span class="p">,</span> Inc.
+gcc (rubenvb<span class="m">-4</span>.<span class="m">7</span>.<span class="m">2</span>-release) <span class="m">4</span>.<span class="m">7</span>.<span class="m">2</span>
+Copyright (C) <span class="m">2012</span> Free Software Foundation<span class="p">,</span> Inc.
 This is free software; see the source <span class="k">for</span> copying conditions.  There is NO
-warranty; not even <span class="k">for</span> MERCHANTABILITY or FITNESS <span class="k">FOR</span> A PARTICULAR PURPOSE.
-</code></pre></div><p>This batch file is useful if you are developing your own native gems and want to build them without installing. After you execute it you will have complete build tool chain available in the Command Prompt.</p>
+warranty; not even <span class="k">for</span> MERCHANTABILITY or FITNESS <span class="k">FOR</span> A PARTICULAR PURPOSE.</code></pre></div>
 
-      <br/>
-      
-      <a href="/book/ch02-03.html" title="Previous: Pik">&laquo; Pik</a>
-      
+<p>This batch file is useful if you are developing your own native gems and want to build them without installing. After you execute it you will have complete build tool chain available in the Command Prompt.</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch02-05.html" title="Next: Installing Native Gems">Installing Native Gems &raquo; </a>
-       
-    </div>
+            <hr>
+          </section>
 
-    <hr>
-  </div>
-</div>
-
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch02-03.html"><i class="icon-double-angle-left"></i> Ruby Version Managers</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch02-05.html">Installing Native Gems <i class=" icon-double-angle-right"></i></a>
+        
+      </section>
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

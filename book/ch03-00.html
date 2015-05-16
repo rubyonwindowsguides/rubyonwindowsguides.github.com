@@ -2,25 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-   <title>Ruby On Rails 3 On Windows</title>
+   <title>Ruby On Rails 4 On Windows</title>
    <meta name="author" content="Boško Ivanišević" />
-
-   <link rel="stylesheet" href="/css/960.css" type="text/css" />
-   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
-   <link rel="stylesheet" href="/css/text.css" type="text/css" />
-
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
 
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/menu.css" type="text/css" media="screen, projection" />
 
    <!-- Update your html tag to include the itemscope and itemtype attributes -->
    <html itemscope itemtype="http://schema.org/Book">
 
    <!-- Add the following three tags inside head -->
    <meta itemprop="name" content="Ruby On Windows Guides">
-   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
 
    <!-- Place this render call where appropriate -->
    <script type="text/javascript">
@@ -46,96 +40,141 @@
    </script>
 </head>
 <body>
+  <header>
+  </header>
+  <main class="content">
+    <section class="container">
+      <nav class="navbar-fixed-top">
+        <div class="container">
+          <a href="/">Book</a>
+          <a href="/about.html">About</a>
+          <span style="float: right;">
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone annotation="inline"></g:plusone>
+          </span>
+        </div>
+      </nav>
+      <div id="header">
+        <table>
+          <tr>
+            <td>
+              <h1>Ruby on Windows Guides</h1>
+              <h4 class="title">by Boško Ivanišević</h4>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="main" class="row-fluid">
+        <article class="post">
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch02-06.html"><i class="icon-double-angle-left"></i> Installing Native Gems From Headers And Shared Libraries</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch03-01.html">Rails And Sqlite3 Database <i class=" icon-double-angle-right"></i></a>
+        
+            <hr>
+      </section>
 
-<div class="container_12">
-  <!--<div class="grid_2">
-    <br/>
-    <h1>Something</h1>
-    <p>
-      Lorem ipsum, etc, etc, so on and so forth
-    </p>
-  </div>-->
+          <section>
+            <h1>Ruby on Rails 4.x on Windows</h1>
 
-  <div id="main" class="grid_10">
-    <div id="header" class="grid_10">
-      <br/>
-      <table>
-        <tr>
-          <td><img src="/images/rwg_logo_blue.png"/></td>
-          <td>
-            <h1>Ruby on Windows Guides</h1>
-            <h4>Comprehensive guides for Ruby on Windows</h4>
-            <h6>by Bosko Ivanisevic</h6>
-          </td>
-        </tr>
-      </table>
-    </div>
+<p>Ruby on Rails is excellent Web application development framework whose popularity has tremendously increased in last few years. Most of the popularity it owes to the fact that it makes some common Web development tasks easier. Being based on MVC (Model-View-Controller) architecture, it gives developer possibility to easily scaffold model, view and controller for basic Web site functionality. In a few simple steps developer is able to create working application skeleton. The latest version 4.x targets either Ruby version 1.9.3+ or 2.x. At the moment of writing this chapter not all gems used by Rails are ready for Ruby 2.2 so for this chapter we will use <a href="http://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-2.1.5.exe">Ruby 2.1.5</a>. Go ahead download and install this version and add it to uru&#39;s list of Rubies.</p>
 
-    <div id="menu" class="grid_10">
-      <a href="/">Book</a>
-      <a href="/about.html">About</a>
-      <!-- <a href="/something.html">Something</a> -->
-    </div>
+<p>With properly installed and configured Ruby version installing Ruby on Rails is easy and straightforward task. Use uru to switch to new Ruby or if this is the only Ruby version you have on the system just start Rails installation.</p>
 
-    <div id="content" class="grid_10">
-      <!-- Place this tag where you want the +1 button to render -->
-      <g:plusone annotation="inline"></g:plusone>
-      <br/>
-      
-      <a href="/book/ch02-06.html" title="Previous: Installing From Headers And Shared Libraries">&laquo; Installing From Headers And Shared Libraries</a>
-      
+<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">gem</span> install rails --no-rdoc --no-ri
+Fetching: thread_safe<span class="m">-0</span>.<span class="m">3</span>.<span class="m">5</span>.gem (<span class="m">100</span>%)
+Successfully installed thread_safe<span class="m">-0</span>.<span class="m">3</span>.<span class="m">5</span>
+Fetching: minitest<span class="m">-5</span>.<span class="m">5</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed minitest<span class="m">-5</span>.<span class="m">5</span>.<span class="m">1</span>
+Fetching: tzinfo<span class="m">-1</span>.<span class="m">2</span>.<span class="m">2</span>.gem (<span class="m">100</span>%)
+Successfully installed tzinfo<span class="m">-1</span>.<span class="m">2</span>.<span class="m">2</span>
+Fetching: i<span class="m">18</span>n<span class="m">-0</span>.<span class="m">7</span>.<span class="m">0</span>.gem (<span class="m">100</span>%)
+Successfully installed i<span class="m">18</span>n<span class="m">-0</span>.<span class="m">7</span>.<span class="m">0</span>
+Fetching: activesupport<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed activesupport<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+Fetching: rails-deprecated_sanitizer<span class="m">-1</span>.<span class="m">0</span>.<span class="m">3</span>.gem (<span class="m">100</span>%)
+Successfully installed rails-deprecated_sanitizer<span class="m">-1</span>.<span class="m">0</span>.<span class="m">3</span>
+Fetching: mini_portile<span class="m">-0</span>.<span class="m">6</span>.<span class="m">2</span>.gem (<span class="m">100</span>%)
+Successfully installed mini_portile<span class="m">-0</span>.<span class="m">6</span>.<span class="m">2</span>
+Fetching: nokogiri<span class="m">-1</span>.<span class="m">6</span>.<span class="m">6</span>.<span class="m">2</span>-x<span class="m">86</span>-mingw<span class="m">32</span>.gem (<span class="m">100</span>%)
+Nokogiri is built with the packaged libraries: libxml<span class="m">2-2</span>.<span class="m">9</span>.<span class="m">2</span><span class="p">,</span> libxslt<span class="m">-1</span>.<span class="m">1</span>.<span class="m">28</span><span class="p">,</span> zlib<span class="m">-1</span>.<span class="m">2</span>.<span class="m">8</span><span class="p">,</span> libiconv<span class="m">-1</span>.<span class="m">14</span>.
+Successfully installed nokogiri<span class="m">-1</span>.<span class="m">6</span>.<span class="m">6</span>.<span class="m">2</span>-x<span class="m">86</span>-mingw<span class="m">32</span>
+Fetching: rails-dom-testing<span class="m">-1</span>.<span class="m">0</span>.<span class="m">6</span>.gem (<span class="m">100</span>%)
+Successfully installed rails-dom-testing<span class="m">-1</span>.<span class="m">0</span>.<span class="m">6</span>
+Fetching: loofah<span class="m">-2</span>.<span class="m">0</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed loofah<span class="m">-2</span>.<span class="m">0</span>.<span class="m">1</span>
+Fetching: rails-html-sanitizer<span class="m">-1</span>.<span class="m">0</span>.<span class="m">2</span>.gem (<span class="m">100</span>%)
+Successfully installed rails-html-sanitizer<span class="m">-1</span>.<span class="m">0</span>.<span class="m">2</span>
+Fetching: erubis<span class="m">-2</span>.<span class="m">7</span>.<span class="m">0</span>.gem (<span class="m">100</span>%)
+Successfully installed erubis<span class="m">-2</span>.<span class="m">7</span>.<span class="m">0</span>
+Fetching: builder<span class="m">-3</span>.<span class="m">2</span>.<span class="m">2</span>.gem (<span class="m">100</span>%)
+Successfully installed builder<span class="m">-3</span>.<span class="m">2</span>.<span class="m">2</span>
+Fetching: actionview<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed actionview<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+Fetching: rack<span class="m">-1</span>.<span class="m">6</span>.<span class="m">0</span>.gem (<span class="m">100</span>%)
+Successfully installed rack<span class="m">-1</span>.<span class="m">6</span>.<span class="m">0</span>
+Fetching: rack-test<span class="m">-0</span>.<span class="m">6</span>.<span class="m">3</span>.gem (<span class="m">100</span>%)
+Successfully installed rack-test<span class="m">-0</span>.<span class="m">6</span>.<span class="m">3</span>
+Fetching: actionpack<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed actionpack<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+Fetching: activemodel<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed activemodel<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+Fetching: arel<span class="m">-6</span>.<span class="m">0</span>.<span class="m">0</span>.gem (<span class="m">100</span>%)
+Successfully installed arel<span class="m">-6</span>.<span class="m">0</span>.<span class="m">0</span>
+Fetching: activerecord<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed activerecord<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+Fetching: mime-types<span class="m">-2</span>.<span class="m">4</span>.<span class="m">3</span>.gem (<span class="m">100</span>%)
+Successfully installed mime-types<span class="m">-2</span>.<span class="m">4</span>.<span class="m">3</span>
+Fetching: mail<span class="m">-2</span>.<span class="m">6</span>.<span class="m">3</span>.gem (<span class="m">100</span>%)
+Successfully installed mail<span class="m">-2</span>.<span class="m">6</span>.<span class="m">3</span>
+Fetching: globalid<span class="m">-0</span>.<span class="m">3</span>.<span class="m">3</span>.gem (<span class="m">100</span>%)
+Successfully installed globalid<span class="m">-0</span>.<span class="m">3</span>.<span class="m">3</span>
+Fetching: activejob<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed activejob<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+Fetching: actionmailer<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed actionmailer<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+Fetching: thor<span class="m">-0</span>.<span class="m">19</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed thor<span class="m">-0</span>.<span class="m">19</span>.<span class="m">1</span>
+Fetching: railties<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed railties<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+Fetching: bundler<span class="m">-1</span>.<span class="m">9</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed bundler<span class="m">-1</span>.<span class="m">9</span>.<span class="m">1</span>
+Fetching: tilt<span class="m">-1</span>.<span class="m">4</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed tilt<span class="m">-1</span>.<span class="m">4</span>.<span class="m">1</span>
+Fetching: multi_json<span class="m">-1</span>.<span class="m">11</span>.<span class="m">0</span>.gem (<span class="m">100</span>%)
+Successfully installed multi_json<span class="m">-1</span>.<span class="m">11</span>.<span class="m">0</span>
+Fetching: hike<span class="m">-1</span>.<span class="m">2</span>.<span class="m">3</span>.gem (<span class="m">100</span>%)
+Successfully installed hike<span class="m">-1</span>.<span class="m">2</span>.<span class="m">3</span>
+Fetching: sprockets<span class="m">-2</span>.<span class="m">12</span>.<span class="m">3</span>.gem (<span class="m">100</span>%)
+Successfully installed sprockets<span class="m">-2</span>.<span class="m">12</span>.<span class="m">3</span>
+Fetching: sprockets-rails<span class="m">-3</span>.<span class="m">0</span>.<span class="m">0</span>.beta<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed sprockets-rails<span class="m">-3</span>.<span class="m">0</span>.<span class="m">0</span>.beta<span class="m">1</span>
+Fetching: rails<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>.gem (<span class="m">100</span>%)
+Successfully installed rails<span class="m">-4</span>.<span class="m">2</span>.<span class="m">1</span>
+<span class="m">34</span> gems installed</code></pre></div>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch03-01.html" title="Next: Sqlite3 Database">Sqlite3 Database &raquo; </a>
-       
-      <br/><br/>
+<p>As the most of Web application frameworks, Ruby on Rails heavily relies on a database as a back-end data storage. Through its built-in database adapters it directly supports SQlite3, MySQL and PostgreSQL databases. This is not the end of the list because you can easily install adapters for other databases like Oracle or MS SQL. The only difference is these adapters are not shipped with Ruby on Rails. Common to all adapters is the fact that they actually use additional extension libraries to connect to target database engine. At the first sight it sounds complicated but in the reality it is quite simple to switch the database Rails uses.</p>
 
-      <h1>Ruby on Rails 3.x on Windows</h1>
-<p>Ruby on Rails is excellent Web application development framework whose popularity has tremendously increased in last few years. Most of the popularity it owes to the fact that it makes some common development tasks easier. Being based on <span class="caps">MVC</span> (Model-View-Controller) architecture, it gives developer possibility to easily scaffold model, view and controller for basic Web site functionality. In a few simple steps developer is able to create working application skeleton. The latest version 3.x targets either Ruby version 1.8.7 or 1.9.2 and drops support for 1.9.1, 1.8.6 and earlier versions.</p>
-<p>All packages that constitute Ruby on Rails, as well as their dependencies, are written in the pure Ruby and are provided as gems. Due to that, installing them on Windows is straightforward:</p>
-<div class="highlight"><pre><code class="ruby"><span class="ss">C</span><span class="p">:\</span><span class="o">&gt;</span><span class="n">gem</span> <span class="n">install</span> <span class="n">rails</span> <span class="err">–</span><span class="n">no</span><span class="o">-</span><span class="n">rdoc</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">ri</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">activesupport</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">builder</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">2</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">i18n</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="mi">0</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">activemodel</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">rack</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">rack</span><span class="o">-</span><span class="nb">test</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="mi">7</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">rack</span><span class="o">-</span><span class="n">mount</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span><span class="o">.</span><span class="mi">13</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">tzinfo</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">24</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">abstract</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">erubis</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">6</span><span class="o">.</span><span class="mi">6</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">actionpack</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">arel</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">7</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">activerecord</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">activeresource</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">mime</span><span class="o">-</span><span class="n">types</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">16</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">polyglot</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">1</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">treetop</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">4</span><span class="o">.</span><span class="mi">9</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">mail</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">15</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">actionmailer</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">thor</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">14</span><span class="o">.</span><span class="mi">6</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">railties</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">bundler</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">9</span>
-<span class="no">Successfully</span> <span class="n">installed</span> <span class="n">rails</span><span class="o">-</span><span class="mi">3</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
-</code></pre></div><p>As the most of Web application frameworks, Ruby on Rails heavily relies on a database as a back-end data storage. Through its built-in database adapters it directly supports SQlite3, MySQL and PostgreSQL databases. This is not the end of the list because you can easily install adapters for other databases like Oracle or MS <span class="caps">SQL</span>. The only difference is these adapters are not shipped with Ruby on Rails. Common to all adapters is the fact that they actually use additional extension libraries to connect to target database engine. At the first sight it sounds complicated but in the reality it is quite simple to switch the database Rails uses.</p>
-<p>Extension libraries for accessing databases were one source of problems on Windows in the past. Natural approach in all Open Source projects is to primarily support and rely on other Open Source projects. Ruby on Rails in no exception. In early RoR days programmers were mostly turned to Linux, leaving Windows behind. At the same time small number of Windows developers, ready to dedicate their spare time to Open Source projects, could not create big enough momentum which would lead to larger number of extension libraries for various databases that work well on Windows. Additional obstacle was the fact that Ruby was build with Visual Studio, commercial project not available to everyone willing to help in this field. Despite this, Windows support was improving over time. Quantum jump has happened with a move to MinGW development environment, just as it did with Ruby.</p>
-<p>Not only more developers were able to contribute, but with some additional tools like rake-compiler it became much easier to create binary gems for specific platform, Windows at the first place. This naturally lead to better support and easier upgrade of extensions, since release cycle was shortened. Even more each develop is now able to build lot of extension libraries by itself, just as we already did with slite3 and mysql2 gems.</p>
+<p>Extension libraries for accessing databases were one source of problems on Windows in the past. Natural approach in all Open Source projects is to primarily support and rely on other Open Source projects. Ruby on Rails in no exception. In early RoR days programmers were mostly turned to Linux, leaving Windows behind. At the same time small number of Windows developers, ready to dedicate their spare time to Open Source projects, could not create big enough momentum which would lead to larger number of extension libraries for various databases that work well on Windows. Additional obstacle was the fact that Ruby was built with Visual Studio, commercial project not available to everyone willing to help in this field. Despite this, Windows support was improving over time. Quantum jump has happened with a move to MinGW development environment, just as it did with Ruby.</p>
 
-      <br/>
-      
-      <a href="/book/ch02-06.html" title="Previous: Installing From Headers And Shared Libraries">&laquo; Installing From Headers And Shared Libraries</a>
-      
+<p>Not only more developers were able to contribute, but with some additional tools like rake-compiler it became much easier to create binary gems for specific platform, Windows at the first place. This naturally lead to better support and easier upgrade of extensions, since release cycle was shortened. Even more, each developer is now able to build lot of extension libraries by itself, just as we already did with slite3 and mysql2 gems.</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch03-01.html" title="Next: Sqlite3 Database">Sqlite3 Database &raquo; </a>
-       
-    </div>
+            <hr>
+          </section>
 
-    <hr>
-  </div>
-</div>
-
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch02-06.html"><i class="icon-double-angle-left"></i> Installing Native Gems From Headers And Shared Libraries</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch03-01.html">Rails And Sqlite3 Database <i class=" icon-double-angle-right"></i></a>
+        
+      </section>
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

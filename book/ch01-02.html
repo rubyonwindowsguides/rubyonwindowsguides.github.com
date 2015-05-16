@@ -5,22 +5,16 @@
    <title>Improving Command Prompt</title>
    <meta name="author" content="Boško Ivanišević" />
 
-   <link rel="stylesheet" href="/css/960.css" type="text/css" />
-   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
-   <link rel="stylesheet" href="/css/text.css" type="text/css" />
-
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
-
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/menu.css" type="text/css" media="screen, projection" />
 
    <!-- Update your html tag to include the itemscope and itemtype attributes -->
    <html itemscope itemtype="http://schema.org/Book">
 
    <!-- Add the following three tags inside head -->
    <meta itemprop="name" content="Ruby On Windows Guides">
-   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
 
    <!-- Place this render call where appropriate -->
    <script type="text/javascript">
@@ -46,76 +40,76 @@
    </script>
 </head>
 <body>
+  <header>
+  </header>
+  <main class="content">
+    <section class="container">
+      <nav class="navbar-fixed-top">
+        <div class="container">
+          <a href="/">Book</a>
+          <a href="/about.html">About</a>
+          <span style="float: right;">
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone annotation="inline"></g:plusone>
+          </span>
+        </div>
+      </nav>
+      <div id="header">
+        <table>
+          <tr>
+            <td>
+              <h1>Ruby on Windows Guides</h1>
+              <h4 class="title">by Boško Ivanišević</h4>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="main" class="row-fluid">
+        <article class="post">
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch01-01.html"><i class="icon-double-angle-left"></i> Windows Command Line</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch01-03.html">A Word About Git Ides And Editors <i class=" icon-double-angle-right"></i></a>
+        
+            <hr>
+      </section>
 
-<div class="container_12">
-  <!--<div class="grid_2">
-    <br/>
-    <h1>Something</h1>
-    <p>
-      Lorem ipsum, etc, etc, so on and so forth
-    </p>
-  </div>-->
+          <section>
+            <h2>Improving Command Prompt</h2>
 
-  <div id="main" class="grid_10">
-    <div id="header" class="grid_10">
-      <br/>
-      <table>
-        <tr>
-          <td><img src="/images/rwg_logo_blue.png"/></td>
-          <td>
-            <h1>Ruby on Windows Guides</h1>
-            <h4>Comprehensive guides for Ruby on Windows</h4>
-            <h6>by Bosko Ivanisevic</h6>
-          </td>
-        </tr>
-      </table>
-    </div>
+<p>In the previous chapter we&#39;ve learned how to enable Unicode characters in the Command Prompt and how to create and change environment variables with the emphasis on the system path. Before we explore all “secrets” of installing Ruby on Windows we will make few more improvements in the Command Prompt.</p>
 
-    <div id="menu" class="grid_10">
-      <a href="/">Book</a>
-      <a href="/about.html">About</a>
-      <!-- <a href="/something.html">Something</a> -->
-    </div>
+<p>Every new Command Prompt on Windows is opened as new window. It is quite impractical if you need to open several Command Prompts. Linux and OSX users have benefit because in one terminal window they can open shells as multiple tabs which makes work in the shell much more comfortable.</p>
 
-    <div id="content" class="grid_10">
-      <!-- Place this tag where you want the +1 button to render -->
-      <g:plusone annotation="inline"></g:plusone>
-      <br/>
-      
-      <a href="/book/ch01-01.html" title="Previous: Windows Command Line">&laquo; Windows Command Line</a>
-      
+<p>There are few applications that can help us working same way on Windows. We will skip commercial ones and focus only on the Open Source solution. Throughout this book we will use <a href="https://code.google.com/p/conemu-maximus5/">conemu-maximus5</a>.</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch01-03.html" title="Next: Word About Editors">Word About Editors &raquo; </a>
-       
-      <br/><br/>
+<p>ConEmu has a lot of options which help you customize it to your needs. Besides background and foreground colors, fonts and other visual customizations you can define hot keys for opening new tabs, switch between them, activating specific tab and many more which we will not discuss here. But one option deserves more attention. Tasks section under Startup group in Settings dialog is used to define which shell will be opened in tabs. ConEmu comes with number of predefined values, but you can define new to use Cygwin or MSYS bash shells. This will come in handy later when we install Git and DevKit. There is only one more improvement remaining.</p>
 
-      <h2>Improving Command Prompt</h2>
-<p>In the previous chapter we&#8217;ve learned how to enable Unicode characters in the Command Prompt, how to change and create environment variables with the emphasis on the system path. Before we explore all “secrets” of installing Ruby on Windows we will make few more improvements in the Command Prompt.</p>
-<p>Every new Command Prompt on Windows is opened as new window. It is quite impractical if you need to open several Command Prompts. Linux and <span class="caps">OSX</span> users have benefit because in one terminal window they can open shells as multiple tabs which make work in the shell much more comfortable. Wouldn&#8217;t it be good to have such a feature on Windows too?</p>
-<p>There are few commercial applications which we will omit here and will focus on the Open Source solution. <a href="http://sourceforge.net/projects/console/">Console application</a>) is the one we will use. Currently it is in the 2.0 beta stage but it is quite stable for everyday use. As a matter of act I use it and I never faced any crash or malfunction. You can choose 32 or 64 bit version depending on the version of Windows you have. At the time of writing this book version is 2.00.147. Console2, as this version is more frequently referred to, comes as a Zip archive. Just unpack it anywhere on the disk and start <code>console.exe</code>. New window with standard Command Prompt will open. You can use menu to open new Command Prompt in a new tab.</p>
-<p>Console2 has a lot of options which help you to customize it to your needs. Besides background and foreground colors, fonts and other visual customizations you can define hot keys for opening new tabs, switch between them, activating specific tab and many more which we will not discuss here. But one option deserves more attention. Tabs section in Settings dialog is used to define which shell will be opened in new tabs. By default Console2 opens tab with cmd.exe shell, but you can use others like Cygwin or <span class="caps">MSYS</span> bash shells. This will come in handy later when we install Git and DevKit.</p>
-<p>Command Prompt on Windows is capable of displaying colored text. Unfortunately Microsoft implementation differs from standard so <span class="caps">ANSI</span> color codes, which are used in all Ruby extensions, are not interpreted correctly. For a long time win32console extension was used on Windows platforms for converting <span class="caps">ANSI</span> color codes in the form Command Prompt understands. Although it did great job at the time and most of extensions were able to use win32console, it had one drawback – slowness.</p>
-<p>At the moment of writing this book recommendation is to use <a href="http://adoxa.110mb.com/ansicon/index.html"><span class="caps">ANSICON</span></a> or <a href="http://github.com/adoxa/ansicon"><span class="caps">ANSICON</span> GitHub Project</a>, application that hooks into <code>cmd.exe</code> process on Windows, parses <span class="caps">ANSI</span> color codes and converts them so Command Prompt can displayed colored output. Like Console2 <span class="caps">ANSICON</span> comes as Zip archive. In order to install it you have to unpack it to some folder on your path. There are few ways <span class="caps">ANSICON</span> can be used. If ansicon.exe is just started new command processor (typically <code>cmd.exe</code>) is started. With option <code>-p</code> <span class="caps">ANSICON</span> hooks in the current Command Prompt and recognition of <span class="caps">ANSI</span> escape sequences is enabled. If you want <span class="caps">ANSICON</span> to be enabled whenever you start new Command Prompt you should invoke it with:</p>
+<p>Command Prompt on Windows is capable of displaying colored text, but Microsoft&#39;s implementation differs from standard used on Linux and Mac OS so ANSI color codes, which are used in all Ruby extensions, are not interpreted correctly. For a long time win32console extension was used on Windows platforms for converting ANSI color codes in the form Command Prompt understands. Although it did great job at the time and most of extensions were able to use win32console, it had one drawback – slowness.</p>
+
+<p>Instead of win32console we will use <a href="http://adoxa.110mb.com/ansicon/index.html">ANSICON</a> (<a href="http://github.com/adoxa/ansicon">GitHub Project</a>), application that hooks into <code>cmd.exe</code> process on Windows, parses ANSI color codes and converts them so Command Prompt can display colored output. ANSICON comes as Zip archive. In order to install it you have to unpack it to some folder on your path. There are few ways ANSICON can be used. If ansicon.exe is just executed, new command processor (typically <code>cmd.exe</code>) is started. With option <code>-p</code> ANSICON hooks in the current Command Prompt and recognition of ANSI escape sequences is enabled. If you want ANSICON to be enabled whenever you start new Command Prompt you should invoke it with:</p>
+
 <div class="highlight"><pre><code class="bat">ansicon -i or
-ansicon -I
-</code></pre></div><p>The first one adds <span class="caps">ANSICON</span> to the <code>AutoRun</code> registry value for current user and the second for local machine.</p>
+ansicon -I</code></pre></div>
 
-      <br/>
-      
-      <a href="/book/ch01-01.html" title="Previous: Windows Command Line">&laquo; Windows Command Line</a>
-      
+<p>The first command adds ANSICON to the <code>AutoRun</code> registry value for current user and the second for local machine.</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch01-03.html" title="Next: Word About Editors">Word About Editors &raquo; </a>
-       
-    </div>
+            <hr>
+          </section>
 
-    <hr>
-  </div>
-</div>
-
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch01-01.html"><i class="icon-double-angle-left"></i> Windows Command Line</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch01-03.html">A Word About Git Ides And Editors <i class=" icon-double-angle-right"></i></a>
+        
+      </section>
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

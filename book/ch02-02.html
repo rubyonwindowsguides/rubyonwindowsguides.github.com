@@ -5,22 +5,16 @@
    <title>Building Ruby</title>
    <meta name="author" content="Boško Ivanišević" />
 
-   <link rel="stylesheet" href="/css/960.css" type="text/css" />
-   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
-   <link rel="stylesheet" href="/css/text.css" type="text/css" />
-
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
-
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/menu.css" type="text/css" media="screen, projection" />
 
    <!-- Update your html tag to include the itemscope and itemtype attributes -->
    <html itemscope itemtype="http://schema.org/Book">
 
    <!-- Add the following three tags inside head -->
    <meta itemprop="name" content="Ruby On Windows Guides">
-   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
 
    <!-- Place this render call where appropriate -->
    <script type="text/javascript">
@@ -46,182 +40,207 @@
    </script>
 </head>
 <body>
+  <header>
+  </header>
+  <main class="content">
+    <section class="container">
+      <nav class="navbar-fixed-top">
+        <div class="container">
+          <a href="/">Book</a>
+          <a href="/about.html">About</a>
+          <span style="float: right;">
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone annotation="inline"></g:plusone>
+          </span>
+        </div>
+      </nav>
+      <div id="header">
+        <table>
+          <tr>
+            <td>
+              <h1>Ruby on Windows Guides</h1>
+              <h4 class="title">by Boško Ivanišević</h4>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="main" class="row-fluid">
+        <article class="post">
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch02-01.html"><i class="icon-double-angle-left"></i> Rubyinstaller</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch02-03.html">Ruby Version Managers <i class=" icon-double-angle-right"></i></a>
+        
+            <hr>
+      </section>
 
-<div class="container_12">
-  <!--<div class="grid_2">
-    <br/>
-    <h1>Something</h1>
-    <p>
-      Lorem ipsum, etc, etc, so on and so forth
-    </p>
-  </div>-->
+          <section>
+            <h2>Building Ruby</h2>
 
-  <div id="main" class="grid_10">
-    <div id="header" class="grid_10">
-      <br/>
-      <table>
-        <tr>
-          <td><img src="/images/rwg_logo_blue.png"/></td>
-          <td>
-            <h1>Ruby on Windows Guides</h1>
-            <h4>Comprehensive guides for Ruby on Windows</h4>
-            <h6>by Bosko Ivanisevic</h6>
-          </td>
-        </tr>
-      </table>
-    </div>
+<p>RubyInstaller project doesn&#39;t provide Ruby installers only. It creates development environment, based on free MinGW tool-chain, that can be used to build Ruby and its components. Project consists of number of Rake tasks aim to build, test and package various Ruby versions.</p>
 
-    <div id="menu" class="grid_10">
-      <a href="/">Book</a>
-      <a href="/about.html">About</a>
-      <!-- <a href="/something.html">Something</a> -->
-    </div>
+<p>Before we start to explore these tasks we have to clone RubyInstaller project.  Open new Command Prompt or Git bash shell or, if you have followed instructions from the book, open corresponding task in ConEmu. Go to our projects directory created in the previous chapter and clone project from GitHub (<code>git://github.com/oneclick/rubyinstaller.git</code>). The whole process in Git&#39;s bash shell should look something like this:</p>
 
-    <div id="content" class="grid_10">
-      <!-- Place this tag where you want the +1 button to render -->
-      <g:plusone annotation="inline"></g:plusone>
-      <br/>
-      
-      <a href="/book/ch02-01.html" title="Previous: Rubyinstaller">&laquo; Rubyinstaller</a>
-      
-
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch02-03.html" title="Next: Pik">Pik &raquo; </a>
-       
-      <br/><br/>
-
-      <h2>Building Ruby</h2>
-<p>RubyInstaller project doesn&#8217;t provide Ruby installers only. It creates development environment, based on free MinGW tool-chain, that can be used to build Ruby and its components. Project consists of number of Rake tasks aim to build, test and package Ruby.</p>
-<p>Before we start to explore these tasks we have to clone RubyInstaller project.  Open up new Command Prompt or Git bash shell or, if you have followed instructions from the book, hit <code>Ctrl-F2</code> in Console2. Go to our projects directory created in the previous chapter and clone project from GitHub (<code>git://github.com/oneclick/rubyinstaller.git</code>). The whole process in Git&#8217;s bash shell should look something like this:</p>
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>mkdir projects
-<span class="nv">$ </span><span class="nb">cd </span>projects/
+<div class="highlight"><pre><code class="sh"><span class="nv">$ </span><span class="nb">cd</span> /c/projects/ruby
 <span class="nv">$ </span>git clone git://github.com/oneclick/rubyinstaller.git
 Cloning into rubyinstaller...
-remote: Counting objects: 3113, <span class="k">done</span>.
-remote: Compressing objects: 100% <span class="o">(</span>1276/1276<span class="o">)</span>, <span class="k">done</span>.
-Receiving objects: 100% <span class="o">(</span>3113/3113<span class="o">)</span>, 392.00 KiB | 753 KiB/s
-Receiving objects: 100% <span class="o">(</span>3113/3113<span class="o">)</span>, 618.25 KiB | 753 KiB/s, <span class="k">done</span>.
-Resolving deltas: 100% <span class="o">(</span>1758/1758<span class="o">)</span>, <span class="k">done</span>.
-<span class="nv">$ </span><span class="nb">cd </span>rubyinstaller
-</code></pre></div><p>Now when you have complete RubyInstaller&#8217;s code it is time to check what Rake tasks it defines. Open your Ruby Console (<code>Ctrl-F4</code> in our Console2), go to the directory where you have cloned RubyInstaller&#8217;s repository and type <code>rake -T</code>.</p>
-<div class="highlight"><pre><code class="bat">C:\<span class="p">&gt;</span><span class="n">cd</span> projects\ruby\rubyinstaller
-C:\projects\ruby\rubyinstaller<span class="p">&gt;</span><span class="n">rake</span> -T
-(in C:<span class="n">/projects/ruby/rubyinstaller)</span>
-You need the rdoc and rdoc_chm gems installed
+More Git clone messages....</code></pre></div>
+
+<p>Now when you have complete RubyInstaller&#39;s code it is time to see what Rake tasks it defines. Open your Ruby Console, go to the directory where you have cloned RubyInstaller&#39;s repository and type <code>rake -T</code>.</p>
+
+<div class="highlight"><pre><code class="bat"><span class="k">cd</span> c:\projects\rubyinstaller
+C:\projects\rubyinstaller<span class="p">&gt;</span><span class="n">rake</span> -T
+You need rdoc <span class="m">3</span>.<span class="m">12</span> and rdoc_chm <span class="m">3</span>.<span class="m">1</span>.<span class="m">0</span> gems installed
 in order to build the docs tasks.
-rake book              # Download and extract The Book of Ruby
-rake check             # Run tests <span class="k">for</span> the interpreter in the sandbox.
-rake clean             # Remove any temporary products.
-rake clobber           # Remove any generated file.
-rake default           # Build Ruby <span class="m">1</span>.<span class="m">8</span>
-rake devkit            # Build DevKit installer and<span class="n">/or</span> archives.
-rake irb               # Test drive the sandbox (using IRB).
-rake ruby<span class="m">18</span>            # compile Ruby <span class="m">1</span>.<span class="m">8</span>
-rake ruby<span class="m">18</span><span class="nl">:install</span>    # install rubyinstaller<span class="m">-1</span>.<span class="m">8</span>.<span class="m">6</span>-p<span class="m">398</span>.exe
-rake ruby<span class="m">18</span><span class="nl">:package</span>    # generate rubyinstaller<span class="m">-1</span>.<span class="m">8</span>.<span class="m">6</span>-p<span class="m">398</span>.exe
-rake ruby<span class="m">18</span><span class="nl">:repackage</span>  # rebuild rubyinstaller<span class="m">-1</span>.<span class="m">8</span>.<span class="m">6</span>-p<span class="m">398</span>.exe
-rake ruby<span class="m">19</span>            # compile Ruby <span class="m">1</span>.<span class="m">9</span>
-rake ruby<span class="m">19</span><span class="nl">:install</span>    # install rubyinstaller<span class="m">-1</span>.<span class="m">9</span>.<span class="m">2</span>-p<span class="m">-1</span>.exe
-rake ruby<span class="m">19</span><span class="nl">:package</span>    # generate rubyinstaller<span class="m">-1</span>.<span class="m">9</span>.<span class="m">2</span>-p<span class="m">-1</span>.exe
-rake ruby<span class="m">19</span><span class="nl">:repackage</span>  # rebuild rubyinstaller<span class="m">-1</span>.<span class="m">9</span>.<span class="m">2</span>-p<span class="m">-1</span>.exe
-</code></pre></div><p>The most important tasks in the list are rake ruby18 and rake ruby19. As their description denotes, they build Ruby 1.8 and 1.9 respectively. How that can be done when we do not have sources and build environment, you might ask. RubyInstaller automates the whole process of downloading build tools, configuring build environment, downloading sources and additional libraries needed for building Ruby and finally compiling it.</p>
-<p>A list of all packages RubyInstaller uses is kept in <code>config\ruby_installer.rb</code> file. Here is excerpt of file related to Ruby 1.8:</p>
+Try <span class="sb">`gem install rdoc -v 3.12`</span> and later <span class="sb">`gem install rdoc_chm -v 3.1.0`</span>
+
+rake book                      # Download and extract The Book of Ruby
+rake clean                     # Remove any temporary products
+rake clobber                   # Remove any generated file
+rake default                   # Build Ruby <span class="m">1</span>.<span class="m">8</span>
+rake devkit                    # Build DevKit installer and<span class="n">/or</span> archives
+rake devkit:ls                 # List available DevKit flavors
+rake release:upload[version]   # Upload release files
+rake ruby<span class="m">18</span>                    # compile Ruby <span class="m">1</span>.<span class="m">8</span>
+rake ruby<span class="m">19</span>                    # compile Ruby <span class="m">1</span>.<span class="m">9</span>
+rake ruby<span class="m">20</span>                    # compile Ruby <span class="m">2</span>.<span class="m">0</span>.<span class="m">0</span>
+rake ruby<span class="m">21</span>                    # compile Ruby <span class="m">2</span>.<span class="m">1</span>
+rake ruby<span class="m">22</span>                    # compile Ruby <span class="m">2</span>.<span class="m">2</span>
+rake ruby<span class="m">23</span><span class="nl">:install</span>            # install rubyinstaller<span class="m">-2</span>.<span class="m">3</span>.<span class="m">0</span>.exe
+rake ruby<span class="m">23</span><span class="nl">:package</span>            # generate packages <span class="k">for</span> ruby <span class="m">2</span>.<span class="m">3</span>.<span class="m">0</span>
+rake ruby<span class="m">23</span><span class="nl">:package:archive</span>    # generate ruby<span class="m">-2</span>.<span class="m">3</span>.<span class="m">0</span>-i<span class="m">386</span>-mingw<span class="m">32</span>.<span class="m">7</span>z
+rake ruby<span class="m">23</span><span class="nl">:package:docs</span>       # generate ruby<span class="m">-2</span>.<span class="m">3</span>.<span class="m">0</span>-doc-chm.<span class="m">7</span>z
+rake ruby<span class="m">23</span><span class="nl">:package:installer</span>  # generate rubyinstaller<span class="m">-2</span>.<span class="m">3</span>.<span class="m">0</span>.exe
+rake ruby<span class="m">23</span><span class="nl">:repackage</span>          # rebuild rubyinstaller<span class="m">-2</span>.<span class="m">3</span>.<span class="m">0</span>.exe</code></pre></div>
+
+<p>The most important tasks in the list are rake rubyXX. As their descriptions denote, they build various Ruby versions. Ruby versions 1.8.x are obsolete and we will not use them. Expect these tasks to be removed from the project.</p>
+
+<p>RubyInstaller automates the whole process of downloading build tools, configuring build environment, downloading sources and additional libraries needed for building Ruby and finally compiling it.</p>
+
+<p>A list of all packages RubyInstaller uses is kept in <code>config\ruby_installer.rb</code> file. Here is excerpt of the file related to Ruby 1.8:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="no">Ruby18</span> <span class="o">=</span> <span class="no">OpenStruct</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-  <span class="ss">:version</span> <span class="o">=&gt;</span> <span class="s1">&#39;1.8.7-p330&#39;</span><span class="p">,</span>
-  <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s2">&quot;http://ftp.ruby-lang.org/pub/ruby/1.8&quot;</span><span class="p">,</span>
-  <span class="ss">:checkout</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://svn.ruby-lang.org/repos/ruby/branches/ruby_1_8_7&#39;</span><span class="p">,</span>
-  <span class="ss">:checkout_target</span> <span class="o">=&gt;</span> <span class="s1">&#39;downloads/ruby_1_8&#39;</span><span class="p">,</span>
-  <span class="ss">:target</span> <span class="o">=&gt;</span> <span class="s1">&#39;sandbox/ruby_1_8&#39;</span><span class="p">,</span>
-  <span class="ss">:build_target</span> <span class="o">=&gt;</span> <span class="s1">&#39;sandbox/ruby18_build&#39;</span><span class="p">,</span>
-  <span class="ss">:install_target</span> <span class="o">=&gt;</span> <span class="s1">&#39;sandbox/ruby18_mingw&#39;</span><span class="p">,</span>
-  <span class="ss">:configure_options</span> <span class="o">=&gt;</span> <span class="o">[</span>
-    <span class="s1">&#39;--enable-shared&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;--with-winsock2&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;--disable-install-doc&#39;</span><span class="p">,</span>
-    <span class="s2">&quot;CFLAGS=&#39;-g -O2 -DFD_SETSIZE=256&#39;&quot;</span>
-  <span class="o">]</span><span class="p">,</span>
-  <span class="ss">:files</span> <span class="o">=&gt;</span> <span class="o">[</span>
-   <span class="s1">&#39;ruby-1.8.7-p330.tar.bz2&#39;</span>
-  <span class="o">]</span><span class="p">,</span>
-  <span class="ss">:dependencies</span> <span class="o">=&gt;</span> <span class="o">[</span>
-    <span class="ss">:gdbm</span><span class="p">,</span> <span class="ss">:iconv</span><span class="p">,</span> <span class="ss">:openssl</span><span class="p">,</span> <span class="ss">:pdcurses</span><span class="p">,</span> <span class="ss">:zlib</span>
-  <span class="o">]</span><span class="p">,</span>
-  <span class="ss">:excludes</span> <span class="o">=&gt;</span> <span class="o">[</span>
-    <span class="s1">&#39;libcharset1.dll&#39;</span>
-  <span class="o">]</span><span class="p">,</span>
-  <span class="ss">:installer_guid</span> <span class="o">=&gt;</span> <span class="s1">&#39;{F6377277-9DF1-4a1f-A487-CB5D34DCD793}&#39;</span>
-<span class="p">)</span>
-</code></pre></div><p>First Ruby version is defined, after that <span class="caps">URL</span> from which archive will be downloaded. Checkout options are used if we want to build Ruby not from archives, but from the Subversion repository. After that directory where sources will be unpacked is defined and it is followed by build and install directories. The install directory here doesn&#8217;t mean directory where Ruby will be installed by installer. It is directory within RubyInstaller output directory where all Ruby files needed for installer to be packed will be copied. Next option is important for build process since it defines configuration flags passed to <code>configure</code> script.</p>
-<p>But what <code>configure</code> script is? This script is used to query the system on which it is run for platform architecture, build and run-time dependencies, system environment, etc. Based on gathered information configure script generates Makefile which is then used to build application. This process is common to Linux but might look strange to Windows developers. Script accepts arguments and these arguments are defined in the configure_options part. Even though you can change configure options directly in the ruby_installer.rb file there is a much better way which we will explain soon.</p>
-<p>Next three options in RubyInstaller&#8217;s configuration file define full name of archive with Ruby sources, libraries that Ruby depends on and excluded library. Last two options are not important at the moment so we will skip them. Similar set of options is defined for Ruby 1.9 and subset of these options is used for other packages used during build process.</p>
-<p>Now I will briefly walk you through other Rake tasks which are important if you decide to build Ruby from sources. RubyInstaller unpacks sources and builds libraries and Ruby in the sandbox folder. Tasks clean and clobber are used to remove temporary and all files created during build process respectively. Running tests on freshly built Ruby is done with check task and if you want to try Ruby you can use irb task to start new irb session in the sandbox.</p>
-<p>You already saw how to choose which version of Ruby will be built but you can alter build procedure by passing “arguments” to Rake task. Actually RubyInstaller does not use Rake way of passing parameters. Namely, if Rake task is defined in such a way that it accepts parameters it is invoked with parameter value enclosed in brackets:</p>
-<div class="highlight"><pre><code class="bash">rake namespace:task_name<span class="o">[</span>param<span class="o">]</span>
-</code></pre></div><p>RubyInstaller on the hand uses environment variables as input parameters. There are several environment variables that RubyInstaller&#8217;s Rake tasks understand but most important for us at the moment are: <code>LOCAL</code>, <code>NODEPS</code> and <code>DKVER</code>. First environment variable, <code>LOCAL</code>, should hold the path where we keep sources from which Ruby will be built. In other words if we do not want to leave to RubyInstaller to download Ruby sources for particular version we can do that manually and then tell RubyInstaller where are they. As a matter of act this is the way we will build Ruby later. The second environment variable tells RubyInstaller to skip building dependencies and the third one which compiler tool-chan it should use.</p>
-<p>Up to now we didn&#8217;t say anything about compiler that is used to build Ruby except that MinGW based tool-chain is used. It is now time to take a closer look which compilers are available. File <code>001_dkcompiler_init.rb</code> in the <code>config\compilers</code> directory within RubyInstaller project keeps a list of compilers that can be used:</p>
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">DevKitInstaller</span>
-  <span class="nb">puts</span> <span class="s2">&quot;Initializing DevKit compilers&quot;</span> <span class="k">if</span> <span class="no">Rake</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">trace</span>
+      <span class="ss">:version</span> <span class="o">=&gt;</span> <span class="s1">&#39;1.8.7-p374&#39;</span><span class="p">,</span>
+      <span class="ss">:short_version</span> <span class="o">=&gt;</span> <span class="s1">&#39;ruby18&#39;</span><span class="p">,</span>
+      <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s2">&quot;http://ftp.ruby-lang.org/pub/ruby/1.8&quot;</span><span class="p">,</span>
+      <span class="ss">:checkout</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://svn.ruby-lang.org/repos/ruby/branches/ruby_1_8_7&#39;</span><span class="p">,</span>
+      <span class="ss">:checkout_target</span> <span class="o">=&gt;</span> <span class="s1">&#39;downloads/ruby_1_8&#39;</span><span class="p">,</span>
+      <span class="ss">:target</span> <span class="o">=&gt;</span> <span class="s1">&#39;sandbox/ruby_1_8&#39;</span><span class="p">,</span>
+      <span class="ss">:doc_target</span> <span class="o">=&gt;</span> <span class="s1">&#39;sandbox/doc/ruby18&#39;</span><span class="p">,</span>
+      <span class="ss">:build_target</span> <span class="o">=&gt;</span> <span class="s1">&#39;sandbox/ruby18_build&#39;</span><span class="p">,</span>
+      <span class="ss">:install_target</span> <span class="o">=&gt;</span> <span class="s1">&#39;sandbox/ruby18_mingw&#39;</span><span class="p">,</span>
+      <span class="ss">:patches</span> <span class="o">=&gt;</span> <span class="s1">&#39;resources/patches/ruby187&#39;</span><span class="p">,</span>
+      <span class="ss">:configure_options</span> <span class="o">=&gt;</span> <span class="o">[</span>
+        <span class="s1">&#39;--enable-shared&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--with-winsock2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--disable-install-doc&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;CFLAGS=&#39;-g -O2 -DFD_SETSIZE=256&#39;&quot;</span>
+      <span class="o">]</span><span class="p">,</span>
+      <span class="ss">:files</span> <span class="o">=&gt;</span> <span class="o">[</span>
+        <span class="s1">&#39;ruby-1.8.7-p374.tar.bz2&#39;</span>
+      <span class="o">]</span><span class="p">,</span>
+      <span class="ss">:dependencies</span> <span class="o">=&gt;</span> <span class="o">[</span>
+        <span class="ss">:gdbm</span><span class="p">,</span> <span class="ss">:iconv</span><span class="p">,</span> <span class="ss">:openssl</span><span class="p">,</span> <span class="ss">:pdcurses</span><span class="p">,</span> <span class="ss">:zlib</span><span class="p">,</span> <span class="ss">:tcl</span><span class="p">,</span> <span class="ss">:tk</span>
+      <span class="o">]</span><span class="p">,</span>
+      <span class="ss">:excludes</span> <span class="o">=&gt;</span> <span class="o">[</span>
+        <span class="s1">&#39;libcharset-1.dll&#39;</span>
+      <span class="o">]</span><span class="p">,</span>
+      <span class="ss">:installer_guid</span> <span class="o">=&gt;</span> <span class="s1">&#39;{F6377277-9DF1-4a1f-A487-CB5D34DCD793}&#39;</span>
+    <span class="p">)</span></code></pre></div>
 
-  <span class="no">COMPILERS</span> <span class="o">=</span> <span class="p">{}</span>
+<p>In the first line of OpenStruct member definition Ruby version is set. Checkout options are used if we want to build Ruby not from archives, but from the Subversion repository. After that, directory where sources will be unpacked is defined and it is followed by build and install directories. The install directory here doesn&#39;t mean directory where Ruby will be installed by installer. It is directory within RubyInstaller output directory where all Ruby files needed for installer to be packed will be copied. Next option is important for build process since it defines configuration flags passed to <code>configure</code> script.</p>
 
-  <span class="c1"># TODO update this list when adding any new compiler or compiler version!</span>
-  <span class="c1">#      The format is a String consisting of vendor-bits-version</span>
-  <span class="no">VALID_COMPILERS</span> <span class="o">=</span> <span class="o">[</span>
-    <span class="s1">&#39;tdm-32-4.5.1&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;tdm-32-4.5.0&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;tdm-64-4.5.1&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;llvm-32-2.8&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;mingw-32-3.4.5&#39;</span>
-  <span class="o">]</span>
+<p>You might wonder what <code>configure</code> script is? This script is used to query the system on which it is run for platform architecture, build and run-time dependencies, system environment, etc. Based on gathered information configure script generates Makefile which is then used to build application. Script accepts arguments and these arguments are defined in the configure options part. Even though you can change configure options directly in the ruby_installer.rb file there is a much better way which we will explain soon.</p>
 
-<span class="k">end</span>
-</code></pre></div><p>As you can see available compilers are: <code>TDM-4.5.1</code> 32 and 64 bit version, <code>LLVM 2.8</code> and <code>MinGW 3.4.5</code>. The latest one is kept mainly for building Ruby 1.8.7. Default version that will be used is <code>TDM-32-4.5.1</code>.</p>
-<p>Before we build latest Ruby development version I owe you one more explanation. I mentioned a way that you can alter default project setting without a need to change RubyInstaller&#8217;s code. During build, RubyInstaller checks for existence of override directory within your RubyInstaller project directory. If it finds it all Ruby files from that folder are loaded and you can use this to change project settings. Code that loads these ruby files looks like:</p>
+<p>Next three options in RubyInstaller&#39;s configuration file define full name of archive with Ruby sources, libraries that Ruby depends on and excluded library. Last option is not important at the moment so we will skip it. Similar set of options is defined for Ruby 2.2 and subset of these options is used for other packages used during build process.</p>
+
+<p>Now I will briefly walk you through other Rake tasks which are important if you decide to build Ruby from sources. RubyInstaller unpacks sources and builds libraries and Ruby in the sandbox folder. Tasks <code>clean</code> and <code>clobber</code> are used to remove temporary and all files created during build process respectively.</p>
+
+<p>You already saw how to choose which version of Ruby will be built but you can alter build procedure by passing “arguments” to Rake task. RubyInstaller does not use standard Rake way of passing parameters. Namely, if Rake task is defined in such a way that it accepts parameters it is invoked with parameter value enclosed in brackets:</p>
+
+<div class="highlight"><pre><code class="bash">rake namespace:task_name<span class="o">[</span>param<span class="o">]</span></code></pre></div>
+
+<p>RubyInstaller on the other hand uses environment variables as input parameters. There are several environment variables that RubyInstaller&#39;s Rake tasks understand but most important for us at the moment are: <code>LOCAL</code>, <code>NODEPS</code> and <code>DKVER</code>. First environment variable, <code>LOCAL</code>, should hold the path where we keep sources from which Ruby will be built. In other words if we do not want to leave to RubyInstaller to download Ruby sources for particular version we can do that manually and then tell RubyInstaller where they are. As a matter of act this is the way we will build Ruby later. The second environment variable tells RubyInstaller to skip building dependencies and the third one which compiler tool-chan it should use.</p>
+
+<p>Up to now we didn&#39;t say anything about compiler that is used to build Ruby except that MinGW based tool-chain is used. It is now time to take a closer look which compilers are available. Files in the <code>config\compilers</code> directory within RubyInstaller project keep a list of compilers that can be used. You can also get a list of supported compilers with</p>
+
+<div class="highlight"><pre><code class="bat">C:\Projects\rubyinstaller<span class="p">&gt;</span><span class="n">rake</span> devkit:ls
+
+<span class="o">===</span> Available DevKit&#39;s <span class="o">===</span>
+    mingw<span class="m">-32-3</span>.<span class="m">4</span>.<span class="m">5</span>
+    mingw<span class="m">-32-4</span>.<span class="m">6</span>.<span class="m">2</span>
+    mingw<span class="m">64-32-4</span>.<span class="m">7</span>.<span class="m">2</span>
+    mingw<span class="m">64-64-4</span>.<span class="m">7</span>.<span class="m">2</span>
+    mingwbuilds<span class="m">-32-4</span>.<span class="m">7</span>.<span class="m">3</span>
+    mingwbuilds<span class="m">-64-4</span>.<span class="m">7</span>.<span class="m">3</span>
+ <span class="o">=</span><span class="p">&gt;</span> <span class="n">tdm</span><span class="m">-32-4</span>.<span class="m">5</span>.<span class="m">2</span>          [default]
+    tdm<span class="m">-32-4</span>.<span class="m">6</span>.<span class="m">1</span>
+    tdm<span class="m">-32-4</span>.<span class="m">7</span>.<span class="m">1</span>
+    tdm<span class="m">-64-4</span>.<span class="m">6</span>.<span class="m">1</span>
+    tdm<span class="m">-64-4</span>.<span class="m">7</span>.<span class="m">1</span></code></pre></div>
+
+<p>As you can see there are lot of defined compilers. Some of them are kept only for building Ruby 1.8.7 and will probably be removed in the future. Others are kept for testing purposes. Even though default version is set to tdm-32-4.5.2 the one that will use is <code>mingw64-32-4.7.2</code> because at the moment of writing this book default version cannot compile Ruby sources (see <a href="https://github.com/oneclick/rubyinstaller/issues/254#issuecomment-85658313">comment on GitHub issue</a>).</p>
+
+<p>Before we build latest Ruby development version I owe you one more explanation. I mentioned a way that you can alter default project setting without a need to change RubyInstaller&#39;s code. During build, RubyInstaller checks for existence of override directory within your RubyInstaller project directory. If it finds it all Ruby files from that folder are loaded and you can use this to change project settings. Code that loads these ruby files looks like:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="c1"># scan all override definitions and load them</span>
 <span class="no">Dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;override/*.rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
   <span class="k">begin</span>
+    <span class="nb">puts</span> <span class="s2">&quot;Loading override </span><span class="si">#{</span><span class="no">File</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="no">Rake</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">trace</span>
     <span class="nb">require</span> <span class="n">f</span>
   <span class="k">rescue</span> <span class="no">StandardError</span> <span class="o">=&gt;</span> <span class="n">e</span>
     <span class="nb">warn</span> <span class="s2">&quot;WARN: Problem loading </span><span class="si">#{</span><span class="n">f</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
   <span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div><p>Therefore if we want to change, for example, which level of optimization compiler uses when it builds application we can do it by creating file <code>optimization.rb</code> within override directory with just one line of code:</p>
-<div class="highlight"><pre><code class="ruby"><span class="ss">RubyInstaller</span><span class="p">:</span><span class="ss">:Ruby19</span><span class="o">.</span><span class="n">configure_options</span> <span class="o">&lt;&lt;</span> <span class="err">“</span><span class="n">optflags</span><span class="o">=</span><span class="s1">&#39;-O0&#39;</span><span class="err">”</span>
-</code></pre></div><p>If you remember <code>configure_options</code> is an array in the Ruby19 <code>OpenStruct</code> object. This array holds arguments that will be passed to <code>configure</code> script when it is invoked. Line given above just adds one more item to the <code>configure_options</code> array. But wouldn&#8217;t it be nice that we can conditionally use new arguments? Let&#8217;s improve code a little bit:</p>
+<span class="k">end</span></code></pre></div>
+
+<p>Therefore if we want to change, for example, which level of optimization compiler uses when it builds application we can do it by creating file <code>optimization.rb</code> within override directory with just one line of code:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">RubyInstaller</span><span class="o">::</span><span class="no">Ruby22</span><span class="o">.</span><span class="n">configure_options</span> <span class="o">&lt;&lt;</span> <span class="err">“</span><span class="n">optflags</span><span class="o">=</span><span class="s1">&#39;-O0&#39;</span><span class="err">”</span></code></pre></div>
+
+<p>If you remember <code>configure_options</code> is an array in the Ruby22 <code>OpenStruct</code> object. This array holds arguments that will be passed to <code>configure</code> script when it is invoked. Line given above just adds one more item to the <code>configure_options</code> array. But wouldn&#39;t it be nice that we can conditionally use new arguments? Let&#39;s improve code a little bit:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="err">“</span><span class="no">OPTIM</span><span class="err">”</span><span class="o">]</span> <span class="k">then</span>
   <span class="nb">puts</span> <span class="s1">&#39;[INFO] Changing compile optimization flags&#39;</span>
-  <span class="ss">RubyInstaller</span><span class="p">:</span><span class="ss">:Ruby19</span><span class="o">.</span><span class="n">configure_options</span> <span class="o">&lt;&lt;</span> <span class="err">“</span><span class="n">optflags</span><span class="o">=</span><span class="s1">&#39;-O0&#39;</span><span class="err">”</span>
-<span class="k">end</span>
-</code></pre></div><p>Now our script checks whether environment variable <code>OPTIM</code> is defined and only if it is configure_options are changed. Starting Rake task in a standard way <code>rake ruby19</code> will use default RubyInstaller settings but with <code>rake ruby19 OPTIM=1</code> changes from our script will be applied. Due to the way how Ruby treats expressions in if statement you can put anything after equals sign except nil and false. Same way is used to change <code>LOCAL</code>, <code>NODEPS</code> and <code>DKVER</code> environment variables during Rake tasks invocation.</p>
-<p>As stated above we will build latest Ruby development version. Since RubyInstaller uses latest official releases we have to download sources by ourself. We can do that by telling RubyInstaller to checkout sources from Ruby Subversion repository (by defining <code>TRUNK</code> environment variable) or telling it where sources are located on our disk. As you might already expect we will use second option. First we will clone Git mirror of Ruby Subversion repository which can be found on GitHub (<code>git://github.com/ruby/ruby.git</code>). Open Bit bash shell in Console2 (<code>Ctrl-F2</code>) and clone Ruby sources in <code>C:\projects\ruby-mirror</code> directory.</p>
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span><span class="nb">cd </span>projects/
+  <span class="no">RubyInstaller</span><span class="o">::</span><span class="no">Ruby22</span><span class="o">.</span><span class="n">configure_options</span> <span class="o">&lt;&lt;</span> <span class="err">“</span><span class="n">optflags</span><span class="o">=</span><span class="s1">&#39;-O0&#39;</span><span class="err">”</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Now our script checks whether environment variable <code>OPTIM</code> is defined and only if it is configure_options are changed. Starting Rake task in a standard way <code>rake ruby22</code> will use default RubyInstaller settings but with <code>rake ruby22 OPTIM=1</code> changes from our script will be applied. Due to the way how Ruby treats expressions in if statement you can put anything after equals sign except nil and false. Same way is used to change <code>LOCAL</code>, <code>NODEPS</code> and <code>DKVER</code> environment variables during Rake tasks invocation.</p>
+
+<p>As stated above we will build latest Ruby development version. Since RubyInstaller uses latest official releases we have to download sources by ourself. We can do that by telling RubyInstaller to checkout sources from Ruby Subversion repository (by defining <code>TRUNK</code> environment variable) or telling it where sources are located on our disk. We will use second option - sources from our local disk. First we will clone Git mirror of Ruby Subversion repository which can be found on GitHub (<code>git://github.com/ruby/ruby.git</code>). Open Git bash shell in ConEmu and clone Ruby sources in <code>C:\projects\ruby-mirror</code> directory.</p>
+
+<div class="highlight"><pre><code class="sh"><span class="nv">$ </span><span class="nb">cd </span>projects/
 <span class="nv">$ </span>git clone git://github.com/ruby/ruby.git ruby-mirror
 Cloning into ruby-mirror...
-remote: Counting objects: 195052, <span class="k">done</span>.
-remote: Compressing objects: 100% <span class="o">(</span>40038/40038<span class="o">)</span>, <span class="k">done</span>.
-remote: Total 195052 <span class="o">(</span>delta 154907<span class="o">)</span>, reused 192277 <span class="o">(</span>delta 153469<span class="o">)</span>
-Receiving objects: 100% <span class="o">(</span>195052/195052<span class="o">)</span>, 67.98 MiB | 926 KiB/s, <span class="k">done</span>.
-Resolving deltas: 100% <span class="o">(</span>154907/154907<span class="o">)</span>, <span class="k">done</span>.
-</code></pre></div><p>Finally start <code>ruby19</code> task with <code>LOCAL</code> variable set to the full path where you just cloned Ruby sources <code>rake ruby19 LOCAL=”c:\projects\ruby-mirror”</code> Now you just have to be patient while RubyInstaller downloads compiler tool-chain, dependencies, builds them and finally configures and builds Ruby. Time needed for all this depends on speed of your network connection and a speed of your processor. After build is finished you can run <code>rake check</code> which will run all tests. Some tests will fail, but don&#8217;t worry. That&#8217;s expected. When build is finished you will find latest version of Ruby 1.9.3dev in the <code>sandbox\ruby19_mingw</code> folder. Let&#8217;s copy this folder to <code>C:\Ruby</code> and rename it to <code>1.9.3dev</code>. If you remember first Ruby version was installed in the <code>C:\Ruby\1.9.2</code> folder. This way we are putting all Rubies in the same root directory.</p>
-<p>Adding this version to Console2 will let us easily switch between different Ruby versions. However we haven&#8217;t installed it through installer so we need to copy <code>resources\installer\setrbvars.bat</code> file to <code>C:\Ruby\1.9.3dev\bin</code> directory. Now open Settings dialog box in Console2 and go to Tabs section, add new tab and for Shell insert:</p>
-<div class="highlight"><pre><code class="bat">C:\Windows\System<span class="m">32</span>\cmd.exe <span class="n">/E:ON</span> <span class="n">/K</span> c:\Ruby\<span class="m">192</span>\bin\setrbvars.bat
-</code></pre></div><p>Set Title to Ruby 193 dev console. This is fifth tab added to Console2, so it can be opened with <code>Ctrl-F5</code>.</p>
+More Git clone messages...</code></pre></div>
 
-      <br/>
-      
-      <a href="/book/ch02-01.html" title="Previous: Rubyinstaller">&laquo; Rubyinstaller</a>
-      
+<p>Finally start <code>ruby22</code> task with <code>LOCAL</code> variable set to the full path where you just cloned Ruby sources and <code>DKVER</code> set to <code>mingw64-32-4.7.2</code>.</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch02-03.html" title="Next: Pik">Pik &raquo; </a>
-       
-    </div>
+<div class="highlight"><pre><code class="bat">C:\projects\rubyinstaller<span class="p">&gt;</span><span class="n">rake</span> ruby<span class="m">22</span> LOCAL<span class="o">=</span>”c:\projects\ruby-mirror” DKVER<span class="o">=</span>mingw<span class="m">64-32-4</span>.<span class="m">7</span>.<span class="m">2</span></code></pre></div>
 
-    <hr>
-  </div>
-</div>
+<p>Now you just have to be patient while RubyInstaller downloads compiler tool-chain, dependencies, builds them and finally configures and builds Ruby. Time needed for all this depends on speed of your network connection and a speed of your computer. When build is finished you will find latest version of Ruby 2.3.0dev in the <code>sandbox\ruby22_mingw</code> folder. Let&#39;s copy this folder to <code>C:\Ruby</code> and rename it to <code>Dev</code>. If you remember first Ruby version was installed in the <code>C:\Ruby\22</code> folder. This way we are putting all Rubies in the same root directory.</p>
 
+<p>Adding this version to ConEmu will let us easily switch between different Ruby versions. However we haven&#39;t installed it through installer so we need to copy <code>resources\installer\setrbvars.bat</code> file to <code>C:\Ruby\Dev\bin</code> directory. Now open ConEmu Setup tasks dialog box and add new task and for Shell insert:</p>
+
+<div class="highlight"><pre><code class="bat">C:\Windows\System<span class="m">32</span>\cmd.exe <span class="n">/E:ON</span> <span class="n">/K</span> c:\Ruby\Dev\bin\setrbvars.bat</code></pre></div>
+
+<p>Set Title to <code>Ruby Dev console</code>.</p>
+
+            <hr>
+          </section>
+
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch02-01.html"><i class="icon-double-angle-left"></i> Rubyinstaller</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch02-03.html">Ruby Version Managers <i class=" icon-double-angle-right"></i></a>
+        
+      </section>
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

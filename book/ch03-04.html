@@ -5,22 +5,16 @@
    <title>Ms Sql Server</title>
    <meta name="author" content="Boško Ivanišević" />
 
-   <link rel="stylesheet" href="/css/960.css" type="text/css" />
-   <link rel="stylesheet" href="/css/reset.css" type="text/css" />
-   <link rel="stylesheet" href="/css/text.css" type="text/css" />
-
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
-
    <!-- Homepage CSS -->
    <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="/css/menu.css" type="text/css" media="screen, projection" />
 
    <!-- Update your html tag to include the itemscope and itemtype attributes -->
    <html itemscope itemtype="http://schema.org/Book">
 
    <!-- Add the following three tags inside head -->
    <meta itemprop="name" content="Ruby On Windows Guides">
-   <meta itemprop="description" content="Comprehensive guides for Ruby on Windows">
 
    <!-- Place this render call where appropriate -->
    <script type="text/javascript">
@@ -46,83 +40,81 @@
    </script>
 </head>
 <body>
+  <header>
+  </header>
+  <main class="content">
+    <section class="container">
+      <nav class="navbar-fixed-top">
+        <div class="container">
+          <a href="/">Book</a>
+          <a href="/about.html">About</a>
+          <span style="float: right;">
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone annotation="inline"></g:plusone>
+          </span>
+        </div>
+      </nav>
+      <div id="header">
+        <table>
+          <tr>
+            <td>
+              <h1>Ruby on Windows Guides</h1>
+              <h4 class="title">by Boško Ivanišević</h4>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="main" class="row-fluid">
+        <article class="post">
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch03-03.html"><i class="icon-double-angle-left"></i> Postgresql Database</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch04-00.html">Programming On Windows <i class=" icon-double-angle-right"></i></a>
+        
+            <hr>
+      </section>
 
-<div class="container_12">
-  <!--<div class="grid_2">
-    <br/>
-    <h1>Something</h1>
-    <p>
-      Lorem ipsum, etc, etc, so on and so forth
-    </p>
-  </div>-->
+          <section>
+            <h2>MS SQL Server</h2>
 
-  <div id="main" class="grid_10">
-    <div id="header" class="grid_10">
-      <br/>
-      <table>
-        <tr>
-          <td><img src="/images/rwg_logo_blue.png"/></td>
-          <td>
-            <h1>Ruby on Windows Guides</h1>
-            <h4>Comprehensive guides for Ruby on Windows</h4>
-            <h6>by Bosko Ivanisevic</h6>
-          </td>
-        </tr>
-      </table>
-    </div>
+<p>What is left is to learn is how to use database engine that is probably of the most interest for developers who work on Windows – Microsoft&#39;s SQL Server. If you do not have MS SQL Server installed go ahead and download MS SQL Server Express installer from Microsoft&#39;s site. I will use version 2014 in this book. Let&#39;s first create database that we will use in our Rails application:</p>
 
-    <div id="menu" class="grid_10">
-      <a href="/">Book</a>
-      <a href="/about.html">About</a>
-      <!-- <a href="/something.html">Something</a> -->
-    </div>
+<div class="highlight"><pre><code class="bat">osql -b -S localhost -U <span class="p">&lt;</span><span class="n">your_sqlserver_admin_username</span>&gt; -P <span class="p">&lt;</span><span class="n">password_here</span>&gt; -Q <span class="s2">&quot;CREATE DATABASE RwinBookDevel COLLATE SQL_Latin1_General_CP1_CS_AS&quot;</span></code></pre></div>
 
-    <div id="content" class="grid_10">
-      <!-- Place this tag where you want the +1 button to render -->
-      <g:plusone annotation="inline"></g:plusone>
-      <br/>
-      
-      <a href="/book/ch03-03.html" title="Previous: Postgresql Database">&laquo; Postgresql Database</a>
-      
+<p>Newest rails adapter for MS SQL Server uses tiny_tds library to connect to MS SQL server and its usage is almost straigtforward. First thing we have to do is to add following two lines to Gemfile:</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch04-00.html" title="Next: Programming On Windows">Programming On Windows &raquo; </a>
-       
-      <br/><br/>
+<div class="highlight"><pre><code class="ruby"><span class="n">gem</span> <span class="s1">&#39;tiny_tds&#39;</span>
+<span class="n">gem</span> <span class="s1">&#39;activerecord-sqlserver-adapter&#39;</span></code></pre></div>
 
-      <h2>MS <span class="caps">SQL</span> Server</h2>
-<p>This, of course, is not the end of database story. What is left is to learn how to use database engine that is probably of the most interest for developers that work on Windows – Microsoft&#8217;s <span class="caps">SQL</span> Server. If you do not have MS <span class="caps">SQL</span> Server installed go ahead and download MS <span class="caps">SQL</span> Server Express installer from Microsoft&#8217;s site. I will use version 2005 in this book but the whole procedure is the same for 2008.</p>
-<p>Rails adapter for MS <span class="caps">SQL</span> Server uses <span class="caps">ODBC</span> connection and in order to use it we must install ruby-odbc gem version 0.99992 or higher and, naturally, activerecord-sqlserver-adapter. I will use database with the same name, rwin_book_devel, on MS <span class="caps">SQL</span> Server so go on and create database either from Management Studio or console client whichever you are familiar with.</p>
-<p><span class="caps">SQL</span> Server adapter uses <span class="caps">ODBC</span> connection so we have to create one that connects to newly created rwin_book_devel database. Open <code>Control Panel -&gt; Administrative Tools -&gt; Data Sources (ODBC)</code> dialog box. Select User <span class="caps">DSN</span> tab, click on the Add button and select <span class="caps">SQL</span> Server driver. When you confirm driver selection New Data Source Wizard will be started. On the first page (Figure 9) enter name of the data source, optionally description and select <span class="caps">SQL</span> Server to which it will connect.</p>
-<p>Next page (Figure 10) is of the most importance for creating successful connection to <span class="caps">SQL</span> Server. In this step you have to define what type of authentication server will use when you connect. MS <span class="caps">SQL</span> server supports two types of authentication. The first one, Windows NT authentication, your access to MS <span class="caps">SQL</span> Server is controlled by your system account which you used to log in to operating system. Rights that will be granted to the user are determined by the rights of the system account and its membership to system groups. This means that if you use administrative account you will have full access to the server. If your system account is ordinary user account with limited rights, you will most probably have just read-only access.</p>
-<p><img src="/images/fig0303.png" title="First page of New Data Source Wizard." alt="First page of New Data Source Wizard." /></p>
-<p>The second type, <span class="caps">SQL</span> Server authentication, is maintained within <span class="caps">SQL</span> Server. This authentication type is turned off by default and you have to explicitly enable it. In <span class="caps">SQL</span> Server Management Studio right click on the server and then on Properties and in the Security section select “SQL Server and Windows Authentication mode” option.</p>
-<p><img src="/images/fig0304.png" title="Selecting connection authentication type." alt="Selecting connection authentication type." /></p>
-<p><span class="caps">SQL</span> Server authentication login requires entering user name and password for the login that will be used to connect to the server. In that case you must create new logins in the <span class="caps">SQL</span> Server and grant them needed rights. Further details about creating new <span class="caps">SQL</span> Server users and adjusting permissions are out of the scope of this book, so I will use Windows NT authentication with the user from system Administrators group.</p>
-<p><img src="/images/fig0305.png" title="Choosing default database for ODBC connection." alt="Choosing default database for ODBC connection." /></p>
-<p>On the next wizard&#8217;s page (Figure 11) you must select default database that will be used by <span class="caps">ODBC</span> connection. We already have rwin_book_devel database and you should select it. On the last page you can change few more setting that are not relevant for us so you can just click on the Finish button. Finally new dialog box will open which you can use to test whether your <span class="caps">ODBC</span> connection is working.</p>
-<p>With all prerequisites met we can now configure our Ruby on Rails application to use <span class="caps">SQL</span> Server. Connection options are displayed below:</p>
+<p>and run <code>bundle install</code>. With all prerequisites met we can now configure our Ruby on Rails application to use SQL Server. Connection options are displayed below:</p>
+
 <div class="highlight"><pre><code class="ruby"><span class="ss">development</span><span class="p">:</span>
   <span class="ss">adapter</span><span class="p">:</span> <span class="n">sqlserver</span>
-  <span class="ss">mode</span><span class="p">:</span> <span class="no">ODBC</span>
-  <span class="ss">dsn</span><span class="p">:</span> <span class="n">rwin_book_devel</span>
-</code></pre></div><p>Finally, two lines for activerecord-sqlserver-adapter and ruby-odbc gems must be added to the Gemfile. Note that if you used <span class="caps">SQL</span> Server authentication mode you have to also set username and password values in the <code>database.yml</code> file.</p>
+  <span class="ss">mode</span><span class="p">:</span> <span class="n">dblib</span>
+  <span class="ss">host</span><span class="p">:</span> <span class="n">localhost</span>
+  <span class="ss">port</span><span class="p">:</span> <span class="mi">1433</span>
+  <span class="ss">username</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">your_db_user_name</span><span class="o">&gt;</span>
+  <span class="ss">password</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">your_db_password</span><span class="o">&gt;</span>
+  <span class="ss">database</span><span class="p">:</span> <span class="no">RwinBookDevel</span></code></pre></div>
 
-      <br/>
-      
-      <a href="/book/ch03-03.html" title="Previous: Postgresql Database">&laquo; Postgresql Database</a>
-      
+<p>This is all you need to use MS SQL server for Rails application. Pretty easy, isn&#39;t it.</p>
 
-      
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="/book/ch04-00.html" title="Next: Programming On Windows">Programming On Windows &raquo; </a>
-       
-    </div>
+            <hr>
+          </section>
 
-    <hr>
-  </div>
-</div>
-
+      <section style="font-weight:bold; margin-bottom: 2em;">
+        
+        <a rel="prev" class="a-hover"href="/book/ch03-03.html"><i class="icon-double-angle-left"></i> Postgresql Database</a>
+        
+        
+        <a rel="next" style="float:right" class="a-hover"href="/book/ch04-00.html">Programming On Windows <i class=" icon-double-angle-right"></i></a>
+        
+      </section>
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
